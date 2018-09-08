@@ -1,0 +1,7 @@
+/.vs/D3D12MiniLibrary/v15/*.db
+/.vs/D3D12MiniLibrary/v15/ipch
+/Debug
+/D3D12MiniLibrary/Debug
+/.vs
+/x64
+/D3D12MiniLibrary/x64
