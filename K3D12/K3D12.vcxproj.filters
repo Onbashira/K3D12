@@ -309,9 +309,6 @@
     <ClCompile Include="Engine\GameConponent\Primitive\Sphere.cpp">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GameConponent\Primitive\Sprite.cpp">
-      <Filter>Engine\GameComponent\Sprite</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\GameConponent\Scene\Scene.cpp">
       <Filter>Engine\GameComponent\Scene</Filter>
     </ClCompile>
@@ -371,6 +368,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Util\Logger.cpp">
       <Filter>Engine\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GameConponent\Sprite\Sprite.cpp">
+      <Filter>Engine\GameComponent\Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -581,9 +581,6 @@
     <ClInclude Include="Engine\GameConponent\Primitive\Sphere.h">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GameConponent\Primitive\Sprite.h">
-      <Filter>Engine\GameComponent\Sprite</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\GameConponent\Scene\Scene.h">
       <Filter>Engine\GameComponent\Scene</Filter>
     </ClInclude>
@@ -643,6 +640,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Util\Logger.h">
       <Filter>Engine\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameConponent\Sprite\Sprite.h">
+      <Filter>Engine\GameComponent\Sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

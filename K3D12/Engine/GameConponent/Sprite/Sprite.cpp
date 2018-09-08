@@ -1,6 +1,6 @@
 #include "Sprite.h"
 #include "Math.h"
-#include "PrimitiveComponent.h"
+#include "../Primitive/PrimitiveComponent.h"
 #include "../../TextureComponent/TextureManager.h"
 #include "../../Model/ModelMesh.h"
 #include "../../Resource/IndexBuffer.h"
