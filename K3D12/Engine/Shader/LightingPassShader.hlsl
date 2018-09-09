@@ -1,5 +1,5 @@
 
-#define ComputeRootSignature   "RootFlags(0),"\
+#define TBDRRootSignature   "RootFlags(0),"\
                                     "CBV(b0),"\
                                     "DescriptorTable(SRV(t0,numDescriptors = 1,space = 0)," \
                                                         "visibility = SHADER_VISIBILITY_ALL),"\
@@ -207,7 +207,7 @@ float4 CalcDirectionalLightBRDF(float3 objPos, float3 objNormal, float3 litDir, 
 }
 
 
-[RootSignature(ComputeRootSignature)]
+[RootSignature(TBDRRootSignature)]
 [numthreads(threadX, threadY, 1)]
 void CSMain(uint3 groupeID : SV_GroupID, uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : SV_GroupThreadID)
 {

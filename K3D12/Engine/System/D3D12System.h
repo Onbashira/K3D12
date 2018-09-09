@@ -144,7 +144,7 @@ namespace K3D12 {
 
 		static std::shared_ptr<GraphicsCommandList>	GetMasterCommandList();
 
-		static std::shared_ptr<CommandQueue>		GetMasterCommandQueue();
+		static K3D12::CommandQueue&		GetMasterCommandQueue();
 
 		Cube* CreateCube();
 

@@ -673,5 +673,8 @@
     <FxCompile Include="Engine\Shader\SpriteShader.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Engine\Shader\ComputeShader.hlsl">
+      <Filter>Engine\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

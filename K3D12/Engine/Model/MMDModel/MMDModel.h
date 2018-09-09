@@ -52,6 +52,7 @@ namespace K3D12 {
 		Animator							_animator;
 
 	public:
+
 	private:
 
 		Matrix CulcBDEF1(K3D12::WeightDeform& deform);

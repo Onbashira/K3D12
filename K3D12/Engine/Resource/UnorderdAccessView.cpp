@@ -22,7 +22,7 @@ HRESULT K3D12::UnorderedAccessValue::CreateHeap(unsigned numElements,  unsigned 
 	return hr;
 }
 
-HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned int numElements, void* pBufferData, UAV_MODE mode)
+HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned int numElements, void* pBufferData)
 {
 	if (elementSize == 0 || numElements == 0) {
 		return E_FAIL;
@@ -43,7 +43,7 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 		defaultHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_UNKNOWN;
 	}
 	{
-		uploadHeapProp.Type = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_UPLOAD;
+		uploadHeapProp.Type = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_READBACK;
 		uploadHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 		uploadHeapProp.VisibleNodeMask = 1;
 		uploadHeapProp.CreationNodeMask = 1;
@@ -58,7 +58,7 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 	}
 	{//リソース作成
 
-		_stagingResource.Create(defaultHeapProp, D3D12_HEAP_FLAG_NONE, defaultResourceDesc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+		_stagingResource.Create(defaultHeapProp, D3D12_HEAP_FLAG_NONE, defaultResourceDesc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		Resource::Create(uploadHeapProp, D3D12_HEAP_FLAG_NONE, uploadResourceDesc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ);
 #ifdef _DEBUG
 		SetName("UAVUploadResource");
@@ -76,7 +76,7 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 		D3D12_BUFFER_UAV uavBuffer;
 		uavBuffer.FirstElement = 0;
 		uavBuffer.NumElements = numElements;
-		uavBuffer.Flags = (mode == UAV_MODE::STRUCTURED) ? D3D12_BUFFER_UAV_FLAGS::D3D12_BUFFER_UAV_FLAG_NONE : D3D12_BUFFER_UAV_FLAGS::D3D12_BUFFER_UAV_FLAG_RAW;
+		uavBuffer.Flags = D3D12_BUFFER_UAV_FLAGS::D3D12_BUFFER_UAV_FLAG_NONE;
 		uavBuffer.CounterOffsetInBytes = 0;
 		uavBuffer.StructureByteStride = elementSize;
 
@@ -94,7 +94,7 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 		srv.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
 		srv.Buffer.FirstElement = 0;
 		srv.Buffer.NumElements = numElements;
-		srv.Buffer.Flags = (mode == UAV_MODE::STRUCTURED) ? D3D12_BUFFER_SRV_FLAGS::D3D12_BUFFER_SRV_FLAG_NONE : D3D12_BUFFER_SRV_FLAGS::D3D12_BUFFER_SRV_FLAG_RAW;
+		srv.Buffer.Flags = D3D12_BUFFER_SRV_FLAGS::D3D12_BUFFER_SRV_FLAG_NONE;
 		srv.Buffer.StructureByteStride = elementSize;
 		this->CreateView(&srv, _heap.GetCPUHandle(1));
 	}
@@ -146,7 +146,7 @@ void K3D12::UnorderedAccessValue::WriteToBuffer(unsigned int numElements,unsigne
 	_stagingResource.ResourceTransition(D3D12System::GetCommandList("CommandList")->GetCommandList().Get(), D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COPY_DEST);
 	//リソース送信
 	UpdateSubresources<1>(D3D12System::GetCommandList("CommandList")->GetCommandList().Get(),_stagingResource.GetResource(),_resource.Get(),0,0,1,&subresourceData);
-	_stagingResource.ResourceTransition(D3D12System::GetCommandList("CommandList")->GetCommandList().Get(), D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+	_stagingResource.ResourceTransition(D3D12System::GetCommandList("CommandList")->GetCommandList().Get(), D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 	D3D12System::GetCommandList("CommandList")->CloseCommandList();
 
@@ -157,6 +157,11 @@ void K3D12::UnorderedAccessValue::WriteToBuffer(unsigned int numElements,unsigne
 
 	D3D12System::GetCommandList("CommandList")->ResetAllocator();
 	D3D12System::GetCommandList("CommandList")->ResetCommandList();
+}
+
+void K3D12::UnorderedAccessValue::ReadBackResource()
+{
+
 }
 
 void K3D12::UnorderedAccessValue::Discard()

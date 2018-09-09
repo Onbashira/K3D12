@@ -57,7 +57,6 @@ std::weak_ptr<K3D12::MMDModel> K3D12::ModelPool::LoadModel(std::string modelPath
 		std::string extension = Util::ExtensionExtruction(modelPath);
 		if (extension == "pmx") {
 			std::shared_ptr<PMXModel> model;
-			std::string tempPath = modelPath;
 
 			model = this->_pmxLoader->Load(modelPath);
 
@@ -70,9 +69,6 @@ std::weak_ptr<K3D12::MMDModel> K3D12::ModelPool::LoadModel(std::string modelPath
 		}
 		else if (extension == "pmd") {
 			std::shared_ptr<PMDModel> model;
-			std::string tempPath = modelPath;
-
-
 			model = this->_pmdLoader->Load(modelPath);
 			if (model == nullptr) {
 				MessageBox(nullptr, L"モデルの読み込みに失敗しました", L"不正パス", MB_OK);

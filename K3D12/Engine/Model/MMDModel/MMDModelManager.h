@@ -16,8 +16,6 @@ namespace K3D12 {
 
 	private:
 		ManagerComponentBase<MMDModel>					 _pool;
-		std::map<std::string, std::shared_ptr<MMDModel>> _modelPool;
-
 	public:
 
 		void SetMMDModel(std::string modelPath, std::shared_ptr<MMDModel> model);

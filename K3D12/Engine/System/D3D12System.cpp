@@ -385,12 +385,12 @@ std::shared_ptr<K3D12::GraphicsCommandList> D3D12System::GetCommandList(std::str
 
 std::shared_ptr<K3D12::GraphicsCommandList> K3D12::D3D12System::GetMasterCommandList()
 {
-	return std::shared_ptr<GraphicsCommandList>();
+	return GraphicsContextLibrary::GetInstance().GetGraphicsCommandList("CommandList");
 }
 
-std::shared_ptr<K3D12::CommandQueue> K3D12::D3D12System::GetMasterCommandQueue()
+K3D12::CommandQueue& K3D12::D3D12System::GetMasterCommandQueue()
 {
-	return std::shared_ptr<CommandQueue>();
+	return GetInstance()._commandQueue;
 }
 
 Cube * K3D12::D3D12System::CreateCube()

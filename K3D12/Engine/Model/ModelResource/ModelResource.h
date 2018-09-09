@@ -39,23 +39,18 @@ namespace K3D12 {
 
 	struct ModelBoneTree {
 		ModelBoneNode* rootNode;
-
 	};
 
 	//計算用ボーンツリーを含むボーンの情報群
 	struct ModelBoneInformation {
 		///ボーン総数
 		unsigned int boneNum;
-
-
 	};
 
 	//シェーダーに渡すためのテクスチャデータ
 	struct ModelTextureData {
 
 	};
-
-	//
 
 	//一般化したモデルのリソース
 	class ModelResource

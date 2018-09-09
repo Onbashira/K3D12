@@ -8,13 +8,6 @@ namespace K3D12 {
 	//UAVはDXGI_FORMATはUNKNWON固定
 	class UnorderedAccessValue : public K3D12::Resource
 	{
-
-	public:
-		//基本的にSTRUCTURED
-		enum class UAV_MODE {
-			STRUCTURED,
-			RAW
-		};
 	private:
 		//Heapのオフセット値
 		enum HEAP_OFFSET
@@ -25,16 +18,17 @@ namespace K3D12 {
 		};
 		//CounterReosurce
 		Microsoft::WRL::ComPtr<ID3D12Resource>	_counterResource;
-		//StagingResource　実際にL1にあるキャッシュデータ
+		//StagingResource
 		Resource								_stagingResource;
+		//UploadResource
+		Resource								_uploadResource;
+
 
 		DescriptorHeap							_heap;
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC		_unorderedAccessViewDesc;
-
-		UAV_MODE								_uavMode;
 	public:
-
+		
 	private:
 
 		HRESULT									CreateHeap(unsigned numElements, unsigned int nodeMask = 0);
@@ -42,8 +36,9 @@ namespace K3D12 {
 		HRESULT									CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC* srvDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
 		virtual HRESULT							Create(D3D12_HEAP_PROPERTIES heapProps, D3D12_HEAP_FLAGS flags, D3D12_RESOURCE_DESC resourceDesc, D3D12_RESOURCE_STATES state, D3D12_CLEAR_VALUE* clearValue = nullptr) { return E_FAIL; };
 	public:
-		HRESULT									Create(unsigned int elementSize, unsigned int numElements, void* pBufferData, UAV_MODE mode = UAV_MODE::STRUCTURED);
+		HRESULT									Create(unsigned int elementSize, unsigned int numElements, void* pBufferData);
 		void									WriteToBuffer(unsigned int numElements, unsigned int elementSize, void* pBufferData);
+		void									ReadBackResource();
 		D3D12_CPU_DESCRIPTOR_HANDLE				GetSRVCPUHandle();
 		D3D12_CPU_DESCRIPTOR_HANDLE				GetUAVCPUHandle();
 		D3D12_GPU_DESCRIPTOR_HANDLE				GetSRVGPUHandle();
