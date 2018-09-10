@@ -28,7 +28,6 @@ namespace K3D12 {
 		DIFFUSE_MAP,
 		RESULT,
 		RESULT2,
-
 		GEOMETRY_TYPE_MAX
 	};
 

@@ -124,6 +124,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AudioComponent.cpp" />
+    <ClCompile Include="AudioLoader.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Engine\Animator\Animator.cpp" />
     <ClCompile Include="Engine\Animator\MotionAssetPool.cpp" />
     <ClCompile Include="Engine\Animator\MotionManager.cpp" />
@@ -210,9 +213,11 @@
     <ClCompile Include="Engine\Window\Window.cpp" />
     <ClCompile Include="Engine\Window\WindowManager.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioComponent.h" />
+    <ClInclude Include="AudioLoader.h" />
+    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Engine\Animator\Animator.h" />
     <ClInclude Include="Engine\Animator\MotionAssetPool.h" />
     <ClInclude Include="Engine\Animator\MotionManager.h" />
@@ -302,7 +307,6 @@
     <ClInclude Include="Engine\Util\WICTextureLoader12.h" />
     <ClInclude Include="Engine\Window\Window.h" />
     <ClInclude Include="Engine\Window\WindowManager.h" />
-    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">

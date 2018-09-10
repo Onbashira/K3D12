@@ -109,6 +109,9 @@
     <Filter Include="Engine\Shader">
       <UniqueIdentifier>{4744b661-01ca-4737-b9a6-1432d7439d0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Audio">
+      <UniqueIdentifier>{0e63bbbd-1155-4b4e-9cac-9dadd05d8c65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -288,9 +291,6 @@
     <ClCompile Include="Engine\Util\WICTextureLoader12.cpp">
       <Filter>Engine\Util</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\GameConponent\Primitive\Capsule.cpp">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClCompile>
@@ -371,6 +371,15 @@
     </ClCompile>
     <ClCompile Include="Engine\GameConponent\Sprite\Sprite.cpp">
       <Filter>Engine\GameComponent\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioComponent.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioLoader.cpp">
+      <Filter>Engine\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -560,9 +569,6 @@
     <ClInclude Include="Engine\Util\WICTextureLoader12.h">
       <Filter>Engine\Util</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\GameConponent\Primitive\Capsule.h">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClInclude>
@@ -643,6 +649,15 @@
     </ClInclude>
     <ClInclude Include="Engine\GameConponent\Sprite\Sprite.h">
       <Filter>Engine\GameComponent\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioComponent.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioLoader.h">
+      <Filter>Engine\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
