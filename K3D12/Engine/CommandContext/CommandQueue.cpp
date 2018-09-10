@@ -21,10 +21,15 @@ HRESULT K3D12::CommandQueue::Create(D3D12_COMMAND_QUEUE_DESC desc)
 	return S_OK;
 }
 
-Microsoft::WRL::ComPtr<ID3D12CommandQueue> K3D12::CommandQueue::GetQueue()
+Microsoft::WRL::ComPtr<ID3D12CommandQueue> K3D12::CommandQueue::GetQueue()const
 {
 
 	return _commandQueue;
+}
+
+void K3D12::CommandQueue::Wait(Fence * fence)
+{
+	fence->Wait(this);
 }
 
 UINT64 K3D12::CommandQueue::GetTimestampFrequency()

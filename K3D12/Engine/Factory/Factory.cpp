@@ -35,9 +35,9 @@ HRESULT K3D12::Factory::Create(UINT createFlags)
 	return S_OK;
 }
 
-IDXGIFactory4 * K3D12::Factory::GetFactory()const
+Microsoft::WRL::ComPtr<IDXGIFactory4> K3D12::Factory::GetFactory()const
 {
-	return _factory.Get();
+	return _factory;
 }
 
 void K3D12::Factory::Discard()

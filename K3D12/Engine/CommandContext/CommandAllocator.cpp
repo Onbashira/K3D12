@@ -13,7 +13,7 @@ K3D12::CommandAllocator::~CommandAllocator()
 }
 
 
-Microsoft::WRL::ComPtr<ID3D12CommandAllocator> K3D12::CommandAllocator::GetAllocator()
+Microsoft::WRL::ComPtr<ID3D12CommandAllocator> K3D12::CommandAllocator::GetAllocator()const
 {
 	return this->_allocator;
 }

@@ -16,8 +16,8 @@ namespace K3D12 {
 
 	public:
 		HRESULT									Create(Factory* factory, bool useWarpDevice = false);
-		ID3D12Device*							GetDevice();
-		const D3D_FEATURE_LEVEL&				GetFeatureLevel();
+		Microsoft::WRL::ComPtr<ID3D12Device3>	GetDevice()const;
+		const D3D_FEATURE_LEVEL&				GetFeatureLevel()const;
 		void									Discard();
 		D3D12Device();
 		~D3D12Device();

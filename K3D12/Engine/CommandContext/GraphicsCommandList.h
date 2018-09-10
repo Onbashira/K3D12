@@ -43,9 +43,9 @@ namespace K3D12 {
 
 		HRESULT ExcutionCommandList(CommandQueue* queue, Fence* fence = nullptr);
 
-		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>	GetCommandList();
+		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>	GetCommandList()const;
 
-		Microsoft::WRL::ComPtr<ID3D12CommandAllocator>		GetAllocator();
+		Microsoft::WRL::ComPtr<ID3D12CommandAllocator>		GetAllocator()const;
 
 		HRESULT						ResetCommandList(ID3D12PipelineState* pInitialState = nullptr);
 

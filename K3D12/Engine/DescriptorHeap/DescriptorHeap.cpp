@@ -15,31 +15,36 @@ K3D12::DescriptorHeap::~DescriptorHeap()
 	Discard();
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE K3D12::DescriptorHeap::GetCPUHandle(UINT indexCount)
+D3D12_CPU_DESCRIPTOR_HANDLE K3D12::DescriptorHeap::GetCPUHandle(UINT indexCount)const
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE handle = _heap->GetCPUDescriptorHandleForHeapStart();
 	handle.ptr += (_incrementSize)* indexCount;
 	return handle;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE K3D12::DescriptorHeap::GetGPUHandle(UINT indexCount)
+D3D12_GPU_DESCRIPTOR_HANDLE K3D12::DescriptorHeap::GetGPUHandle(UINT indexCount)const
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = _heap->GetGPUDescriptorHandleForHeapStart();
 	handle.ptr += (_incrementSize)* indexCount;
 	return handle;
 }
 
-UINT K3D12::DescriptorHeap::GetIncrementSize()
+UINT K3D12::DescriptorHeap::GetIncrementSize()const
 {
 	return _incrementSize;
 }
 
-ID3D12DescriptorHeap* const K3D12::DescriptorHeap::GetPtr()const
+Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> K3D12::DescriptorHeap::GetHeap() const
+{
+	return _heap;
+}
+
+ID3D12DescriptorHeap*  K3D12::DescriptorHeap::GetPtr()const
 {
 	return _heap.Get();
 }
 
-const D3D12_DESCRIPTOR_HEAP_DESC & K3D12::DescriptorHeap::GetDesc()
+const D3D12_DESCRIPTOR_HEAP_DESC & K3D12::DescriptorHeap::GetDesc()const
 {
 	return _heapDesc;
 }

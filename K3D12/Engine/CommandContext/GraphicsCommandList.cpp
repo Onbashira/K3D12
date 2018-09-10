@@ -76,12 +76,12 @@ HRESULT K3D12::GraphicsCommandList::ExcutionCommandList(CommandQueue* queue, Fen
 	return S_OK;
 }
 
-Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> K3D12::GraphicsCommandList::GetCommandList()
+Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> K3D12::GraphicsCommandList::GetCommandList()const
 {
 	return this->_commandList;
 }
 
-Microsoft::WRL::ComPtr<ID3D12CommandAllocator> K3D12::GraphicsCommandList::GetAllocator()
+Microsoft::WRL::ComPtr<ID3D12CommandAllocator> K3D12::GraphicsCommandList::GetAllocator()const
 {
 	return this->_commandAllocator;
 }

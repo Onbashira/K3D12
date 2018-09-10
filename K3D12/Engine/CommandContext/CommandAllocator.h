@@ -9,7 +9,7 @@ namespace K3D12 {
 	public:
 	private:
 	public:
-		Microsoft::WRL::ComPtr<ID3D12CommandAllocator> GetAllocator();
+		Microsoft::WRL::ComPtr<ID3D12CommandAllocator> GetAllocator()const;
 		void Discard();
 		CommandAllocator();
 		~CommandAllocator();

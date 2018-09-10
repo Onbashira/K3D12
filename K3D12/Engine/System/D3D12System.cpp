@@ -60,7 +60,7 @@ D3D12System::~D3D12System()
 
 IDXGIFactory4* D3D12System::GetFactory()
 {
-	return _factory.GetFactory();
+	return _factory.GetFactory().Get();
 }
 
 K3D12::Fence * D3D12System::GetFence()
@@ -405,7 +405,7 @@ Camera & D3D12System::GetCamera()
 
 ID3D12Device * D3D12System::GetDevice()
 {
-	return _device.GetDevice();
+	return _device.GetDevice().Get();
 }
 
 HRESULT D3D12System::InitializeDevice(bool useWarpDevice)

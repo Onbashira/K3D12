@@ -13,7 +13,7 @@ namespace K3D12 {
 
 	public:
 		HRESULT	Create(UINT createFlags = 0);
-		IDXGIFactory4* GetFactory()const;
+		Microsoft::WRL::ComPtr<IDXGIFactory4> GetFactory()const;
 		void Discard();
 		Factory();
 		~Factory();

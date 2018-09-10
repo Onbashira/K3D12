@@ -1,11 +1,9 @@
 #pragma once
 #include "../Util/D3D12Common.h"
-#include <list>
-
 
 namespace K3D12 {
 	class GraphicsCommandList;
-
+	class Fence;
 	class CommandQueue
 	{
 	private:
@@ -16,11 +14,12 @@ namespace K3D12 {
 
 	public:
 
-		HRESULT						Create(D3D12_COMMAND_QUEUE_DESC desc);
-		Microsoft::WRL::ComPtr<ID3D12CommandQueue>			GetQueue();
-		UINT64						GetTimestampFrequency();
-		D3D12_COMMAND_QUEUE_DESC	GetDesc();
-		void						Discard();
+		HRESULT												Create(D3D12_COMMAND_QUEUE_DESC desc);
+		Microsoft::WRL::ComPtr<ID3D12CommandQueue>			GetQueue()const;
+		void												Wait(Fence* fence);
+		UINT64												GetTimestampFrequency();
+		D3D12_COMMAND_QUEUE_DESC							GetDesc();
+		void												Discard();
 
 		CommandQueue();
 		~CommandQueue();

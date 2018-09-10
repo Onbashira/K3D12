@@ -83,12 +83,12 @@ HRESULT K3D12::D3D12Device::Create(Factory* factory,bool useWarpDevice)
 	return hr;
 }
 
-ID3D12Device * K3D12::D3D12Device::GetDevice()
+Microsoft::WRL::ComPtr<ID3D12Device3> K3D12::D3D12Device::GetDevice()const
 {
-	return _device.Get();
+	return _device;
 }
 
-const D3D_FEATURE_LEVEL& K3D12::D3D12Device::GetFeatureLevel()
+const D3D_FEATURE_LEVEL& K3D12::D3D12Device::GetFeatureLevel()const
 {
 	return this->_featureLevel;
 }

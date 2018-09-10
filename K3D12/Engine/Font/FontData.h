@@ -15,11 +15,11 @@ namespace K3D12 {
 
 	public:
 
-		LOGFONT GetPramater();
-		HFONT	GetFontHandle();
+		LOGFONT GetPramater()const;
+		HFONT	GetFontHandle()const;
 		void	SetFontHandle(const HFONT& font);
-		std::string GetFontName();
-		std::string GetFontPath();
+		std::string GetFontName()const;
+		std::string GetFontPath()const;
 
 		void    Create(LOGFONT paramater, std::string fontName, std::string fontPath);
 		void	Discard();

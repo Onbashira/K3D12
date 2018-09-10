@@ -16,12 +16,12 @@ K3D12::FontData::~FontData()
 }
 
 
-LOGFONT K3D12::FontData::GetPramater()
+LOGFONT K3D12::FontData::GetPramater()const
 {
 	return _fontParamater;
 }
 
-HFONT K3D12::FontData::GetFontHandle()
+HFONT K3D12::FontData::GetFontHandle()const
 {
 	return _font;
 }
@@ -31,12 +31,12 @@ void K3D12::FontData::SetFontHandle(const HFONT & font)
 	_font = font;
 }
 
-std::string K3D12::FontData::GetFontName()
+std::string K3D12::FontData::GetFontName()const
 {
 	return _fontName;
 }
 
-std::string K3D12::FontData::GetFontPath()
+std::string K3D12::FontData::GetFontPath()const
 {
 	return _fontPath;
 }
