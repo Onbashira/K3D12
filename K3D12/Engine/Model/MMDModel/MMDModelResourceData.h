@@ -21,6 +21,26 @@ namespace K3D12 {
 		QDEF
 	};
 
+	struct MMDWeightDeform {
+		int boneIndex01;
+		int boneIndex02;
+		int boneIndex03;
+		int boneIndex04;
+		float boneWeight01;
+		float boneWeight02;
+		float boneWeight03;
+		float boneWeight04;
+		Vector3 c;
+		Vector3 r0;
+		Vector3 r1;
+		MMDWeightDeform() :
+			boneIndex01(0), boneIndex02(0), boneIndex03(0), boneIndex04(0),
+			boneWeight01(0.0f), boneWeight02(0.0f), boneWeight03(0.0f), boneWeight04(0.0f),
+			c(),r0(),r1()
+		{};
+		~MMDWeightDeform() {};
+	};
+
 	enum class MMDMaterialFlags {
 		NO_CULL,
 		GROUND_SHADOW,
@@ -57,14 +77,19 @@ namespace K3D12 {
 
 
 	//オリジナルデータを編集（変換）して、その情報の必要部分をこの構造体に代入　→　めっちゃおもそう　→　非同期ならどうだろうか ->ComputeShaderあるやん
-	//レンダリングに必要な頂点情報(変換済み頂点情報）
 	struct MMDVertex {
+		//位置
 		Vector3 pos;
+		//頂点法線
 		Vector3 normal;
+		//UV座標
 		Vector2 texCoord;
+		//変形タイプ
 		MMDWeightDeformType deformType;
-		WeightDeform deformation;
-		MMDVertex() : pos(), normal(), texCoord(), deformType(), deformation() {};
+		//変形参照情報
+		MMDWeightDeform deformation;
+		MMDVertex() : 
+			pos(), normal(), texCoord(), deformType(), deformation() {};
 		~MMDVertex() {};
 		MMDVertex(const MMDVertex& other) {
 			*this = other;
@@ -140,7 +165,8 @@ namespace K3D12 {
 			this->childrenBone.clear();
 		};
 
-		MMDBoneNode() {};
+		MMDBoneNode() {
+		};
 		~MMDBoneNode() {
 		};
 	};
@@ -184,7 +210,7 @@ namespace K3D12 {
 		};
 	};
 
-	//MMDで読み込めるモデルデータ（PMX・PMD）のオリジナルデータ
+	//MMDで読み込めるモデルデータ（PMX・PMD）のオリジナルデータをPMXへ寄せた情報
 	struct MMDModelResourceData
 	{
 		//頂点情報

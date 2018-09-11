@@ -119,6 +119,9 @@ namespace K3D12 {
 		//ライティングパスを非同期コンピュートで実行
 		void StartLightingPass(UnorderedAccessValue* lightsBuffer, DepthStencil* depthResource = nullptr);
 
+		//特定リソースのステートを遷移させる
+		void TransitionResource(GEOMETRY_TYPE type, D3D12_RESOURCE_STATES states);
+
 		//各パスにおけるリソースの状態を変位させる
 		void TransitionGeometryPassStart();
 		void TransitionGeometryPassEnd();

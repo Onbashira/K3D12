@@ -6,14 +6,14 @@ namespace K3D12 {
 	class Factory
 	{
 	private:
-		Microsoft::WRL::ComPtr<IDXGIFactory4>	_factory;
+		Microsoft::WRL::ComPtr<IDXGIFactory6>	_factory;
 	public:
 
 	private:
 
 	public:
 		HRESULT	Create(UINT createFlags = 0);
-		Microsoft::WRL::ComPtr<IDXGIFactory4> GetFactory()const;
+		Microsoft::WRL::ComPtr<IDXGIFactory6> GetFactory()const;
 		void Discard();
 		Factory();
 		~Factory();

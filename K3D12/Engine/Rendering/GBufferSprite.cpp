@@ -662,6 +662,12 @@ void K3D12::GBufferSprite::StartLightingPass(K3D12::UnorderedAccessValue* lights
 
 }
 
+void K3D12::GBufferSprite::TransitionResource(GEOMETRY_TYPE type, D3D12_RESOURCE_STATES states)
+{
+	_geometryResource[type].ResourceTransition(_list->GetCommandList().Get(), states);
+
+}
+
 void K3D12::GBufferSprite::TransitionGeometryPassStart()
 {
 	_geometryResource[GEOMETRY_TYPE::NORMAL].ResourceTransition(_list->GetCommandList().Get(), D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET);
