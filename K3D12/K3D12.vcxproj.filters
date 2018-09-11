@@ -112,6 +112,9 @@
     <Filter Include="Engine\Audio">
       <UniqueIdentifier>{0e63bbbd-1155-4b4e-9cac-9dadd05d8c65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\TaskComponent">
+      <UniqueIdentifier>{5171071d-d4a1-4e24-aab7-b2003a049994}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -380,6 +383,15 @@
     </ClCompile>
     <ClCompile Include="AudioLoader.cpp">
       <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskInvorker.cpp">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskList.cpp">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskManager.cpp">
+      <Filter>Engine\TaskComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -658,6 +670,15 @@
     </ClInclude>
     <ClInclude Include="AudioLoader.h">
       <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskInvorker.h">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskList.h">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskManager.h">
+      <Filter>Engine\TaskComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
