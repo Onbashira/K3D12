@@ -19,6 +19,7 @@ namespace K3D12 {
 	private:
 		//<Key =  pair<MasterPathIndex , MasterPathName> , value = <key = childPathName, value = PathOBJ>
 		std::map < std::pair<unsigned int, std::string>, std::map<std::string, RenderingPathObject >> _renderingPathMap;
+		std::maa<std::string,int>
 		std::map < std::string, bool> _masterPathEnableMap;
 		RenderTarget _rendertarget;
 	public:

@@ -216,6 +216,7 @@
     <ClCompile Include="TaskInvorker.cpp" />
     <ClCompile Include="TaskList.cpp" />
     <ClCompile Include="TaskManager.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioComponent.h" />
@@ -313,6 +314,7 @@
     <ClInclude Include="TaskInvorker.h" />
     <ClInclude Include="TaskList.h" />
     <ClInclude Include="TaskManager.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">

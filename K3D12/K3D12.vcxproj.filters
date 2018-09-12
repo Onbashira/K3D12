@@ -115,6 +115,9 @@
     <Filter Include="Engine\TaskComponent">
       <UniqueIdentifier>{5171071d-d4a1-4e24-aab7-b2003a049994}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Timer">
+      <UniqueIdentifier>{b9c4a4c6-98ec-4fdf-bcf1-31930439017d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -392,6 +395,9 @@
     </ClCompile>
     <ClCompile Include="TaskManager.cpp">
       <Filter>Engine\TaskComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Engine\Timer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -679,6 +685,9 @@
     </ClInclude>
     <ClInclude Include="TaskManager.h">
       <Filter>Engine\TaskComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Engine\Timer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

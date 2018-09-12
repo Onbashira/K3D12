@@ -81,22 +81,22 @@ void K3D12::RenderingManager::InitializeOnAfterExcute()
 
 std::weak_ptr<K3D12::GraphicsCommandList> K3D12::RenderingManager::GetRenderingCommandList(std::string pathName, std::string childPathName)
 {
-	return std::weak_ptr<GraphicsCommandList>();
+	return _renderingPathMap[];
 }
 
 std::weak_ptr<K3D12::GraphicsCommandList> K3D12::RenderingManager::GetRenderingCommandList(unsigned int pathIndex, unsigned int childPathIndex)
 {
-	return std::weak_ptr<GraphicsCommandList>();
+	return _renderingPathMap[];
 }
 
 std::weak_ptr<K3D12::GraphicsCommandList> K3D12::RenderingManager::GetRenderingCommandList(unsigned int pathIndex, std::string childPathName)
 {
-	return std::weak_ptr<GraphicsCommandList>();
+	return _renderingPathMap[];
 }
 
 std::weak_ptr<K3D12::GraphicsCommandList> K3D12::RenderingManager::GetRenderingCommandList(std::string pathName, unsigned int childPathIndex)
 {
-	return std::weak_ptr<K3D12::GraphicsCommandList>();
+	return _renderingPathMap[];
 }
 
 unsigned int K3D12::RenderingManager::GetRenderingPathIndex(std::string pathName, std::string childPathName)

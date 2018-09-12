@@ -23,7 +23,7 @@ namespace K3D12 {
 		virtual ~ILogger() {};
 	};
 
-	class  SystemLogger : public ILogger,private NonCopyable {
+	class  SystemLogger : public ILogger, private NonCopyable {
 	private:
 		LogLevel _LogFilter;
 		std::ofstream _debugFile;
@@ -46,4 +46,8 @@ namespace K3D12 {
 		static SystemLogger& GetInstance();
 		~SystemLogger();
 	};
+
+#define LOG (logLevel , str) SystemLogger::GetInstance().Log(logLevel,"%s","%d","%s",__FILE__,__LINE__,str.c_str())
+#define LOGW(logLevel , str) SystemLogger::GetInstance().LogW(logLevel"%ls","%ld","%ls",__FILE__,__LINE__,str.c_str())
+
 }

@@ -31,9 +31,13 @@ namespace K3D12::TaskSystem {
 	{
 		using return_type = typename std::result_of<F(Args...)>::type;
 		auto task = std::make_shared<std::packaged_task<return_type()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
-
-
-		return std::future<typename std::result_of<F(Args ...)>::type>();
+		std::future<return_type> ret = task->get_future(); 
+		{
+			std::unique_lock<std::mutex> lock(_mutex);
+			_tasks.emplace([task]() {(*task)(); });
+		}
+		_condition.notify_one();
+		return ret;
 	}
 }
 
