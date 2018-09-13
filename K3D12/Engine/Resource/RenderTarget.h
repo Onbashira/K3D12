@@ -14,10 +14,9 @@ namespace K3D12 {
 
 	class RenderTarget
 	{
-	private:
 		unsigned int										_bufferNum;
 		unsigned int										_currentIndex;
-		Microsoft::WRL::ComPtr<IDXGISwapChain3>				_swapChain;
+		Microsoft::WRL::ComPtr<IDXGISwapChain4>				_swapChain;
 		std::vector<Resource>								_rtResource;
 		DescriptorHeap										_rtHeap;
 	public:

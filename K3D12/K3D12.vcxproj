@@ -184,8 +184,6 @@
     <ClCompile Include="Engine\Model\PMX\PMXModel.cpp" />
     <ClCompile Include="Engine\PipelineState\PipelineStateObject.cpp" />
     <ClCompile Include="Engine\Rendering\GBufferSprite.cpp" />
-    <ClCompile Include="Engine\Rendering\RenderingManager.cpp" />
-    <ClCompile Include="Engine\Rendering\RenderingPathObject.cpp" />
     <ClCompile Include="Engine\Resource\ConstantBuffer.cpp" />
     <ClCompile Include="Engine\Resource\DepthStencilBuffer.cpp" />
     <ClCompile Include="Engine\Resource\IndexBuffer.cpp" />
@@ -280,8 +278,6 @@
     <ClInclude Include="Engine\Model\PMX\PMXModel.h" />
     <ClInclude Include="Engine\PipelineState\PipelineStateObject.h" />
     <ClInclude Include="Engine\Rendering\GBufferSprite.h" />
-    <ClInclude Include="Engine\Rendering\RenderingManager.h" />
-    <ClInclude Include="Engine\Rendering\RenderingPathObject.h" />
     <ClInclude Include="Engine\Resource\ConstantBuffer.h" />
     <ClInclude Include="Engine\Resource\DepthStencilBuffer.h" />
     <ClInclude Include="Engine\Resource\IndexBuffer.h" />
