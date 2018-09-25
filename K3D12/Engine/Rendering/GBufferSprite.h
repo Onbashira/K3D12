@@ -11,7 +11,7 @@
 #include "../Window/Window.h"
 #include "../Util/Math.h"
 #include "../GameConponent/Camera/Camera.h"
-#include "../Resource/UnorderdAccessView.h"
+#include "../Resource/UnorderedAccessValue.h"
 
 namespace K3D12 {
 

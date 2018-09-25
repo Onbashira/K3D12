@@ -7,6 +7,7 @@
 #include "../PMD/PMDModel.h"
 #include "../../PipelineState/PipelineStateObject.h"
 #include "../../DescriptorHeap/DescriptorHeap.h"
+#include "../../Resource/UnorderedAccessValue.h"
 
 
 namespace K3D12 {
@@ -22,6 +23,7 @@ namespace K3D12 {
 	};
 
 	struct MMDWeightDeform {
+		unsigned int deformType;
 		int boneIndex01;
 		int boneIndex02;
 		int boneIndex03;
@@ -33,8 +35,8 @@ namespace K3D12 {
 		Vector3 c;
 		Vector3 r0;
 		Vector3 r1;
-		MMDWeightDeform() :
-			boneIndex01(0), boneIndex02(0), boneIndex03(0), boneIndex04(0),
+		MMDWeightDeform() : 
+			deformType(0),boneIndex01(0), boneIndex02(0), boneIndex03(0), boneIndex04(0),
 			boneWeight01(0.0f), boneWeight02(0.0f), boneWeight03(0.0f), boneWeight04(0.0f),
 			c(),r0(),r1()
 		{};
@@ -76,7 +78,6 @@ namespace K3D12 {
 	};
 
 
-	//オリジナルデータを編集（変換）して、その情報の必要部分をこの構造体に代入　→　めっちゃおもそう　→　非同期ならどうだろうか ->ComputeShaderあるやん
 	struct MMDVertex {
 		//位置
 		Vector3 pos;
@@ -85,11 +86,11 @@ namespace K3D12 {
 		//UV座標
 		Vector2 texCoord;
 		//変形タイプ
-		MMDWeightDeformType deformType;
+		//MMDWeightDeformType deformType;
 		//変形参照情報
-		MMDWeightDeform deformation;
+		//MMDWeightDeform deformation;
 		MMDVertex() : 
-			pos(), normal(), texCoord(), deformType(), deformation() {};
+			pos(), normal(), texCoord(){};
 		~MMDVertex() {};
 		MMDVertex(const MMDVertex& other) {
 			*this = other;
@@ -98,8 +99,8 @@ namespace K3D12 {
 			pos = rhs.pos;
 			normal = rhs.normal;
 			texCoord = rhs.texCoord;
-			deformType = rhs.deformType;
-			deformation = rhs.deformation;
+			//deformType = rhs.deformType;
+			//deformation = rhs.deformation;
 			return *this;
 		}
 	};
@@ -171,9 +172,6 @@ namespace K3D12 {
 		};
 	};
 
-
-
-
 	struct MMDIKLinkData {
 		unsigned int boneIndex;
 		bool hasLimit;		//下限値上限値の判断フラグ
@@ -215,6 +213,8 @@ namespace K3D12 {
 	{
 		//頂点情報
 		std::vector<MMDVertex>						_vertexes;
+		std::vector<MMDWeightDeform>				_deformationData;
+		K3D12::UnorderedAccessValue					_deformation;
 		//頂点インデックス情報
 		MMDIndexList								_indexList;
 		//テクスチャ情報

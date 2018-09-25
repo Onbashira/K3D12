@@ -1,0 +1,16 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: 中間ディレクトリ (x64\Debug\) に別のプロジェクト (Bullet3Collision.vcxproj, Bullet3Common.vcxproj, Bullet3Dynamics.vcxproj, Bullet3Geometry.vcxproj, BulletExampleBrowserLib.vcxproj) と共有されているファイルが含まれています。これにより、クリーンしてリビルド動作が適切に行われない可能性があります。
+  CloneTreeCreator.cpp
+  CoilCreator.cpp
+  DillCreator.cpp
+  IDRandomUtil.cpp
+d:\users\onbashira\desktop\bullet3-2.87\bullet3-2.87\extras\inversedynamics\coilcreator.hpp : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\Extras\InverseDynamics\CoilCreator.cpp)
+d:\users\onbashira\desktop\bullet3-2.87\bullet3-2.87\extras\inversedynamics\dillcreator.hpp : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\Extras\InverseDynamics\DillCreator.cpp)
+  MultiBodyNameMap.cpp
+  MultiBodyTreeCreator.cpp
+  MultiBodyTreeDebugGraph.cpp
+  RandomTreeCreator.cpp
+  SimpleTreeCreator.cpp
+  User2InternalIndex.cpp
+  btMultiBodyTreeCreator.cpp
+  invdyn_bullet_comparison.cpp
+  BulletInverseDynamicsUtils.vcxproj -> D:\Users\Onbashira\Desktop\bullet3-2.87\bullet3-2.87\build3\vs2010\x64\Debug\BulletInverseDynamicsUtils.lib

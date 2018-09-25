@@ -33,6 +33,8 @@ HRESULT K3D12::ShaderObjectLibrary::CreatePSO(std::string psoName, D3D12_GRAPHIC
 		if (SUCCEEDED(hr)) {
 
 			SystemLogger::GetInstance().Log(LogLevel::Info, "PSO‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + psoName + "\n");
+			DEBUG_LOG(std::string("PSO‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + psoName + "\n"));
+
 			return hr;
 		}
 		return hr;

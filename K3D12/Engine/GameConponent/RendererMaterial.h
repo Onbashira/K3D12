@@ -18,6 +18,6 @@ namespace K3D12 {
 	{
 		Vector4 albedo;		//アルベド
 		float reflectivity; //金属質感
-		float roughness; //microsuface値
+		float roughness; //microsurface値
 	};
 }

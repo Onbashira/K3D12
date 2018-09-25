@@ -124,9 +124,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AudioComponent.cpp" />
-    <ClCompile Include="AudioLoader.cpp" />
-    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Engine\Animator\Animator.cpp" />
     <ClCompile Include="Engine\Animator\MotionAssetPool.cpp" />
     <ClCompile Include="Engine\Animator\MotionManager.cpp" />
@@ -136,6 +133,9 @@
     <ClCompile Include="Engine\Animator\VMD.cpp" />
     <ClCompile Include="Engine\Animator\VMDLoader.cpp" />
     <ClCompile Include="Engine\AsyncComponent\Fence.cpp" />
+    <ClCompile Include="Engine\Audio\AudioComponent.cpp" />
+    <ClCompile Include="Engine\Audio\AudioLoader.cpp" />
+    <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\CommandContext\CommandAllocator.cpp" />
     <ClCompile Include="Engine\CommandContext\CommandListLibrary.cpp" />
     <ClCompile Include="Engine\CommandContext\CommandQueue.cpp" />
@@ -159,7 +159,6 @@
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveComponent.cpp" />
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveCreater.cpp" />
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveObject.cpp" />
-    <ClCompile Include="Engine\GameConponent\Primitive\Quad.cpp" />
     <ClCompile Include="Engine\GameConponent\Primitive\Sphere.cpp" />
     <ClCompile Include="Engine\GameConponent\RendererMaterial.cpp" />
     <ClCompile Include="Engine\GameConponent\Scene\Scene.cpp" />
@@ -184,6 +183,10 @@
     <ClCompile Include="Engine\Model\PMX\PMXModel.cpp" />
     <ClCompile Include="Engine\PipelineState\PipelineStateObject.cpp" />
     <ClCompile Include="Engine\Rendering\GBufferSprite.cpp" />
+    <ClCompile Include="Engine\Rendering\RootRenderingPath.cpp" />
+    <ClCompile Include="Engine\Rendering\RenderingPathBase.cpp" />
+    <ClCompile Include="Engine\Rendering\RenderingPathManager.cpp" />
+    <ClCompile Include="Engine\Rendering\SceneRenderer.cpp" />
     <ClCompile Include="Engine\Resource\ConstantBuffer.cpp" />
     <ClCompile Include="Engine\Resource\DepthStencilBuffer.cpp" />
     <ClCompile Include="Engine\Resource\IndexBuffer.cpp" />
@@ -191,8 +194,7 @@
     <ClCompile Include="Engine\Resource\Resource.cpp" />
     <ClCompile Include="Engine\Resource\ResourceCreater.cpp" />
     <ClCompile Include="Engine\Resource\ShaderResource.cpp" />
-    <ClCompile Include="Engine\Resource\StructuredBuffer.cpp" />
-    <ClCompile Include="Engine\Resource\UnorderdAccessView.cpp" />
+    <ClCompile Include="Engine\Resource\UnorderedAccessValue.cpp" />
     <ClCompile Include="Engine\Resource\VertexBuffer.cpp" />
     <ClCompile Include="Engine\ShaderComponent\HLSLIncluder.cpp" />
     <ClCompile Include="Engine\ShaderComponent\ShaderCluster.cpp" />
@@ -217,9 +219,6 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioComponent.h" />
-    <ClInclude Include="AudioLoader.h" />
-    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Engine\Animator\Animator.h" />
     <ClInclude Include="Engine\Animator\MotionAssetPool.h" />
     <ClInclude Include="Engine\Animator\MotionManager.h" />
@@ -230,6 +229,9 @@
     <ClInclude Include="Engine\Animator\VMDLoader.h" />
     <ClInclude Include="Engine\AsyncComponent\Fence.h" />
     <ClInclude Include="Engine\AsyncComponent\ThreadPool.h" />
+    <ClInclude Include="Engine\Audio\AudioComponent.h" />
+    <ClInclude Include="Engine\Audio\AudioLoader.h" />
+    <ClInclude Include="Engine\Audio\AudioManager.h" />
     <ClInclude Include="Engine\CommandContext\CommandAllocator.h" />
     <ClInclude Include="Engine\CommandContext\CommandListLibrary.h" />
     <ClInclude Include="Engine\CommandContext\CommandQueue.h" />
@@ -253,7 +255,6 @@
     <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveComponent.h" />
     <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveCreater.h" />
     <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveObject.h" />
-    <ClInclude Include="Engine\GameConponent\Primitive\Quad.h" />
     <ClInclude Include="Engine\GameConponent\Primitive\Sphere.h" />
     <ClInclude Include="Engine\GameConponent\RendererMaterial.h" />
     <ClInclude Include="Engine\GameConponent\Scene\Scene.h" />
@@ -278,6 +279,10 @@
     <ClInclude Include="Engine\Model\PMX\PMXModel.h" />
     <ClInclude Include="Engine\PipelineState\PipelineStateObject.h" />
     <ClInclude Include="Engine\Rendering\GBufferSprite.h" />
+    <ClInclude Include="Engine\Rendering\RootRenderingPath.h" />
+    <ClInclude Include="Engine\Rendering\RenderingPathBase.h" />
+    <ClInclude Include="Engine\Rendering\RenderingPathManager.h" />
+    <ClInclude Include="Engine\Rendering\SceneRenderer.h" />
     <ClInclude Include="Engine\Resource\ConstantBuffer.h" />
     <ClInclude Include="Engine\Resource\DepthStencilBuffer.h" />
     <ClInclude Include="Engine\Resource\IndexBuffer.h" />
@@ -285,8 +290,7 @@
     <ClInclude Include="Engine\Resource\Resource.h" />
     <ClInclude Include="Engine\Resource\ResourceCreater.h" />
     <ClInclude Include="Engine\Resource\ShaderResource.h" />
-    <ClInclude Include="Engine\Resource\StructuredBuffer.h" />
-    <ClInclude Include="Engine\Resource\UnorderdAccessView.h" />
+    <ClInclude Include="Engine\Resource\UnorderedAccessValue.h" />
     <ClInclude Include="Engine\Resource\VertexBuffer.h" />
     <ClInclude Include="Engine\ShaderComponent\HLSLIncluder.h" />
     <ClInclude Include="Engine\ShaderComponent\ShaderCluster.h" />

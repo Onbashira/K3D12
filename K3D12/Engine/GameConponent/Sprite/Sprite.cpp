@@ -179,8 +179,7 @@ void K3D12::Sprite::Initializer()
 
 	//MaterialFactor Update
 	this->_info.alphaFactor = 1.0f;
-	this->_info.topLeftUV = Vector2(0.0f, 0.0f);
-	this->_info.bottomRightUV = Vector2(1.0f, 1.0f);
+	this->_info.color = Vector3::zero;
 	_materialBuffer.Update(&_info, sizeof(SpriteInfo), 0);
 
 	//TransformUpdate
@@ -281,6 +280,8 @@ void K3D12::Sprite::SetRect(float top, float left, float bottom, float right)
 		_vertexes[i].texCoord = Vector2(pos[i % 2], pos[(i) % _vertexes.size() / 2 + 2]);
 	}
 
+	_vertexBuffer->Update(&_vertexes[0], sizeof(Vertex2D)*_vertexes.size(), 0);
+
 }
 
 void K3D12::Sprite::SetRect(Vector2 topLeft, Vector2 bottomRight)
@@ -291,16 +292,39 @@ void K3D12::Sprite::SetRect(Vector2 topLeft, Vector2 bottomRight)
 		_vertexes[i].texCoord = Vector2(pos[i % 2], pos[(i) % _vertexes.size() / 2 + 2]);
 	}
 
+	_vertexBuffer->Update(&_vertexes[0], sizeof(Vertex2D)*_vertexes.size(), 0);
+}
+
+void K3D12::Sprite::SetColor(Vector3 color)
+{
+	this->_info.color = std::move(color);
+	_materialBuffer.Update(&_info, sizeof(SpriteInfo), 0);
+}
+
+void K3D12::Sprite::SetColor(float r, float g, float b)
+{
+	this->_info.color = std::move(Vector3::Saturate(Vector3(r,g,b)));
+	_materialBuffer.Update(&_info, sizeof(SpriteInfo), 0);
+}
+
+void K3D12::Sprite::SetTransparency(float alpha)
+{
+	this->_info.alphaFactor = std::move(alpha);
+
+	_materialBuffer.Update(&_info, sizeof(SpriteInfo), 0);
+
 }
 
 void K3D12::Sprite::Translate(Vector2 pos)
 {
 	GameObject::Translate(Vector3(pos.x, pos.y, 0.0f));
+	K3D12::GameObject::UpdateTransformBuffer();
 }
 
 void K3D12::Sprite::Move(Vector2 velocity)
 {
 	K3D12::GameObject::Move(Vector3(velocity.x, velocity.y, 0.0f));
+	K3D12::GameObject::UpdateTransformBuffer();
 }
 
 Vector2 K3D12::Sprite::GetPos()
@@ -311,7 +335,7 @@ Vector2 K3D12::Sprite::GetPos()
 void K3D12::Sprite::SetScale(Vector2 scale)
 {
 	K3D12::GameObject::SetScale(Vector3(scale.x, scale.y, 0.0f));
-
+	K3D12::GameObject::UpdateTransformBuffer();
 }
 
 Vector2 K3D12::Sprite::GetScale()
@@ -322,6 +346,7 @@ Vector2 K3D12::Sprite::GetScale()
 void K3D12::Sprite::Rotate(float deg)
 {
 	K3D12::GameObject::RotationEulerAngles(Vector3(0.0f, deg, 0.0f));
+	K3D12::GameObject::UpdateTransformBuffer();
 }
 
 void K3D12::Sprite::Rotate(Quaternion quaternion)

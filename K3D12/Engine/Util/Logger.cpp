@@ -219,12 +219,3 @@ K3D12::SystemLogger & K3D12::SystemLogger::GetInstance()
 	static K3D12::SystemLogger instance;
 	return instance;
 }
-
-
-#ifdef _DEBUG
-#define LOG(message,LogLevel) SystemLogger::GetInstance.Log(LogLevel,"%s","%d","%s" ,__FILE__,__LINE__, message.c_str())
-#endif // _DEBUG
-
-#ifdef _DEBUG
-	#define LOGW(message,LogLevel) SystemLogger::GetInstance.LogW(LogLevel,"%ls","%ld","%ls" ,__FILE__,__LINE__, message.c_str())
-#endif // _DEBUG

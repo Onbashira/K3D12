@@ -8,7 +8,7 @@
 #include "../RendererMaterial.h"
 #include "../../PipelineState/PipelineStateObject.h"
 #include "../../Signature/RootSignature.h"
-#include "../../Resource/UnorderdAccessView.h"
+#include "../../Resource/UnorderedAccessValue.h"
 #include "PrimitiveComponent.h"
 #include "PrimitiveObject.h"
 

@@ -1,0 +1,42 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: 中間ディレクトリ (x64\Release\) に別のプロジェクト (Bullet3Collision.vcxproj, Bullet3Common.vcxproj, Bullet3Geometry.vcxproj) と共有されているファイルが含まれています。これにより、クリーンしてリビルド動作が適切に行われない可能性があります。
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+  b3GpuGridBroadphase.cpp
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+  b3GpuParallelLinearBvh.cpp
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+  b3GpuParallelLinearBvhBroadphase.cpp
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+  b3GpuSapBroadphase.cpp
+  b3OpenCLUtils.cpp
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+  b3ContactCache.cpp
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+  b3ConvexHullContact.cpp
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+  b3GjkEpa.cpp
+  b3OptimizedBvh.cpp
+  b3QuantizedBvh.cpp
+  b3StridingMeshInterface.cpp
+  b3TriangleCallback.cpp
+  b3TriangleIndexVertexArray.cpp
+  b3VoronoiSimplexSolver.cpp
+  b3BoundSearchCL.cpp
+  b3FillCL.cpp
+  b3LauncherCL.cpp
+  b3PrefixScanCL.cpp
+  b3PrefixScanFloat4CL.cpp
+  b3RadixSort32CL.cpp
+  b3GpuRaycast.cpp
+  b3GpuGenericConstraint.cpp
+  b3GpuJacobiContactSolver.cpp
+  b3GpuNarrowPhase.cpp
+  b3GpuPgsConstraintSolver.cpp
+  b3GpuPgsContactSolver.cpp
+  b3GpuRigidBodyPipeline.cpp
+  b3Solver.cpp
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+  clew.c
+d:\users\onbashira\desktop\bullet3-2.87\bullet3-2.87\src\clew\clew.c(136): warning C4133: '関数': 'const char *' と 'LPCWSTR' の間で型に互換性がありません。
+  Bullet3OpenCL_clew.vcxproj -> D:\Users\Onbashira\Desktop\bullet3-2.87\bullet3-2.87\build3\vs2010\x64\Release\Bullet3OpenCL_clew.lib

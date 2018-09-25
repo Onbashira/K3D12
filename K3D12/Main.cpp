@@ -6,7 +6,7 @@
 #include "./Engine/Input/InputManager.h"
 #include "./Engine/GameConponent/Primitive/Cube.h"
 #include "./Engine/Util/Math.h"
-#include "./Engine/Resource/UnorderdAccessView.h"
+#include "./Engine/Resource/UnorderedAccessValue.h"
 
 #include "Engine/CommandContext/GraphicsCommandList.h"
 #include "Engine/Signature/RootSignature.h"

@@ -107,54 +107,56 @@ void K3D12::MMDModel::TransformUpdate()
 void K3D12::MMDModel::AnimationUpdate()
 {
 
-	//ボーン情報から頂点ブレンディング
-	for (unsigned int i = 0; i < _vertexes.size(); ++i) {
-		Matrix rotMat;
-		auto vertex = this->_vertexes[i];
-		auto& deform = _resourceData.lock()->_vertexes[i].deformation;
-		switch (_resourceData.lock()->_vertexes[i].deformType)
-		{
-		case MMDWeightDeformType::BDEF1:
-			deform.bdef1;
-			rotMat = CulcBDEF1(deform);
-			vertex.pos = Vector3::Transform(vertex.pos, rotMat);
-			vertex.normal = Vector3::TransformNormal(vertex.normal, rotMat);
-			break;
-		case MMDWeightDeformType::BDEF2:
-			deform.bdef2;
-			rotMat = CulcBDEF2(deform);
-			vertex.pos = Vector3::Transform(vertex.pos, rotMat);
-			vertex.normal = Vector3::TransformNormal(vertex.normal, rotMat);
-			break;
-		case MMDWeightDeformType::BDEF4:
-			deform.bdef4;
+	//GPUにコードを移植すること！
 
-			rotMat = rotMat = CulcBDEF4(deform);
-			vertex.pos = Vector3::Transform(vertex.pos, rotMat);
-			vertex.normal = Vector3::TransformNormal(vertex.normal, rotMat);
-			break;
-		case MMDWeightDeformType::SDEF:
-			deform.sdef;
-			{
-				auto& skeltonRef = _resourceData.lock()->_boneTree;
-				auto mcPair = CulcSDEF(deform);
-				Vector4 q0 = skeltonRef->boneAccessor[skeltonRef->boneNameAccessor[deform.sdef.boneIndex01]]->rotation;
-				Vector4 q1 = skeltonRef->boneAccessor[skeltonRef->boneNameAccessor[deform.sdef.boneIndex02]]->rotation;
-				Quaternion q = Quaternion::Slerp(q0,q1, mcPair.second);
-				
-				vertex.pos = mcPair.first + Vector3::Rotate(vertex.pos - deform.sdef.c, q);
-				vertex.normal = Vector3::Rotate(vertex.normal, q).Normalize();
-			
-			}
-			break;
-		case MMDWeightDeformType::QDEF:
-			deform.qdef;
+	////ボーン情報から頂点ブレンディング
+	//for (unsigned int i = 0; i < _vertexes.size(); ++i) {
+	//	Matrix rotMat;
+	//	auto vertex = this->_vertexes[i];
+	//	auto& deform = _resourceData.lock()->_vertexes[i].deformation;
+	//	switch (_resourceData.lock()->_vertexes[i].deformType)
+	//	{
+	//	case MMDWeightDeformType::BDEF1:
+	//		deform.bdef1;
+	//		rotMat = CulcBDEF1(deform);
+	//		vertex.pos = Vector3::Transform(vertex.pos, rotMat);
+	//		vertex.normal = Vector3::TransformNormal(vertex.normal, rotMat);
+	//		break;
+	//	case MMDWeightDeformType::BDEF2:
+	//		deform.bdef2;
+	//		rotMat = CulcBDEF2(deform);
+	//		vertex.pos = Vector3::Transform(vertex.pos, rotMat);
+	//		vertex.normal = Vector3::TransformNormal(vertex.normal, rotMat);
+	//		break;
+	//	case MMDWeightDeformType::BDEF4:
+	//		deform.bdef4;
 
-			break;
-		default:
-			break;
-		}
-	}
+	//		rotMat = rotMat = CulcBDEF4(deform);
+	//		vertex.pos = Vector3::Transform(vertex.pos, rotMat);
+	//		vertex.normal = Vector3::TransformNormal(vertex.normal, rotMat);
+	//		break;
+	//	case MMDWeightDeformType::SDEF:
+	//		deform.sdef;
+	//		{
+	//			auto& skeltonRef = _resourceData.lock()->_boneTree;
+	//			auto mcPair = CulcSDEF(deform);
+	//			Vector4 q0 = skeltonRef->boneAccessor[skeltonRef->boneNameAccessor[deform.sdef.boneIndex01]]->rotation;
+	//			Vector4 q1 = skeltonRef->boneAccessor[skeltonRef->boneNameAccessor[deform.sdef.boneIndex02]]->rotation;
+	//			Quaternion q = Quaternion::Slerp(q0,q1, mcPair.second);
+	//			
+	//			vertex.pos = mcPair.first + Vector3::Rotate(vertex.pos - deform.sdef.c, q);
+	//			vertex.normal = Vector3::Rotate(vertex.normal, q).Normalize();
+	//		
+	//		}
+	//		break;
+	//	case MMDWeightDeformType::QDEF:
+	//		deform.qdef;
+
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//}
 }
 
 void K3D12::MMDModel::SkeltonReset()

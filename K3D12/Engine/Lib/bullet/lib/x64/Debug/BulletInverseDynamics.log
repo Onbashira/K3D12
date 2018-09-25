@@ -1,0 +1,6 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: 中間ディレクトリ (x64\Debug\) に別のプロジェクト (Bullet2FileLoader.vcxproj, Bullet3Collision.vcxproj, Bullet3Common.vcxproj, Bullet3Dynamics.vcxproj, Bullet3Geometry.vcxproj, Bullet3OpenCL_clew.vcxproj, BulletExampleBrowserLib.vcxproj, BulletFileLoader.vcxproj, BulletInverseDynamicsUtils.vcxproj, BulletWorldImporter.vcxproj, BulletXmlWorldImporter.vcxproj) と共有されているファイルが含まれています。これにより、クリーンしてリビルド動作が適切に行われない可能性があります。
+  IDMath.cpp
+  MultiBodyTree.cpp
+  MultiBodyTreeImpl.cpp
+  MultiBodyTreeInitCache.cpp
+  BulletInverseDynamics.vcxproj -> D:\Users\Onbashira\Desktop\bullet3-2.87\bullet3-2.87\build3\vs2010\x64\Debug\BulletInverseDynamics.lib

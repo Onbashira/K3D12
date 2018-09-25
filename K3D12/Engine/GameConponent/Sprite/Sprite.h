@@ -20,9 +20,8 @@ namespace K3D12 {
 	private:
 		struct SpriteInfo {
 			float	alphaFactor; //0.0~1.0
+			Vector3 color;
 			Vector2 centerOffset;
-			Vector2	topLeftUV;			//Rect           
-			Vector2 bottomRightUV;		//Rect
 		}_info;
 
 		unsigned int  _height;
@@ -31,6 +30,7 @@ namespace K3D12 {
 		std::vector<Vertex2D> _vertexes;
 		std::vector<unsigned int> _list;
 		std::weak_ptr<ShaderResource> _shaderResource;
+
 	protected:
 
 	public:
@@ -50,6 +50,9 @@ namespace K3D12 {
 		void AttachTexture(std::string path); //テクスチャアタッチ（すでにセットされたテクスチャの所有権を破棄して新しいテクスチャの所有権を得る）
 		void SetRect(float top, float left, float bottom, float right);
 		void SetRect(Vector2 topLeft, Vector2 bottomLeft);
+		void SetColor(Vector3 color);
+		void SetColor(float r, float g, float b);
+		void SetTransparency(float alpha);
 		void Translate(Vector2 pos);
 		void Move(Vector2 velocity);
 		Vector2 GetPos();

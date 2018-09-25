@@ -1,7 +1,7 @@
 #include <memory>
 #include <map>
 #include "LightManager.h"
-#include "../../Resource/UnorderdAccessView.h"
+#include "../../Resource/UnorderedAccessValue.h"
 
 K3D12::LightManager::LightManager()
 {

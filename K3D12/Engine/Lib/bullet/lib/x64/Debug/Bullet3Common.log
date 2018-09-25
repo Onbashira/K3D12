@@ -1,0 +1,4 @@
+﻿  b3AlignedAllocator.cpp
+  b3Logging.cpp
+  b3Vector3.cpp
+  Bullet3Common.vcxproj -> D:\Users\Onbashira\Desktop\bullet3-2.87\bullet3-2.87\build3\vs2010\x64\Debug\Bullet3Common.lib

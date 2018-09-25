@@ -1,0 +1,8 @@
+﻿cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+  b3AlignedAllocator.cpp
+  b3Logging.cpp
+cl : コマンド ライン warning D9002: 不明なオプション '/arch:SSE2' を無視します。
+  b3Vector3.cpp
+  Bullet3Common.vcxproj -> D:\Users\Onbashira\Desktop\bullet3-2.87\bullet3-2.87\build3\vs2010\x64\Release\Bullet3Common.lib

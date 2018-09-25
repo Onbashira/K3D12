@@ -12,7 +12,7 @@
 #include "../Util/Utility.h"
 #include "../CommandContext/GraphicsContextLibrary.h"
 #include "../GameConponent/Camera/Camera.h"
-#include "../Resource/UnorderdAccessView.h"
+#include "../Resource/UnorderedAccessValue.h"
 #include "../CommandContext/GraphicsCommandList.h"
 #include "../Signature/RootSignature.h"
 

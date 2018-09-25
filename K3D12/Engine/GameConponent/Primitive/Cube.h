@@ -3,7 +3,7 @@
 #include "PrimitiveComponent.h"
 #include "PrimitiveObject.h"
 
-#include "../../Resource/UnorderdAccessView.h"
+#include "../../Resource/UnorderedAccessValue.h"
 
 
 namespace K3D12 {

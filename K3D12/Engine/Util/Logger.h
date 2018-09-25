@@ -47,7 +47,15 @@ namespace K3D12 {
 		~SystemLogger();
 	};
 
-#define LOG (logLevel , str) SystemLogger::GetInstance().Log(logLevel,"%s","%d","%s",__FILE__,__LINE__,str.c_str())
-#define LOGW(logLevel , str) SystemLogger::GetInstance().LogW(logLevel"%ls","%ld","%ls",__FILE__,__LINE__,str.c_str())
+
+#define	DEBUG_LOG(str)		SystemLogger::GetInstance().Log(K3D12::LogLevel::Debug,		"[File: %s, Line: %d] {%s}\n", __FILE__, __LINE__, str.c_str())
+#define INFO_LOG(str)		SystemLogger::GetInstance().Log(K3D12::LogLevel::Info ,		"[File: %s, Line: %d] {%s}\n", __FILE__, __LINE__, str.c_str())
+#define DETAILS_LOG(str)	SystemLogger::GetInstance().Log(K3D12::LogLevel::Details ,	"[File: %s, Line: %d] {%s}\n", __FILE__, __LINE__, str.c_str())
+#define WARNING_LOG(str)	SystemLogger::GetInstance().Log(K3D12::LogLevel::Warning ,	"[File: %s, Line: %d] {%s}\n", __FILE__, __LINE__, str.c_str())
+#define ERROR_LOG(str)		SystemLogger::GetInstance().Log(K3D12::LogLevel::Error ,	"[File: %s, Line: %d] {%s}\n", __FILE__, __LINE__, str.c_str())
+
+#if defined(UNICODE) || defined(_UNICODE)
+#else
+#endif
 
 }

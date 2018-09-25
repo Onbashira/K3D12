@@ -1,0 +1,32 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: 中間ディレクトリ (x64\Debug\) に別のプロジェクト (Bullet2FileLoader.vcxproj, Bullet3Collision.vcxproj, Bullet3Common.vcxproj, Bullet3Dynamics.vcxproj, Bullet3Geometry.vcxproj, BulletExampleBrowserLib.vcxproj, BulletInverseDynamicsUtils.vcxproj) と共有されているファイルが含まれています。これにより、クリーンしてリビルド動作が適切に行われない可能性があります。
+  b3GpuGridBroadphase.cpp
+  b3GpuParallelLinearBvh.cpp
+  b3GpuParallelLinearBvhBroadphase.cpp
+  b3GpuSapBroadphase.cpp
+  b3OpenCLUtils.cpp
+  b3ContactCache.cpp
+  b3ConvexHullContact.cpp
+  b3GjkEpa.cpp
+  b3OptimizedBvh.cpp
+  b3QuantizedBvh.cpp
+  b3StridingMeshInterface.cpp
+  b3TriangleCallback.cpp
+  b3TriangleIndexVertexArray.cpp
+  b3VoronoiSimplexSolver.cpp
+  b3BoundSearchCL.cpp
+  b3FillCL.cpp
+  b3LauncherCL.cpp
+  b3PrefixScanCL.cpp
+  b3PrefixScanFloat4CL.cpp
+  b3RadixSort32CL.cpp
+  b3GpuRaycast.cpp
+  b3GpuGenericConstraint.cpp
+  b3GpuJacobiContactSolver.cpp
+  b3GpuNarrowPhase.cpp
+  b3GpuPgsConstraintSolver.cpp
+  b3GpuPgsContactSolver.cpp
+  b3GpuRigidBodyPipeline.cpp
+  b3Solver.cpp
+  clew.c
+d:\users\onbashira\desktop\bullet3-2.87\bullet3-2.87\src\clew\clew.c(136): warning C4133: '関数': 'const char *' と 'LPCWSTR' の間で型に互換性がありません。
+  Bullet3OpenCL_clew.vcxproj -> D:\Users\Onbashira\Desktop\bullet3-2.87\bullet3-2.87\build3\vs2010\x64\Debug\Bullet3OpenCL_clew.lib

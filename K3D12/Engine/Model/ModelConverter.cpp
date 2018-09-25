@@ -14,6 +14,7 @@
 #include "./ModelMesh.h"
 #include "../Resource/IndexBuffer.h"
 #include "../Resource/VertexBuffer.h"
+#include "../Resource/UnorderedAccessValue.h"
 
 
 constexpr UINT ToonMapTextureNum = 11;
@@ -59,17 +60,24 @@ std::shared_ptr<K3D12::MMDModelResourceData> K3D12::ModelConverter::ConvertPMDMo
 	//頂点コンバート
 	{
 		convertModel->_vertexes.resize(model->vertices.size());
+		convertModel->_deformationData.resize(model->vertices.size());
+
 		for (size_t i = 0; i < convertModel->_vertexes.size(); i++) {
 			convertModel->_vertexes[i].pos = Vector3::Transform(model->vertices[i].pos, rotMat);
 			convertModel->_vertexes[i].normal = Vector3::Transform(model->vertices[i].normal, rotMat);
 			convertModel->_vertexes[i].texCoord = std::move(Vector2(model->vertices[i].texCoord.x, model->vertices[i].texCoord.y));
-			convertModel->_vertexes[i].deformType = MMDWeightDeformType::BDEF2;
-			//convertModel->_vertexes[i].deformation.type = static_cast<int>(MMDWeightDeformType::BDEF2);
-			convertModel->_vertexes[i].deformation.boneIndex01 = model->vertices[i].boneIndex[0];
-			convertModel->_vertexes[i].deformation.boneIndex02 = model->vertices[i].boneIndex[1];
-			convertModel->_vertexes[i].deformation.boneWeight01 = model->vertices[i].boneWeight;
-			convertModel->_vertexes[i].deformation.boneWeight02 = 1.0f - model->vertices[i].boneWeight;
+			//convertModel->_vertexes[i].deformType = MMDWeightDeformType::BDEF2;
+			convertModel->_deformationData[i].deformType = static_cast<int>(MMDWeightDeformType::BDEF2);
+			convertModel->_deformationData[i].boneIndex01 = model->vertices[i].boneIndex[0];
+			convertModel->_deformationData[i].boneIndex02 = model->vertices[i].boneIndex[1];
+			convertModel->_deformationData[i].boneWeight01 = model->vertices[i].boneWeight;
+			convertModel->_deformationData[i].boneWeight02 = 1.0f - model->vertices[i].boneWeight;
 
+		}
+
+		//GPU渡し用の変形データの構築
+		{
+			convertModel->_deformation.Create(convertModel->_vertexes.size(), convertModel->_vertexes.size() * sizeof(MMDWeightDeform), &convertModel->_deformationData[0]);
 		}
 	}
 	//	インデックスリストコンバート
@@ -210,26 +218,33 @@ std::shared_ptr<K3D12::MMDModelResourceData> K3D12::ModelConverter::ConvertPMXMo
 		Matrix rotMat = Matrix::CreateRotationY(DegToRad(180.0f));
 
 		convertModel->_vertexes.resize(model->vertcies.size());
+		convertModel->_deformationData.resize(model->vertcies.size());
+
 		for (size_t i = 0; i < convertModel->_vertexes.size(); i++) {
 			convertModel->_vertexes[i].pos = Vector3::Transform(model->vertcies[i].position, rotMat);
 			convertModel->_vertexes[i].normal = Vector3::Transform(model->vertcies[i].normal, rotMat);;
 			convertModel->_vertexes[i].texCoord = model->vertcies[i].uv;
-			convertModel->_vertexes[i].deformType = static_cast<MMDWeightDeformType>(model->vertcies[i].weightDeformType);
+			//convertModel->_vertexes[i].deformType = static_cast<MMDWeightDeformType>(model->vertcies[i].weightDeformType);
 
-			//convertModel->_vertexes[i].deformation.type = static_cast<int>(model->vertcies[i].weightDeformType);
-			convertModel->_vertexes[i].deformation.boneIndex01 = model->vertcies[i].weightDeform.qdef.boneIndex01;
-			convertModel->_vertexes[i].deformation.boneIndex02 = model->vertcies[i].weightDeform.qdef.boneIndex02;
-			convertModel->_vertexes[i].deformation.boneIndex03 = model->vertcies[i].weightDeform.qdef.boneIndex03;
-			convertModel->_vertexes[i].deformation.boneIndex04 = model->vertcies[i].weightDeform.qdef.boneIndex04;
-			convertModel->_vertexes[i].deformation.boneWeight01 = model->vertcies[i].weightDeform.qdef.boneWeight01;
-			convertModel->_vertexes[i].deformation.boneWeight02 = model->vertcies[i].weightDeform.qdef.boneWeight02;
-			convertModel->_vertexes[i].deformation.boneWeight03 = model->vertcies[i].weightDeform.qdef.boneWeight03;
-			convertModel->_vertexes[i].deformation.boneWeight04 = model->vertcies[i].weightDeform.qdef.boneWeight04;
-			convertModel->_vertexes[i].deformation.c = model->vertcies[i].weightDeform.sdef.c;
-			convertModel->_vertexes[i].deformation.r0 = model->vertcies[i].weightDeform.sdef.r0;
-			convertModel->_vertexes[i].deformation.r1 = model->vertcies[i].weightDeform.sdef.r1;
+			convertModel->_deformationData[i].deformType = static_cast<int>(model->vertcies[i].weightDeformType);
+			convertModel->_deformationData[i].boneIndex01 = model->vertcies[i].weightDeform.qdef.boneIndex01;
+			convertModel->_deformationData[i].boneIndex02 = model->vertcies[i].weightDeform.qdef.boneIndex02;
+			convertModel->_deformationData[i].boneIndex03 = model->vertcies[i].weightDeform.qdef.boneIndex03;
+			convertModel->_deformationData[i].boneIndex04 = model->vertcies[i].weightDeform.qdef.boneIndex04;
+			convertModel->_deformationData[i].boneWeight01 = model->vertcies[i].weightDeform.qdef.boneWeight01;
+			convertModel->_deformationData[i].boneWeight02 = model->vertcies[i].weightDeform.qdef.boneWeight02;
+			convertModel->_deformationData[i].boneWeight03 = model->vertcies[i].weightDeform.qdef.boneWeight03;
+			convertModel->_deformationData[i].boneWeight04 = model->vertcies[i].weightDeform.qdef.boneWeight04;
+			convertModel->_deformationData[i].c = model->vertcies[i].weightDeform.sdef.c;
+			convertModel->_deformationData[i].r0 = model->vertcies[i].weightDeform.sdef.r0;
+			convertModel->_deformationData[i].r1 = model->vertcies[i].weightDeform.sdef.r1;
 
 			//convertModel->_vertexes[i].deformation.sdef = model->vertcies[i].weightDeform.sdef;
+		}
+
+		//GPU渡し用の変形データの構築
+		{
+			convertModel->_deformation.Create(convertModel->_vertexes.size(), convertModel->_vertexes.size() * sizeof(MMDWeightDeform), &convertModel->_deformationData[0]);
 		}
 	}
 	//	インデックスリストコンバート

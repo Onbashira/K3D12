@@ -146,6 +146,7 @@ namespace K3D12 {
 
 		static K3D12::CommandQueue&		GetMasterCommandQueue();
 
+		//ì’iŠK
 		Cube* CreateCube();
 
 		static Camera& GetCamera();

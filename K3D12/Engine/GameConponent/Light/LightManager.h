@@ -4,7 +4,7 @@
 #include <vector>
 #include <Windows.h>
 #include "Light.h"
-#include "../../Resource/UnorderdAccessView.h"
+#include "../../Resource/UnorderedAccessValue.h"
 
 namespace K3D12 {
 	class LightManager
