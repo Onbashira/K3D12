@@ -16,7 +16,9 @@ void K3D12::SceneRenderer::Rendering()
 {
 	int i = 0;
 	for (auto& rootPath : this->_renderingPath) {
-		rootPath.second->Rendering();
+		if (rootPath.second->IsEnable()) {
+			rootPath.second->Rendering();
+		}
 	}
 }
 

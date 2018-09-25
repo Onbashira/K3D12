@@ -35,7 +35,6 @@ void K3D12::RenderingPathBase::SetBeforExcutionInitializer(std::function<void(st
 void K3D12::RenderingPathBase::SetAfterExcutionInitializer(std::function<void(std::weak_ptr<GraphicsCommandList>)> function)
 {
 	this->_onInitAE = function;
-
 }
 
 void K3D12::RenderingPathBase::SetFrameStartInitializer(std::function<void(std::weak_ptr<GraphicsCommandList>)> function)

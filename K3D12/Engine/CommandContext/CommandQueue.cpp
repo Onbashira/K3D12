@@ -29,7 +29,8 @@ Microsoft::WRL::ComPtr<ID3D12CommandQueue> K3D12::CommandQueue::GetQueue()const
 void K3D12::CommandQueue::Wait(Fence * fence)
 {
 	if (fence != nullptr) {
-		fence->Wait(this);	}
+		fence->Wait(this);
+	}
 	else {
 		_fence.Wait(this);
 	}

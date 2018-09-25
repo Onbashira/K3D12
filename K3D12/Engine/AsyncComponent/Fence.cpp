@@ -1,6 +1,7 @@
 #include "Fence.h"
 #include "../System/D3D12System.h"
 #include "../CommandContext/CommandQueue.h"
+#include "../Util/Logger.h"
 
 K3D12::Fence::Fence():_fence(),_fenceValue(), _fenceEvent(nullptr)
 {
@@ -64,9 +65,14 @@ HRESULT K3D12::Fence::Wait(K3D12::CommandQueue * commandQueue)
 		hr = _fence->SetEventOnCompletion(fence, _fenceEvent);
 		if (FAILED(hr))
 			return hr;
-
+		//SystemLogger::GetInstance().Log(LogLevel::Details, "fence waiting... \n");
+		DETAILS_LOG(std::string("fence waiting... \n"));
 		WaitForSingleObject(_fenceEvent, INFINITE);
-	}
+
+	}		
+	//SystemLogger::GetInstance().Log(LogLevel::Details, "fence sysnc complete! \n");
+	DETAILS_LOG(std::string("fence sysnc complete! \n"));
+
 	return S_OK;
 }
 

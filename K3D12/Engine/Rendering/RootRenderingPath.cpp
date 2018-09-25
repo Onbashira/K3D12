@@ -18,15 +18,14 @@ void K3D12::RootRenderingPath::Rendering()
 {
 
 	std::vector<ID3D12CommandList*> lists;
-	int i = 0;
 	for (auto& list : this->_renderingPathMap.GetMap()) {
 
 		if (list.second->IsEnable()) {
 			lists.push_back(GraphicsContextLibrary::GetInstance().GetGraphicsCommandList(list.first)->GetCommandList().Get());
 		}
-		++i;
 	}
 	_excutionQueue.GetQueue()->ExecuteCommandLists(static_cast<UINT>(lists.size()), &lists[0]);
+
 	_excutionQueue.Wait();
 }
 
@@ -85,6 +84,11 @@ void K3D12::RootRenderingPath::Enable()
 void K3D12::RootRenderingPath::Disable()
 {
 	this->_isEnable = false;
+}
+
+bool K3D12::RootRenderingPath::IsEnable()
+{
+	return this->_isEnable;
 }
 
 

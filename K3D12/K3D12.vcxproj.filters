@@ -736,5 +736,8 @@
     <FxCompile Include="Engine\Shader\ComputeShader.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Engine\Shader\ParticleCreate.hlsl">
+      <Filter>Engine\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

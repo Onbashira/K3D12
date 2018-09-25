@@ -29,6 +29,7 @@ namespace K3D12 {
 
 		void Enable();
 		void Disable();
+		bool IsEnable();
 
 		RootRenderingPath(CommandQueue& excutionQueueRef);
 		~RootRenderingPath();
