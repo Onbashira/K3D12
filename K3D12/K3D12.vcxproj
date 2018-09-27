@@ -143,7 +143,6 @@
     <ClCompile Include="Engine\CommandContext\GraphicsContextLibrary.cpp" />
     <ClCompile Include="Engine\DescriptorHeap\DescriptorHeap.cpp" />
     <ClCompile Include="Engine\Device\D3D12Device.cpp" />
-    <ClCompile Include="Engine\Device\DebugDevice.cpp" />
     <ClCompile Include="Engine\DrawnableComponent\DrawableComponent.cpp" />
     <ClCompile Include="Engine\Factory\Factory.cpp" />
     <ClCompile Include="Engine\Font\FontData.cpp" />
@@ -217,6 +216,7 @@
     <ClCompile Include="TaskList.cpp" />
     <ClCompile Include="TaskManager.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="UIRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Animator\Animator.h" />
@@ -239,7 +239,6 @@
     <ClInclude Include="Engine\CommandContext\GraphicsContextLibrary.h" />
     <ClInclude Include="Engine\DescriptorHeap\DescriptorHeap.h" />
     <ClInclude Include="Engine\Device\D3D12Device.h" />
-    <ClInclude Include="Engine\Device\DebugDevice.h" />
     <ClInclude Include="Engine\DrawnableComponent\DrawableComponent.h" />
     <ClInclude Include="Engine\Factory\Factory.h" />
     <ClInclude Include="Engine\Font\FontData.h" />
@@ -315,6 +314,7 @@
     <ClInclude Include="TaskList.h" />
     <ClInclude Include="TaskManager.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="UIRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">
@@ -326,17 +326,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="Engine\Shader\ComputeShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Engine\Shader\FXAATest.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

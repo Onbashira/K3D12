@@ -57,99 +57,11 @@ D3D12System::~D3D12System()
 	TermD3D12();
 }
 
-
-IDXGIFactory4* D3D12System::GetFactory()
-{
-	return _factory.GetFactory().Get();
-}
-
-K3D12::Fence * D3D12System::GetFence()
-{
-	return &_fence;
-}
-
-InputManager& D3D12System::GetInput()
-{
-	return (D3D12System::GetInstance()._inputManager);
-}
-
-K3D12::CommandQueue * D3D12System::GetCommandQueue()
-{
-	return &_commandQueue;
-}
-
-void D3D12System::Create()
-{
-	if (_instance == nullptr) {
-		_instance = new D3D12System();
-	}
-	return;
-}
-
 D3D12System & D3D12System::GetInstance()
 {
 	return *_instance;
 }
 
-void D3D12System::Destroy()
-{
-	if (_instance != nullptr) {
-		delete _instance;
-	}
-	return;
-}
-
-HRESULT D3D12System::Initialize(UINT windowWidth, UINT windowHeight, UINT backBufferCount, bool useWarpDevice)
-{
-	SystemLogger::GetInstance().SetFilter(LogLevel::Details);
-	D3D12System::GetInstance().SetWindowSize(windowWidth, windowHeight);
-	auto hr = D3D12System::GetInstance().InitializeWindow();
-	CHECK_RESULT(hr);
-	SystemLogger::GetInstance().Log(LogLevel::Info, "ウインドウが正常に初期化されました\n");
-	hr = D3D12System::GetInstance().InitializeD3D12(backBufferCount, useWarpDevice);
-	CHECK_RESULT(hr);
-	SystemLogger::GetInstance().Log(LogLevel::Info, "D3D12が正常に初期化されました\n");
-	return S_OK;
-}
-
-HRESULT D3D12System::Initialize(UINT backBufferCount, bool useWarpDevice)
-{
-	SystemLogger::GetInstance().SetFilter(LogLevel::Details);
-	auto hr = D3D12System::GetInstance().InitializeWindow();
-	CHECK_RESULT(hr);
-	SystemLogger::GetInstance().Log(LogLevel::Info, "ウインドウが正常に初期化されました\n");
-	hr = D3D12System::GetInstance().InitializeD3D12(backBufferCount, useWarpDevice);
-	CHECK_RESULT(hr);
-	SystemLogger::GetInstance().Log(LogLevel::Info, "D3D12が正常に初期化されました\n");
-
-#pragma region Multi Light Test Code
-	LightInfo lightInfo;
-
-	//LightManager::Create(LIGHT_NUM);
-	//for (unsigned int i = 0; i < LIGHT_NUM; ++i) {
-	//	lightInfo.range = lightRange(dev);
-	//	lightInfo.attenuation = lightAttenuent(dev);
-	//	lightInfo.color = Vector3(lightColorR(dev), lightColorG(dev), lightColorB(dev));
-	//	lightInfo.type = 0;
-	//	lightInfo.intensity = 1.0f;
-	//	lightInfo.pos = Vector3(lightRangeX(dev), lightRangeY(dev), lightRangeZ(dev));
-
-	//	LightManager::AddLight(lightInfo);
-	//}
-	LightManager::Create(1);
-	lightInfo.range = 1000.0f;
-	lightInfo.attenuation = 100.0f;
-	lightInfo.color = Vector3::one;
-	lightInfo.type = 1;
-	lightInfo.intensity = 1.0f;
-	lightInfo.direction = Vector3(1.0f, -1.0f, 1.0f).Normalize();
-	lightInfo.pos = Vector3(-200.0f, 200.0f, -200.0f);
-	LightManager::AddLight(lightInfo);
-
-	LightManager::CommitStructuredBuffer();
-#pragma endregion
-	return S_OK;
-}
 
 void D3D12System::InitializeCamera(CameraType type, const Vector3 & pos, const Vector3 & target, const Vector3 & up, float nearClip, float farClip, float fov)
 {
@@ -168,173 +80,6 @@ void D3D12System::InitializeCamera(CameraType type, const Vector3 & pos, const V
 		break;
 	}
 	GetInstance()._mainCamera.Update();
-}
-
-void D3D12System::SetWindowSize(UINT widths, UINT height)
-{
-	D3D12System::Create();
-	D3D12System::GetInstance()._windowHeight = height;
-	D3D12System::GetInstance()._windowWidth = widths;
-}
-
-void D3D12System::SetWindowName(std::wstring name)
-{
-	D3D12System::Create();
-	D3D12System::GetInstance()._appClassName = name;
-}
-
-int D3D12System::MessageLoop()
-{
-	MSG msg = {};
-	while (true) {
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-			if (msg.message == WM_QUIT) {
-				return -1;
-			}
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else {
-			return 0;
-		}
-	}
-}
-
-void D3D12System::ScreenFlip()
-{
-	//後で追加可能な設計に変更する
-	auto& ref = D3D12System::GetInstance();
-	//ジオメトリ描画パス
-	//コマンド実行
-	{
-		auto cameraInfo = ref._mainCamera.GetCameraInfo();
-		ref._geometryBufferSprite.SetCameraInfo(cameraInfo);
-		GraphicsContextLibrary::GetInstance().CloseAllCommandLists();
-		GraphicsContextLibrary::GetInstance().ExcutionAllCommandLists(&D3D12System::GetInstance()._commandQueue, &D3D12System::GetInstance()._fence);
-		GraphicsContextLibrary::GetInstance().ResetAllCommandList();
-	}
-	D3D12System::GetInstance()._geometryBufferSprite.TransitionGeometryPassEnd();
-	//ライティングパス
-	//コマンド実行(この時点でテクスチャ合成も行う)
-	{
-		D3D12System::GetInstance()._geometryBufferSprite.TransitionLightingPassStart();
-		ref._geometryBufferSprite.StartLightingPass(LightManager::GetLightUAV(), &ref._mainCamera.GetDepthStencil());
-		GraphicsContextLibrary::GetInstance().CloseCommandList("CommandList");
-		ID3D12CommandList *lists[] = { ref.GetCommandList("CommandList")->GetCommandList().Get() };
-		D3D12System::GetInstance()._commandQueue.GetQueue()->ExecuteCommandLists(_countof(lists), lists);
-		D3D12System::GetInstance()._fence.Wait(&D3D12System::GetInstance()._commandQueue);
-		GraphicsContextLibrary::GetInstance().ResetCommandList("CommandList");
-	}
-	D3D12System::GetInstance()._geometryBufferSprite.TransitionLightingPassEnd();
-	//半透明オブジェクト描画パス
-	{
-
-	}
-	//半透明ライティングパス
-	{
-
-	}
-	//アンチエイリアス等のポストエフェクトパス
-	//コマンド実行
-	{
-		//めんどうなのでここで再定義
-		D3D12_CLEAR_VALUE clearValue;
-		clearValue.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
-		clearValue.Color[0] = 0.0f;
-		clearValue.Color[1] = 0.0f;
-		clearValue.Color[2] = 0.0f;
-		clearValue.Color[3] = 1.0f;
-		//
-		{
-			//結果テクスチャと頂点四つを投げる
-			ref._geometryBufferSprite.TransitionResultTexture2ToRT();
-			ref._geometryBufferSprite.TransitionResultTextureToSR();
-			ref.GetCommandList("CommandList")->GetCommandList()->ClearRenderTargetView(ref._geometryBufferSprite.GetRTVCPUHandle(GEOMETRY_TYPE::RESULT2), clearValue.Color, 0, nullptr);
-
-			ref.GetCommandList("CommandList")->OMSetRenderTargets(1, &ref._geometryBufferSprite.GetRTVCPUHandle(GEOMETRY_TYPE::RESULT2), FALSE);
-			ref.GetCommandList("CommandList")->GetCommandList()->IASetVertexBuffers(0, 1, &ref._geometryBufferSprite.GetVertexBuffer().GetView());
-			ref.GetCommandList("CommandList")->GetCommandList()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-			ref.GetCommandList("CommandList")->GetCommandList()->SetPipelineState(ref.GetPSO("FxAA")->GetPSO().Get());
-			ref.GetCommandList("CommandList")->GetCommandList()->SetGraphicsRootSignature(ref.GetPSO("FxAA")->GetRootSignature().lock()->GetSignature().Get());
-			ref.GetCommandList("CommandList")->GetCommandList()->RSSetScissorRects(1, &ref._window.GetScissorRect());
-			ref.GetCommandList("CommandList")->GetCommandList()->RSSetViewports(1, &ref._window.GetViewPort());
-			ref._geometryBufferSprite.SetHeaps();
-			ref.GetCommandList("CommandList")->GetCommandList()->SetGraphicsRootDescriptorTable(0, ref._geometryBufferSprite.GetSRVGPUHandle(GEOMETRY_TYPE::RESULT));
-			ref.GetCommandList("CommandList")->GetCommandList()->DrawInstanced(4, 1, 0, 0);
-
-			ref._geometryBufferSprite.TransitionResultTextureToGeneric();
-			ref._geometryBufferSprite.TransitionResultTexture2ToGeneric();
-
-		}
-		GraphicsContextLibrary::GetInstance().CloseCommandList("CommandList");
-		ID3D12CommandList *lists[] = { ref.GetCommandList("CommandList")->GetCommandList().Get() };
-		D3D12System::GetInstance()._commandQueue.GetQueue()->ExecuteCommandLists(_countof(lists), lists);
-		D3D12System::GetInstance()._fence.Wait(&D3D12System::GetInstance()._commandQueue);
-		GraphicsContextLibrary::GetInstance().ResetCommandList("CommandList");
-	}
-	//ディファードのリザルトテクスチャをコピーする
-	{
-		ref._renderTarget.SetStateCopyDest(ref.GetCommandList("CommandList"));
-		ref._geometryBufferSprite.TransitionResultTexture2ToCopySource();
-		ref._renderTarget.CopyToRenderTarget(ref.GetCommandList("CommandList"), ref._geometryBufferSprite.GetGBufferResource(GEOMETRY_TYPE::RESULT2));
-		ref._geometryBufferSprite.TransitionResultTexture2ToGeneric();
-		ref._renderTarget.SetStateGenericRead(ref.GetCommandList("CommandList"));
-		GraphicsContextLibrary::GetInstance().CloseCommandList("CommandList");
-		ID3D12CommandList *lists[] = { ref.GetCommandList("CommandList")->GetCommandList().Get() };
-		D3D12System::GetInstance()._commandQueue.GetQueue()->ExecuteCommandLists(_countof(lists), lists);
-		D3D12System::GetInstance()._fence.Wait(&D3D12System::GetInstance()._commandQueue);
-		GraphicsContextLibrary::GetInstance().ResetCommandList("CommandList");
-
-
-	}
-	//最終レンダリングコミット
-	{
-		//レンダーターゲットをプレセント状態へ
-		D3D12System::GetInstance()._renderTarget.SetStatePresent(D3D12System::GetInstance().GetCommandList("CommandList"));
-		//コマンドリストを閉じる
-		D3D12System::GetInstance().GetCommandList("CommandList")->CloseCommandList();
-		//コマンド実行
-		{
-			ID3D12CommandList *lists[] = { ref.GetCommandList("CommandList")->GetCommandList().Get() };
-			D3D12System::GetInstance()._commandQueue.GetQueue()->ExecuteCommandLists(_countof(lists), lists);
-			D3D12System::GetInstance()._fence.Wait(&D3D12System::GetInstance()._commandQueue);
-		}
-		//プレセント
-		D3D12System::GetInstance()._renderTarget.Present(1, 0);
-	}
-	//GPU待機
-	D3D12System::GetInstance()._fence.Wait(&D3D12System::GetInstance()._commandQueue);
-	//リストとアロケータをリセットしてレコード状態へ
-	D3D12System::GetInstance().GetCommandList("CommandList")->ResetAllocator();
-	D3D12System::GetInstance().GetCommandList("CommandList")->ResetCommandList();
-
-	//描画コマンドが詰まれるオブジェクトにデプスステンシルビューにデフォルトのビューポートと切り取り矩形、およびDSVRTVをセット
-
-}
-
-void D3D12System::ClearScreen()
-{
-	//クリア処理をコマンドリストに積む
-	auto& ref = D3D12System::GetInstance();
-	ref._renderTarget.ClearScreen(GraphicsContextLibrary::GetInstance().GetGraphicsCommandList("CommandList"));
-	ref.GetCommandList("CommandList")->GetCommandList()->RSSetScissorRects(1, &ref._window.GetScissorRect());
-	ref.GetCommandList("CommandList")->GetCommandList()->RSSetViewports(1, &ref._window.GetViewPort());
-	ref._mainCamera.GetDepthStencil().ClearDepthStencil(ref.GetCommandList("CommandList"));
-	D3D12System::GetInstance()._geometryBufferSprite.TransitionGeometryPassStart();
-	//ドローコールが呼ばれる可能性のある不透明レンダリングをサポートするコマンドリストに対してディファードレンダリングで用いるテクスチャをバインドする。
-	ref.BindingGBufferRenderTarget();
-
-}
-
-HRESULT D3D12System::LoadTexture(std::string path)
-{
-
-	return E_NOTIMPL;
-}
-
-std::weak_ptr<MMDModel> D3D12System::LoadModel(std::string modelPath)
-{
-	return GetInstance()._modelPool.LoadModel(modelPath);
 }
 
 std::shared_ptr<GamePad> D3D12System::GetController(int padID)
@@ -391,21 +136,6 @@ std::shared_ptr<K3D12::GraphicsCommandList> K3D12::D3D12System::GetMasterCommand
 K3D12::CommandQueue& K3D12::D3D12System::GetMasterCommandQueue()
 {
 	return GetInstance()._commandQueue;
-}
-
-Cube * K3D12::D3D12System::CreateCube()
-{
-	return _primitiveCreater.CreateCube();
-}
-
-Camera & D3D12System::GetCamera()
-{
-	return GetInstance()._mainCamera;
-}
-
-ID3D12Device * D3D12System::GetDevice()
-{
-	return _device.GetDevice().Get();
 }
 
 HRESULT D3D12System::InitializeDevice(bool useWarpDevice)
@@ -884,13 +614,6 @@ HRESULT D3D12System::InitializeModelOpacity()
 		{ "POSITION",		0, DXGI_FORMAT_R32G32B32_FLOAT,		0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "NORMAL",			0, DXGI_FORMAT_R32G32B32_FLOAT,		0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD",		0, DXGI_FORMAT_R32G32_FLOAT,		0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		//{ "DEFORM_TYPE",	0, DXGI_FORMAT_R32_FLOAT,			0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		//{ "BONE_INDEX",	0, DXGI_FORMAT_R32G32B32A32_FLOAT,	0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		//{ "BONE_WEIGHT",	0, DXGI_FORMAT_R32G32B32A32_FLOAT,	0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		//{ "C_VALUE",		0, DXGI_FORMAT_R32G32B32_FLOAT,		0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		//{ "R0_VALUE",		0, DXGI_FORMAT_R32G32B32_FLOAT,		0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		//{ "R1_VALUE",		0, DXGI_FORMAT_R32G32B32_FLOAT,		0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-
 	};
 
 	//ラスタライザステートの設定
@@ -1100,4 +823,153 @@ void D3D12System::TermD3D12()
 	}
 
 
+}
+
+void K3D12::Create()
+{
+	if (D3D12System::GetInstance()._instance == nullptr) {
+		D3D12System::GetInstance()._instance = new D3D12System();
+	}
+	return;
+}
+
+void K3D12::Destroy()
+{
+	if (D3D12System::GetInstance()._instance != nullptr) {
+		delete D3D12System::GetInstance()._instance;
+	}
+	return;
+}
+
+HRESULT K3D12::Initialize(UINT windowWidth, UINT windowHeight, UINT backBufferCount, bool useWarpDevice)
+{
+	SystemLogger::GetInstance().SetFilter(LogLevel::Details);
+	K3D12::SetWindowSize(windowWidth, windowHeight);
+	auto hr = D3D12System::GetInstance().InitializeWindow();
+	CHECK_RESULT(hr);
+	DEBUG_LOG(std::string("ウインドウが正常に初期化されました\n"));
+	SystemLogger::GetInstance().Log(LogLevel::Debug, "ウインドウが正常に初期化されました\n");
+	hr = D3D12System::GetInstance().InitializeD3D12(backBufferCount, useWarpDevice);
+	CHECK_RESULT(hr);
+	DEBUG_LOG(std::string("D3D12が正常に初期化されました\n"));
+	K3D12::D3D12System::InitializeController();
+	DEBUG_LOG(std::string("コントローラの最大接続数を４で初期化しました\n"));
+	return S_OK;
+}
+
+HRESULT K3D12::Initialize(UINT backBufferCount, bool useWarpDevice)
+{
+	SystemLogger::GetInstance().SetFilter(LogLevel::Details);
+	auto hr = D3D12System::GetInstance().InitializeWindow();
+	CHECK_RESULT(hr);
+	DEBUG_LOG(std::string("ウインドウが正常に初期化されました\n"));
+	hr = D3D12System::GetInstance().InitializeD3D12(backBufferCount, useWarpDevice);
+	CHECK_RESULT(hr);
+	DEBUG_LOG(std::string("D3D12が正常に初期化されました\n"));
+	K3D12::D3D12System::InitializeController();
+	DEBUG_LOG(std::string("コントローラの最大接続数を４で初期化しました\n"));
+
+}
+
+void K3D12::ScreenFlip()
+{
+	//最終レンダリングコミット
+	{
+		//レンダーターゲットをプレセント状態へ
+		D3D12System::GetInstance()._renderTarget.SetStatePresent(D3D12System::GetInstance().GetCommandList("CommandList"));
+		//コマンドリストを閉じる
+		D3D12System::GetInstance().GetCommandList("CommandList")->CloseCommandList();
+		//コマンド実行
+		{
+			ID3D12CommandList *lists[] = { D3D12System::GetInstance().GetCommandList("CommandList")->GetCommandList().Get() };
+			D3D12System::GetInstance()._commandQueue.GetQueue()->ExecuteCommandLists(_countof(lists), lists);
+			D3D12System::GetInstance()._fence.Wait(&D3D12System::GetInstance()._commandQueue);
+		}
+		//プレセント
+		D3D12System::GetInstance()._renderTarget.Present(1, 0);
+	}
+	//GPU待機
+	D3D12System::GetInstance()._fence.Wait(&D3D12System::GetInstance()._commandQueue);
+	//リストとアロケータをリセットしてレコード状態へ
+	D3D12System::GetInstance().GetCommandList("CommandList")->ResetAllocator();
+	D3D12System::GetInstance().GetCommandList("CommandList")->ResetCommandList();
+}
+
+void K3D12::ClearScreen()
+{
+	//レンダーターゲットをプレセント状態へ
+	//クリア処理をコマンドリストに積む
+	auto& ref = D3D12System::GetInstance();
+	ref._renderTarget.ClearScreen(GraphicsContextLibrary::GetInstance().GetGraphicsCommandList("CommandList"));
+	ref.GetCommandList("CommandList")->GetCommandList()->RSSetScissorRects(1, &ref._window.GetScissorRect());
+	ref.GetCommandList("CommandList")->GetCommandList()->RSSetViewports(1, &ref._window.GetViewPort());
+	ref._mainCamera.GetDepthStencil().ClearDepthStencil(ref.GetCommandList("CommandList"));
+	D3D12System::GetInstance()._geometryBufferSprite.TransitionGeometryPassStart();
+	//ドローコールが呼ばれる可能性のある不透明レンダリングをサポートするコマンドリストに対してディファードレンダリングで用いるテクスチャをバインドする。
+	ref.BindingGBufferRenderTarget();
+}
+
+Camera & K3D12::GetCamera()
+{
+	return D3D12System::GetInstance()._mainCamera;
+}
+
+ID3D12Device * K3D12::GetDevice()
+{
+	return D3D12System::GetInstance()._device.GetDevice().Get();
+}
+
+IDXGIFactory4 * K3D12::GetFactory()
+{
+	return D3D12System::GetInstance()._factory.GetFactory().Get();
+}
+
+Fence * K3D12::GetFence()
+{
+	return &D3D12System::GetInstance()._fence;
+}
+
+InputManager & K3D12::Input()
+{
+	return (D3D12System::GetInstance()._inputManager);
+}
+
+void K3D12::SetWindowSize(UINT widths, UINT height)
+{
+	D3D12System::Create();
+	D3D12System::GetInstance()._windowHeight = height;
+	D3D12System::GetInstance()._windowWidth = widths;
+}
+
+void K3D12::SetWindowName(std::wstring name)
+{
+	D3D12System::Create();
+	D3D12System::GetInstance()._appClassName = name;
+}
+
+int K3D12::MessageLoop()
+{
+	MSG msg = {};
+	while (true) {
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+			if (msg.message == WM_QUIT) {
+				return -1;
+			}
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else {
+			return 0;
+		}
+	}
+}
+
+HRESULT K3D12::LoadTexture(std::string path)
+{
+
+}
+
+std::weak_ptr<MMDModel> K3D12::LoadModel(std::string modelPath)
+{
+	return D3D12System::GetInstance()._modelPool.LoadModel(modelPath);
 }

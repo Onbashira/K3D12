@@ -5,7 +5,7 @@
 
 namespace K3D12 {
 
-	class GraphcisCommandList;
+	class GraphicsCommandList;
 	class CommandQueue;
 
 	//UAV‚ÍDXGI_FORMAT‚ÍUNKNWONŒÅ’è

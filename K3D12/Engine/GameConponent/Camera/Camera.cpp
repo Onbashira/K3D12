@@ -55,6 +55,11 @@ void K3D12::Camera::SetConstantBuffer(GraphicsCommandList * list, UINT paramater
 	list->GetCommandList()->SetGraphicsRootConstantBufferView(paramaterIndex, _cameraMatrixBuffer.GetResource()->GetGPUVirtualAddress());
 }
 
+void K3D12::Camera::SetCameraParamater(std::weak_ptr<GraphicsCommandList> list, unsigned int paramaterIndex)
+{
+	list.lock()->GetCommandList()->SetGraphicsRootConstantBufferView(paramaterIndex, _cameraMatrixBuffer.GetResource()->GetGPUVirtualAddress());
+}
+
 void K3D12::Camera::Discard()
 {
 

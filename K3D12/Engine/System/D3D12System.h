@@ -31,7 +31,7 @@ namespace K3D12 {
 	{
 
 	private:
-		inline static D3D12System*				_instance = nullptr;
+		inline static D3D12System*		_instance = nullptr;
 		D3D12Device						_device;
 		Factory							_factory;
 		Fence							_fence;
@@ -39,7 +39,6 @@ namespace K3D12 {
 		UINT							_windowWidth;
 		UINT							_windowHeight;
 		std::wstring					_appClassName;
-		//GraphicsContextLibrary			_graphicsLibrary;
 		CommandQueue					_commandQueue;
 		RenderTarget					_renderTarget;
 		InputManager					_inputManager;
@@ -97,32 +96,32 @@ namespace K3D12 {
 
 		D3D12System();
 
+		friend static void ScreenFlip();
+
+		friend static void ClearScreen();
+
+		friend static void Drawing2DStep();
+
+		friend static void Drawing3DStep();
+
 	public:
-		static void Create();
+		friend static void Create();
 
 		static D3D12System& GetInstance();
 
-		static void Destroy();
-
-		static HRESULT Initialize(UINT windowWidth, UINT windowHeight, UINT backBufferCount = 2, bool useWarpDevice = false);
-
-		static HRESULT Initialize(UINT backBufferCount = 2, bool useWarpDevice = false);
+		friend static void Destroy();
 
 		static void InitializeCamera(CameraType type, const Vector3& pos, const Vector3 & target, const Vector3& up, float nearClip, float farClip, float fov);
 
-		static void SetWindowSize(UINT widths, UINT height);
+		friend static void SetWindowSize(UINT widths, UINT height);
 
-		static void SetWindowName(std::wstring name);
+		friend static void SetWindowName(std::wstring name);
 
-		static int MessageLoop();
+		friend static int MessageLoop();
 
-		static void ScreenFlip();
+		friend static HRESULT LoadTexture(std::string path);
 
-		static void ClearScreen();
-
-		static HRESULT LoadTexture(std::string path);
-
-		static std::weak_ptr<MMDModel> LoadModel(std::string modelPath);
+		friend static std::weak_ptr<MMDModel> LoadModel(std::string modelPath);
 
 		static std::shared_ptr<GamePad> GetController(int padID = 0);
 
@@ -146,26 +145,21 @@ namespace K3D12 {
 
 		static K3D12::CommandQueue&		GetMasterCommandQueue();
 
-		//ééçÏíiäK
-		Cube* CreateCube();
+		friend static Camera& GetCamera();
 
-		static Camera& GetCamera();
+		friend ID3D12Device * GetDevice();
 
-		ID3D12Device * GetDevice();
+		friend IDXGIFactory4* GetFactory();
 
-		IDXGIFactory4* GetFactory();
+		friend Fence*		   GetFence();
 
-		Fence*		   GetFence();
-
-		static InputManager&  GetInput();
-
-		CommandQueue*	GetCommandQueue();
+		friend static InputManager&  Input();
 
 		~D3D12System();
 	};
 
 #ifndef GET_DEVICE
-#define GET_DEVICE K3D12::D3D12System::GetInstance().GetDevice()
+#define GET_DEVICE K3D12::GetDevice()
 #endif // !GET_DEVICE
 
 #ifndef CHECK_RESULT 
@@ -173,8 +167,42 @@ namespace K3D12 {
 #endif // !CHECK_RESULT
 
 #ifndef GET_SYSTEM_FENCE 
-#define GET_SYSTEM_FENCE K3D12::D3D12System::GetInstance().GetFence()
+#define GET_SYSTEM_FENCE K3D12::GetFence()
 #endif // !GET_DEVICE
+
+	//static global function
+
+	static void Create();
+
+	static void Destroy();
+
+	static HRESULT Initialize(UINT windowWidth, UINT windowHeight, UINT backBufferCount = 2, bool useWarpDevice = false);
+
+	static HRESULT Initialize(UINT backBufferCount = 2, bool useWarpDevice = false);
+
+	static void ScreenFlip();
+
+	static void ClearScreen();
+
+	static Camera& GetCamera();
+
+	static ID3D12Device * GetDevice();
+
+	static IDXGIFactory4* GetFactory();
+
+	static Fence*		   GetFence();
+
+	static InputManager&  Input();
+
+	static void SetWindowSize(UINT widths, UINT height);
+
+	static void SetWindowName(std::wstring name);
+
+	static int MessageLoop();
+
+	static HRESULT LoadTexture(std::string path);
+
+	static std::weak_ptr<MMDModel> LoadModel(std::string modelPath);
 
 
 }

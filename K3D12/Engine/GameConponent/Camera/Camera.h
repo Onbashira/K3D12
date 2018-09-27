@@ -61,16 +61,12 @@ namespace K3D12 {
 		void Update();
 		void DebugMove(InputManager& input);
 		void DebugRotate(InputManager& input);
-
-
 		void InitializeCamera(CameraType type, const float width, const float height, const float nearClip, const float farClip, const Vector3& position, const Vector3& target, const Vector3& upWard);
 		void InitializeCameraFOV(const float fov, const float width, const float height, const float nearClip, const float farClip, const Vector3& position, const Vector3& target, const Vector3& upWard);
-
 		HRESULT InitializeCameraDepthStencill(DXGI_FORMAT depthFormat, unsigned int windowWidth, unsigned int windowHeight);
-
 		void SetConstantBuffer(GraphicsCommandList* list, UINT paramaterIndex = 0);
+		void SetCameraParamater(std::weak_ptr<GraphicsCommandList> list, unsigned int paramaterIndex = 0);
 		void Discard();
-
 		Camera();
 
 		~Camera();

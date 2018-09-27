@@ -130,6 +130,24 @@
     <Filter Include="Engine\CommandContext\CommandList">
       <UniqueIdentifier>{af67b049-b44c-413a-87d4-5574b2a36397}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Rendering\Manager">
+      <UniqueIdentifier>{2e08ff3a-390e-44a2-bc4d-ac4f8881e7a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering\GBuffer">
+      <UniqueIdentifier>{6bf1c66b-d820-483b-bc62-0b6b337e8885}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering\RenderingPathBase">
+      <UniqueIdentifier>{55df2d35-ce4d-4eec-8c32-82a631583696}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering\RootRenderer">
+      <UniqueIdentifier>{d2653110-4dbd-4270-9c79-ef72088aaf96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering\SceneRenderer">
+      <UniqueIdentifier>{575c52e4-4725-4d1b-90d6-36aa2879b123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering\UIRenderer">
+      <UniqueIdentifier>{ae87a3f1-bfff-4b2c-9b32-3808fc6fee30}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\CommandContext\GraphicsContextLib">
       <UniqueIdentifier>{fa3bf96e-8a8b-4d66-8872-37885e596ca4}</UniqueIdentifier>
     </Filter>
@@ -171,9 +189,6 @@
     <ClCompile Include="Engine\Device\D3D12Device.cpp">
       <Filter>Engine\Device</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Device\DebugDevice.cpp">
-      <Filter>Engine\Device</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\DrawnableComponent\DrawableComponent.cpp">
       <Filter>Engine\DrawnableComponent</Filter>
     </ClCompile>
@@ -212,9 +227,6 @@
     </ClCompile>
     <ClCompile Include="Engine\PipelineState\PipelineStateObject.cpp">
       <Filter>Engine\PipelineState</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Rendering\GBufferSprite.cpp">
-      <Filter>Engine\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Resource\ConstantBuffer.cpp">
       <Filter>Engine\Resource</Filter>
@@ -402,17 +414,23 @@
     <ClCompile Include="Engine\Audio\AudioManager.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Rendering\RenderingPathBase.cpp">
-      <Filter>Engine\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Rendering\RenderingPathManager.cpp">
-      <Filter>Engine\Rendering</Filter>
+      <Filter>Engine\Rendering\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Rendering\SceneRenderer.cpp">
-      <Filter>Engine\Rendering</Filter>
+    <ClCompile Include="Engine\Rendering\GBufferSprite.cpp">
+      <Filter>Engine\Rendering\GBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Rendering\RenderingPathBase.cpp">
+      <Filter>Engine\Rendering\RenderingPathBase</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Rendering\RootRenderingPath.cpp">
-      <Filter>Engine\Rendering</Filter>
+      <Filter>Engine\Rendering\RootRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Rendering\SceneRenderer.cpp">
+      <Filter>Engine\Rendering\SceneRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="UIRenderer.cpp">
+      <Filter>Engine\Rendering\UIRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -450,9 +468,6 @@
       <Filter>Engine\DescriptorHeap</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Device\D3D12Device.h">
-      <Filter>Engine\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Device\DebugDevice.h">
       <Filter>Engine\Device</Filter>
     </ClInclude>
     <ClInclude Include="Engine\DrawnableComponent\DrawableComponent.h">
@@ -493,9 +508,6 @@
     </ClInclude>
     <ClInclude Include="Engine\PipelineState\PipelineStateObject.h">
       <Filter>Engine\PipelineState</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Rendering\GBufferSprite.h">
-      <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Resource\ConstantBuffer.h">
       <Filter>Engine\Resource</Filter>
@@ -692,17 +704,23 @@
     <ClInclude Include="Engine\Audio\AudioManager.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Rendering\RenderingPathBase.h">
-      <Filter>Engine\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Rendering\RenderingPathManager.h">
-      <Filter>Engine\Rendering</Filter>
+      <Filter>Engine\Rendering\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Rendering\SceneRenderer.h">
-      <Filter>Engine\Rendering</Filter>
+    <ClInclude Include="Engine\Rendering\GBufferSprite.h">
+      <Filter>Engine\Rendering\GBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Rendering\RenderingPathBase.h">
+      <Filter>Engine\Rendering\RenderingPathBase</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Rendering\RootRenderingPath.h">
-      <Filter>Engine\Rendering</Filter>
+      <Filter>Engine\Rendering\RootRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Rendering\SceneRenderer.h">
+      <Filter>Engine\Rendering\SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="UIRenderer.h">
+      <Filter>Engine\Rendering\UIRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -731,9 +749,6 @@
       <Filter>Engine\Shader</Filter>
     </FxCompile>
     <FxCompile Include="Engine\Shader\SpriteShader.hlsl">
-      <Filter>Engine\Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\Shader\ComputeShader.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
     <FxCompile Include="Engine\Shader\ParticleCreate.hlsl">

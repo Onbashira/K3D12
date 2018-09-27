@@ -151,7 +151,7 @@ void K3D12::Plane::Draw()
 
 	this->BindingShaderObject();
 
-	this->_commandList.lock()->GetCommandList()->SetGraphicsRootConstantBufferView(0, D3D12System::GetInstance().GetCamera().GetCameraBuffer().GetResource()->GetGPUVirtualAddress());
+	this->_commandList.lock()->GetCommandList()->SetGraphicsRootConstantBufferView(0, K3D12::GetCamera().GetCameraBuffer().GetResource()->GetGPUVirtualAddress());
 	ID3D12DescriptorHeap* heap[] = { _heap->GetPtr() };
 	this->_commandList.lock()->GetCommandList()->SetDescriptorHeaps(1, heap);
 	this->_commandList.lock()->GetCommandList()->ExecuteBundle(_bundleList.GetCommandList().Get());

@@ -10,6 +10,7 @@
 namespace K3D12 {
 
 	//シーン単位のレンダリングパスを管理
+	//あとで外部ツールからバイナリ形式でインポートできるようにする
 	class SceneRenderer
 	{
 	private:
@@ -20,7 +21,7 @@ namespace K3D12 {
 		//シーン単位でのレンダリング
 		void Rendering();
 		//シーンに対してレンダリングパスを追加する
-		std::weak_ptr<RootRenderingPath> AddRootRenderingPath(std::string name , RootRenderingPath rootRenderPath);
+		std::shared_ptr<RootRenderingPath> AddRootRenderingPath(std::string name , RootRenderingPath rootRenderPath);
 		//名前からレンダリングパスを取得する
 		std::weak_ptr<K3D12::RootRenderingPath> GetRootRenderingPath(std::string name);
 		//名前からレンダリングパスを削除する

@@ -8,6 +8,7 @@ namespace K3D12 {
 	class PipelineStateObject;
 	class RootSignature;
 
+	//描画可能コンポネント
 	class DrawableComponent
 	{
 	private:
