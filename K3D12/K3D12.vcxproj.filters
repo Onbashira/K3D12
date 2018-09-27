@@ -151,6 +151,9 @@
     <Filter Include="Engine\CommandContext\GraphicsContextLib">
       <UniqueIdentifier>{fa3bf96e-8a8b-4d66-8872-37885e596ca4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Mesh">
+      <UniqueIdentifier>{3e8c9907-b1ab-4858-9695-10fbcd00c7c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -431,6 +434,9 @@
     </ClCompile>
     <ClCompile Include="UIRenderer.cpp">
       <Filter>Engine\Rendering\UIRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Mesh\MeshComponent.cpp">
+      <Filter>Engine\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -721,6 +727,9 @@
     </ClInclude>
     <ClInclude Include="UIRenderer.h">
       <Filter>Engine\Rendering\UIRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Mesh\MeshComponent.h">
+      <Filter>Engine\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

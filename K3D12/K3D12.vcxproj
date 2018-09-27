@@ -167,6 +167,7 @@
     <ClCompile Include="Engine\Input\GamePadManager.cpp" />
     <ClCompile Include="Engine\Input\InputManager.cpp" />
     <ClCompile Include="Engine\InstancingComponent\InstanceDataManager.cpp" />
+    <ClCompile Include="Engine\Mesh\MeshComponent.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModel.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModelManager.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModelResourceData.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="Engine\Input\GamePadManager.h" />
     <ClInclude Include="Engine\Input\InputManager.h" />
     <ClInclude Include="Engine\InstancingComponent\InstanceDataManager.h" />
+    <ClInclude Include="Engine\Mesh\MeshComponent.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModel.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModelManager.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModelResourceData.h" />

@@ -1,17 +1,30 @@
 #pragma once
 #include <vector>
 #include <map>
+#include "../Resource/VertexBuffer.h"
 
 
-class InstanceDataManager
-{
+namespace K3D12 {
+	enum class MESH_TYPE {
 
-private:
-public:
-private:
+	};
 
-public:
-	InstanceDataManager();
-	~InstanceDataManager();
-};
+	class InstanceDataManager
+	{
 
+	private:
+		//インスタンシングするパラメータ配列
+		std::vector<K3D12::VertexBuffer> _instanceParamater;
+		//インスタンシングするメッシュ情報
+		
+	public:
+
+	private:
+
+	public:
+
+		InstanceDataManager();
+		~InstanceDataManager();
+	};
+
+}

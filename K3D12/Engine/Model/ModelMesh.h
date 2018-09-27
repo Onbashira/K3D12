@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <memory>
 #include "../DescriptorHeap/DescriptorHeap.h"
 #include "../Resource/ShaderResource.h"
 #include "../DrawnableComponent/DrawableComponent.h"
@@ -18,7 +19,7 @@ namespace K3D12 {
 	class ConstantBuffer;
 	class ShaderResource;
 
-	//メッシュに必要な情報を持ったクラス
+	//モデルのメッシュに必要な情報を持ったクラス
 	class ModelMesh : public K3D12::GameObject,
 		public K3D12::DrawableComponent
 	{
@@ -51,5 +52,5 @@ namespace K3D12 {
 		ModelMesh();
 		~ModelMesh();
 	};
-}
+};
 
