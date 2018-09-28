@@ -20,8 +20,9 @@ namespace K3D12 {
 	class ShaderResource;
 
 	//モデルのメッシュに必要な情報を持ったクラス
-	class ModelMesh : public K3D12::GameObject,
-		public K3D12::DrawableComponent
+	//MeshとGameObjectは分離すべきでは？ ObjectClass : public GameObject , public DrawableComponent,public MeshComponent{};
+	
+	class ModelMesh : public K3D12::GameObject,public K3D12::DrawableComponent 
 	{
 	private:
 

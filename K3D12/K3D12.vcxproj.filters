@@ -154,6 +154,18 @@
     <Filter Include="Engine\Mesh">
       <UniqueIdentifier>{3e8c9907-b1ab-4858-9695-10fbcd00c7c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Model\RawModel">
+      <UniqueIdentifier>{94011dd4-9538-42bc-a3da-a16c10585ce9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Model\MMDModel">
+      <UniqueIdentifier>{9b49ca10-cf27-4035-9eb1-54d2087a73ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Model\ModelUtil">
+      <UniqueIdentifier>{70e150b1-bcdb-46f1-899b-e1232703ee69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\SwapChain">
+      <UniqueIdentifier>{fbcd8cd5-ed71-472b-8906-669e7df27b89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -216,16 +228,7 @@
     <ClCompile Include="Engine\InstancingComponent\InstanceDataManager.cpp">
       <Filter>Engine\InstancingComponent</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Model\ModelConverter.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Model\ModelMesh.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\ModelObject.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\ModelPool.cpp">
       <Filter>Engine\Model</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PipelineState\PipelineStateObject.cpp">
@@ -238,9 +241,6 @@
       <Filter>Engine\Resource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Resource\IndexBuffer.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\RenderTarget.cpp">
       <Filter>Engine\Resource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Resource\Resource.cpp">
@@ -345,47 +345,11 @@
     <ClCompile Include="Engine\GameConponent\Camera\Camera.cpp">
       <Filter>Engine\GameComponent\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Model\MMDModel\MMDModel.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\MMDModel\MMDModelManager.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\MMDModel\MMDModelResourceData.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\MMDModel\MMDModelResourceDataManager.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\ModelResource\ModelResource.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\PMD\PMDLoader.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\PMD\PMDModel.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\PMX\PMXLoader.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\PMX\PMXModel.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Util\Logger.cpp">
       <Filter>Engine\Util</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GameConponent\Sprite\Sprite.cpp">
       <Filter>Engine\GameComponent\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="TaskInvorker.cpp">
-      <Filter>Engine\TaskComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="TaskList.cpp">
-      <Filter>Engine\TaskComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="TaskManager.cpp">
-      <Filter>Engine\TaskComponent</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Engine\Timer</Filter>
@@ -432,10 +396,64 @@
     <ClCompile Include="Engine\Rendering\SceneRenderer.cpp">
       <Filter>Engine\Rendering\SceneRenderer</Filter>
     </ClCompile>
-    <ClCompile Include="UIRenderer.cpp">
+    <ClCompile Include="Engine\Mesh\MeshComponent.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\TaskSystem\TaskInvoker.cpp">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\TaskSystem\TaskList.cpp">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\TaskSystem\TaskManager.cpp">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskBase.cpp">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\PMD\PMDLoader.cpp">
+      <Filter>Engine\Model\RawModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\PMD\PMDModel.cpp">
+      <Filter>Engine\Model\RawModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\PMX\PMXLoader.cpp">
+      <Filter>Engine\Model\RawModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\PMX\PMXModel.cpp">
+      <Filter>Engine\Model\RawModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\MMDModel\MMDModel.cpp">
+      <Filter>Engine\Model\MMDModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\MMDModel\MMDModelManager.cpp">
+      <Filter>Engine\Model\MMDModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\MMDModel\MMDModelResourceData.cpp">
+      <Filter>Engine\Model\MMDModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\MMDModel\MMDModelResourceDataManager.cpp">
+      <Filter>Engine\Model\MMDModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\ModelConverter.cpp">
+      <Filter>Engine\Model\ModelUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\ModelObject.cpp">
+      <Filter>Engine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\ModelPool.cpp">
+      <Filter>Engine\Model\ModelUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\ModelResource\ModelResource.cpp">
+      <Filter>Engine\Model\ModelUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SwapChain\SwapChain.cpp">
+      <Filter>Engine\SwapChain</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Rendering\UIRenderer.cpp">
       <Filter>Engine\Rendering\UIRenderer</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Mesh\MeshComponent.cpp">
+    <ClCompile Include="Engine\Mesh\MeshRenderer.cpp">
       <Filter>Engine\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
@@ -500,16 +518,7 @@
     <ClInclude Include="Engine\InstancingComponent\InstanceDataManager.h">
       <Filter>Engine\InstancingComponent</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Model\ModelConverter.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Model\ModelMesh.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\ModelObject.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\ModelPool.h">
       <Filter>Engine\Model</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PipelineState\PipelineStateObject.h">
@@ -522,9 +531,6 @@
       <Filter>Engine\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Resource\IndexBuffer.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\RenderTarget.h">
       <Filter>Engine\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Resource\Resource.h">
@@ -638,47 +644,11 @@
     <ClInclude Include="Engine\GameConponent\Camera\Camera.h">
       <Filter>Engine\GameComponent\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Model\MMDModel\MMDModel.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\MMDModel\MMDModelManager.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\MMDModel\MMDModelResourceData.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\MMDModel\MMDModelResourceDataManager.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\ModelResource\ModelResource.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\PMD\PMDLoader.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\PMD\PMDModel.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\PMX\PMXLoader.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\PMX\PMXModel.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Util\Logger.h">
       <Filter>Engine\Util</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GameConponent\Sprite\Sprite.h">
       <Filter>Engine\GameComponent\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="TaskInvorker.h">
-      <Filter>Engine\TaskComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="TaskList.h">
-      <Filter>Engine\TaskComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="TaskManager.h">
-      <Filter>Engine\TaskComponent</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Engine\Timer</Filter>
@@ -725,11 +695,65 @@
     <ClInclude Include="Engine\Rendering\SceneRenderer.h">
       <Filter>Engine\Rendering\SceneRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="UIRenderer.h">
-      <Filter>Engine\Rendering\UIRenderer</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Mesh\MeshComponent.h">
       <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TaskSystem\TaskInvoker.h">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TaskSystem\TaskList.h">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TaskSystem\TaskManager.h">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskBase.h">
+      <Filter>Engine\TaskComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\PMX\PMXModel.h">
+      <Filter>Engine\Model\RawModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\PMD\PMDLoader.h">
+      <Filter>Engine\Model\RawModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\PMD\PMDModel.h">
+      <Filter>Engine\Model\RawModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\PMX\PMXLoader.h">
+      <Filter>Engine\Model\RawModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\MMDModel\MMDModel.h">
+      <Filter>Engine\Model\MMDModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\MMDModel\MMDModelManager.h">
+      <Filter>Engine\Model\MMDModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\MMDModel\MMDModelResourceData.h">
+      <Filter>Engine\Model\MMDModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\MMDModel\MMDModelResourceDataManager.h">
+      <Filter>Engine\Model\MMDModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\ModelConverter.h">
+      <Filter>Engine\Model\ModelUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\ModelResource\ModelResource.h">
+      <Filter>Engine\Model\ModelUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\ModelPool.h">
+      <Filter>Engine\Model\ModelUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SwapChain\SwapChain.h">
+      <Filter>Engine\SwapChain</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Rendering\UIRenderer.h">
+      <Filter>Engine\Rendering\UIRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Mesh\MeshRenderer.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\ModelObject.h">
+      <Filter>Engine\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -757,10 +781,10 @@
     <FxCompile Include="Engine\Shader\QualityFXAA.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\SpriteShader.hlsl">
+    <FxCompile Include="Engine\Shader\ParticleCreate.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\ParticleCreate.hlsl">
+    <FxCompile Include="Engine\Shader\SpriteDefaultShader.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
   </ItemGroup>

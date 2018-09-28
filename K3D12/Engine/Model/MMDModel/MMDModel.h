@@ -7,6 +7,7 @@
 #include "./MMDModelResourceData.h"
 #include "../ModelMesh.h"
 #include "../../Mesh/MeshComponent.h"
+#include "../../Mesh/MeshRenderer.h"
 
 namespace K3D12 {
 
@@ -31,7 +32,7 @@ namespace K3D12 {
 
 	//ゲーム本編で使うモデル
 	class MMDModel :
-		public ModelMesh,public MeshComponent<MMDVertex>,public GameObject
+		public GameObject , public ModelMesh,public MeshComponent<MMDVertex>, MeshRenderer
 	{
 		friend class ModelConverter;
 		friend class ModelPool;

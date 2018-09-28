@@ -168,6 +168,7 @@
     <ClCompile Include="Engine\Input\InputManager.cpp" />
     <ClCompile Include="Engine\InstancingComponent\InstanceDataManager.cpp" />
     <ClCompile Include="Engine\Mesh\MeshComponent.cpp" />
+    <ClCompile Include="Engine\Mesh\MeshRenderer.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModel.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModelManager.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModelResourceData.cpp" />
@@ -187,10 +188,10 @@
     <ClCompile Include="Engine\Rendering\RenderingPathBase.cpp" />
     <ClCompile Include="Engine\Rendering\RenderingPathManager.cpp" />
     <ClCompile Include="Engine\Rendering\SceneRenderer.cpp" />
+    <ClCompile Include="Engine\Rendering\UIRenderer.cpp" />
     <ClCompile Include="Engine\Resource\ConstantBuffer.cpp" />
     <ClCompile Include="Engine\Resource\DepthStencilBuffer.cpp" />
     <ClCompile Include="Engine\Resource\IndexBuffer.cpp" />
-    <ClCompile Include="Engine\Resource\RenderTarget.cpp" />
     <ClCompile Include="Engine\Resource\Resource.cpp" />
     <ClCompile Include="Engine\Resource\ResourceCreater.cpp" />
     <ClCompile Include="Engine\Resource\ShaderResource.cpp" />
@@ -202,7 +203,11 @@
     <ClCompile Include="Engine\ShaderComponent\ShaderObjectLibrary.cpp" />
     <ClCompile Include="Engine\Signature\CommandSignature.cpp" />
     <ClCompile Include="Engine\Signature\RootSignature.cpp" />
+    <ClCompile Include="Engine\SwapChain\SwapChain.cpp" />
     <ClCompile Include="Engine\System\D3D12System.cpp" />
+    <ClCompile Include="Engine\TaskSystem\TaskInvoker.cpp" />
+    <ClCompile Include="Engine\TaskSystem\TaskList.cpp" />
+    <ClCompile Include="Engine\TaskSystem\TaskManager.cpp" />
     <ClCompile Include="Engine\TextureComponent\TextureLoader.cpp" />
     <ClCompile Include="Engine\TextureComponent\TextureManager.cpp" />
     <ClCompile Include="Engine\Util\Logger.cpp" />
@@ -213,11 +218,8 @@
     <ClCompile Include="Engine\Window\Window.cpp" />
     <ClCompile Include="Engine\Window\WindowManager.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="TaskInvorker.cpp" />
-    <ClCompile Include="TaskList.cpp" />
-    <ClCompile Include="TaskManager.cpp" />
+    <ClCompile Include="TaskBase.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="UIRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Animator\Animator.h" />
@@ -265,6 +267,7 @@
     <ClInclude Include="Engine\Input\InputManager.h" />
     <ClInclude Include="Engine\InstancingComponent\InstanceDataManager.h" />
     <ClInclude Include="Engine\Mesh\MeshComponent.h" />
+    <ClInclude Include="Engine\Mesh\MeshRenderer.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModel.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModelManager.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModelResourceData.h" />
@@ -284,10 +287,10 @@
     <ClInclude Include="Engine\Rendering\RenderingPathBase.h" />
     <ClInclude Include="Engine\Rendering\RenderingPathManager.h" />
     <ClInclude Include="Engine\Rendering\SceneRenderer.h" />
+    <ClInclude Include="Engine\Rendering\UIRenderer.h" />
     <ClInclude Include="Engine\Resource\ConstantBuffer.h" />
     <ClInclude Include="Engine\Resource\DepthStencilBuffer.h" />
     <ClInclude Include="Engine\Resource\IndexBuffer.h" />
-    <ClInclude Include="Engine\Resource\RenderTarget.h" />
     <ClInclude Include="Engine\Resource\Resource.h" />
     <ClInclude Include="Engine\Resource\ResourceCreater.h" />
     <ClInclude Include="Engine\Resource\ShaderResource.h" />
@@ -299,7 +302,11 @@
     <ClInclude Include="Engine\ShaderComponent\ShaderObjectLibrary.h" />
     <ClInclude Include="Engine\Signature\CommandSignature.h" />
     <ClInclude Include="Engine\Signature\RootSignature.h" />
+    <ClInclude Include="Engine\SwapChain\SwapChain.h" />
     <ClInclude Include="Engine\System\D3D12System.h" />
+    <ClInclude Include="Engine\TaskSystem\TaskInvoker.h" />
+    <ClInclude Include="Engine\TaskSystem\TaskList.h" />
+    <ClInclude Include="Engine\TaskSystem\TaskManager.h" />
     <ClInclude Include="Engine\TextureComponent\TextureLoader.h" />
     <ClInclude Include="Engine\TextureComponent\TextureManager.h" />
     <ClInclude Include="Engine\Util\D3D12Common.h" />
@@ -312,11 +319,8 @@
     <ClInclude Include="Engine\Util\WICTextureLoader12.h" />
     <ClInclude Include="Engine\Window\Window.h" />
     <ClInclude Include="Engine\Window\WindowManager.h" />
-    <ClInclude Include="TaskInvorker.h" />
-    <ClInclude Include="TaskList.h" />
-    <ClInclude Include="TaskManager.h" />
+    <ClInclude Include="TaskBase.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="UIRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">
@@ -364,7 +368,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\SpriteShader.hlsl">
+    <FxCompile Include="Engine\Shader\SpriteDefaultShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
