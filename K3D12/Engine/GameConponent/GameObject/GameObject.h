@@ -14,11 +14,10 @@ namespace K3D12 {
 
 	protected:
 		Transform		_transform;
-		ConstantBuffer	_transformBuffer;
 		Vector3			_scale;
 		unsigned int	_initializeSize;
 		bool			_isEnable;
-
+		ConstantBuffer	_transformBuffer;
 	public:
 
 	private:

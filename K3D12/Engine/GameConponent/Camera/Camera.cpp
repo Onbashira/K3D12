@@ -6,7 +6,7 @@
 #include "../../Util/Utility.h"
 
 K3D12::Camera::Camera() :
-	GameObject(), _type(CameraType::Perspective)
+	GameObject(), _mode(CameraMode::Perspective)
 {
 }
 
@@ -17,14 +17,14 @@ K3D12::Camera::~Camera()
 }
 
 
-void K3D12::Camera::InitializeCamera(CameraType type, const float width, const float height, const float nearClip, const float farClip,const Vector3 & position, const Vector3 & target, const Vector3 & upWard)
+void K3D12::Camera::InitializeCamera(CameraMode type, const float width, const float height, const float nearClip, const float farClip, const Vector3 & position, const Vector3 & target, const Vector3 & upWard)
 {
 	switch (type)
 	{
-	case CameraType::Perspective:
+	case CameraMode::Perspective:
 		initializePerspective(width, height, nearClip, farClip, position, target, upWard);
 		break;
-	case CameraType::Orthogonal:
+	case CameraMode::Orthogonal:
 		InitializeOrthogonal(width, height, nearClip, farClip, position, target, upWard);
 		break;
 	default:
@@ -33,10 +33,17 @@ void K3D12::Camera::InitializeCamera(CameraType type, const float width, const f
 }
 
 void K3D12::Camera::InitializeCameraFOV(const float fov, const float width, const float height, const float nearClip, const float farClip, const Vector3 & position, const Vector3 & target, const Vector3 & upWard)
-{
+{	
+	
+	_mode = CameraMode::Perspective;
+
 	_fov = DegToRad(fov);
-	_type = CameraType::Perspective;
-	_aspectRatio = height / width;
+	_near = nearClip;
+	_far = farClip;
+	_aspectRatio = width / height;
+	_info.windowHeight = height;
+	_info.windowWidth = width;
+
 	auto mat = Matrix::ExtractRotationMatrix(Matrix::CreateLookAt(position, target, upWard));
 	SetRotation(Quaternion::CreateFromRotationMatrix(mat));
 	this->_projection = Matrix::CreatePerspectiveFOV(fov, _aspectRatio, nearClip, farClip);
@@ -44,15 +51,11 @@ void K3D12::Camera::InitializeCameraFOV(const float fov, const float width, cons
 
 HRESULT K3D12::Camera::InitializeCameraDepthStencill(DXGI_FORMAT depthFormat, unsigned int windowWidth, unsigned int windowHeight)
 {
+	_depthStencillRersource.Discard();
 	auto hr = _depthStencillRersource.Create(windowWidth, windowHeight, depthFormat, depthFormat);
 	_depthStencillRersource.SetName("CameraDepthStencill");
 	return hr;
 
-}
-
-void K3D12::Camera::SetConstantBuffer(GraphicsCommandList * list, UINT paramaterIndex)
-{
-	list->GetCommandList()->SetGraphicsRootConstantBufferView(paramaterIndex, _cameraMatrixBuffer.GetResource()->GetGPUVirtualAddress());
 }
 
 void K3D12::Camera::SetCameraParamater(std::weak_ptr<GraphicsCommandList> list, unsigned int paramaterIndex)
@@ -78,51 +81,73 @@ HRESULT K3D12::Camera::CreateBuffer()
 	return hr;
 }
 
+void K3D12::Camera::ChangeCameraMode(CameraMode mode)
+{
+
+	switch (mode)
+	{
+	case K3D12::CameraMode::Perspective:
+		InitializeOrthogonal(_windowWidth, _windowHeight, this->_near, _far, this->GetPos(), this->GetPos() + GetLocalAxis().w, GetLocalAxis().v);
+		break;
+	case K3D12::CameraMode::Orthogonal:
+		initializePerspective(_windowWidth, _windowHeight, this->_near, _far,this->GetPos(), this->GetPos() + GetLocalAxis().w, GetLocalAxis().v);
+		break;
+	default:
+		break;
+	}
+
+}
 
 HRESULT K3D12::Camera::InitializeOrthogonal(const float width, const float height, const float nearClip, const float farClip, const Vector3 & position, const Vector3 & target, const Vector3 & upWard)
 {
+	_mode = CameraMode::Orthogonal;
+
 	_fov = 0;
-	_type = CameraType::Orthogonal;
+	_near = nearClip;
+	_far = farClip;
 	_aspectRatio = width / height;
+	_info.windowHeight = height;
+	_info.windowWidth = width;
+
 	SetScale(Vector3::one);
 	SetPos(position);
 
-	auto mat = Matrix::ExtractRotationMatrix(Matrix::CreateLookAt(position, target, upWard));
+	Matrix mat = Matrix::ExtractRotationMatrix(Matrix::CreateLookAt(position, target, upWard));
 	SetRotation(Quaternion::CreateFromRotationMatrix(mat));
-	this->_projection = Matrix::CreateOrthographic(width, height, nearClip, farClip);
 
+	this->_info.projection = this->_projection = Matrix::CreateOrthographic(width, height, nearClip, farClip);
+	this->_info.view = Matrix::Invert(mat);
+	this->_info.windowHeight = this->_windowHeight;
+	this->_info.windowWidth = this->_windowWidth;
 
 	if (FAILED(CreateBuffer())) {
 		return E_FAIL;
 	}
 	Update();
-
 	return S_OK;
 
 }
 
 HRESULT K3D12::Camera::initializePerspective(const float width, const float height, const float nearClip, const float farClip, const Vector3 & position, const Vector3 & target, const Vector3 & upWard)
 {
-	_fov = 0;
-	_type = CameraType::Perspective;
-	this->_near = nearClip;
-	this->_far = farClip;
-	this->_windowHeight = height;
-	this->_windowWidth = width;
 
+	_mode = CameraMode::Perspective;
+
+	_fov = 0;
+	_near = nearClip;
+	_far = farClip;
 	_aspectRatio = width / height;
+	_info.windowHeight = height;
+	_info.windowWidth = width;
+
 	SetScale(Vector3::one);
 	SetPos(position);
-	auto mat = Matrix::CreateLookAt(position, target, upWard);
 
+	Matrix mat = std::move(Matrix::CreateLookAt(position, target, upWard));
 	SetRotation(Quaternion::CreateFromRotationMatrix(Matrix::ExtractRotationMatrix(mat)));
 
-	mat = Matrix::Invert(mat);
-
-	this->_projection = Matrix::CreatePerspectiveFOV(DegToRad(70), _aspectRatio, nearClip, farClip);
-
-	this->_info.projection = this->_projection;
-	this->_info.view = mat;
+	this->_info.projection = this->_projection = Matrix::CreatePerspectiveFOV(DegToRad(70), _aspectRatio, nearClip, farClip);;
+	this->_info.view = Matrix::Invert(mat);
 	this->_info.windowHeight = this->_windowHeight;
 	this->_info.windowWidth = this->_windowWidth;
 
@@ -134,9 +159,9 @@ HRESULT K3D12::Camera::initializePerspective(const float width, const float heig
 	return S_OK;
 }
 
-K3D12::CameraType K3D12::Camera::GetType()
+K3D12::CameraMode K3D12::Camera::GetMode()
 {
-	return _type;
+	return _mode;
 }
 
 const Matrix & K3D12::Camera::GetProjection()
@@ -249,6 +274,8 @@ void K3D12::Camera::DebugRotate(InputManager & input)
 		RotationAxisAngles(GetLocalAxis().w, DegToRad(-1.0f));
 	}
 }
+
+
 
 
 

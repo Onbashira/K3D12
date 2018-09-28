@@ -5,6 +5,38 @@ K3D12::RenderingPathBase::RenderingPathBase()
 {
 }
 
+K3D12::RenderingPathBase::RenderingPathBase(const RenderingPathBase & other)
+{
+	*this = other;
+}
+
+K3D12::RenderingPathBase::RenderingPathBase(RenderingPathBase && other)
+{
+	*this = std::move(other);
+}
+
+K3D12::RenderingPathBase & K3D12::RenderingPathBase::operator=(const RenderingPathBase & other)
+{
+	this->_commandList = other._commandList;
+	this->_isEnable = other._isEnable;
+	this->_onInitAE = other._onInitAE;
+	this->_onInitBE = other._onInitBE;
+	this->_onInitFS = other._onInitFS;
+
+}
+
+K3D12::RenderingPathBase & K3D12::RenderingPathBase::operator=(RenderingPathBase && other)
+{
+	this->_commandList = other._commandList;
+	this->_isEnable = other._isEnable;
+	this->_onInitAE = std::move(other._onInitAE);
+	this->_onInitBE = std::move(other._onInitBE);
+	this->_onInitFS = std::move(other._onInitFS);
+
+	other._commandList.reset();
+	other._isEnable = false;
+}
+
 
 K3D12::RenderingPathBase::~RenderingPathBase()
 {
@@ -42,14 +74,17 @@ void K3D12::RenderingPathBase::SetFrameStartInitializer(std::function<void(std::
 	this->_onInitFS = function;
 }
 
-void K3D12::RenderingPathBase::SetEnable(bool enable)
+K3D12::RenderingPathBase& K3D12::RenderingPathBase::SetEnable(bool enable)
 {
 	this->_isEnable = enable;
+	return *this;
+
 }
 
-void K3D12::RenderingPathBase::SetCommandList(std::weak_ptr<GraphicsCommandList> list)
+K3D12::RenderingPathBase& K3D12::RenderingPathBase::SetCommandList(std::weak_ptr<GraphicsCommandList> list)
 {
 	this->_commandList = list;
+	return *this;
 }
 
 bool K3D12::RenderingPathBase::IsEnable()

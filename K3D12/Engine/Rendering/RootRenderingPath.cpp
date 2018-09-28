@@ -7,6 +7,27 @@ K3D12::RootRenderingPath::RootRenderingPath(CommandQueue & excutionQueueRef) :
 {
 }
 
+K3D12::RootRenderingPath::RootRenderingPath(const RootRenderingPath & other) :
+	_excutionQueue(other._excutionQueue), _isEnable(other._isEnable)
+
+{
+}
+
+K3D12::RootRenderingPath::RootRenderingPath(RootRenderingPath && other) :
+	_excutionQueue(other._excutionQueue), _isEnable(other._isEnable)
+{
+}
+
+K3D12::RootRenderingPath & K3D12::RootRenderingPath::operator=(const RootRenderingPath & other)
+{
+	// TODO: return ステートメントをここに挿入します
+}
+
+K3D12::RootRenderingPath & K3D12::RootRenderingPath::operator=(RootRenderingPath && other)
+{
+	// TODO: return ステートメントをここに挿入します
+}
+
 
 K3D12::RootRenderingPath::~RootRenderingPath()
 {

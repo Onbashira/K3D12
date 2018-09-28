@@ -19,9 +19,11 @@ namespace K3D12 {
 	{
 	private:
 		struct SpriteInfo {
-			float	alphaFactor; //0.0~1.0
+			float	alpha; //0.0~1.0
 			Vector3 color;
-			Vector2 centerOffset;
+			Vector2 centerOffset; //中心からのオフセットベクトル
+			SpriteInfo() : alpha(1.0f),color(Vector3::one), centerOffset() {};
+			~SpriteInfo() {};
 		}_info;
 
 		unsigned int  _height;

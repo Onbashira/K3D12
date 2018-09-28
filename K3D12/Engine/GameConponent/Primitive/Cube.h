@@ -13,7 +13,6 @@ namespace K3D12 {
 	private:
 	protected:
 		PrimitiveComponent _info;
-		UnorderedAccessValue testArray;
 		std::vector<float>   buffer;
 	public:
 	private:

@@ -7,7 +7,7 @@
 #include "../Util/ManagerComponentBase.h"
 namespace K3D12 {
 
-	//シーン内の1レンダリングパス単位のクラス
+	//シーン内の1パス単位のクラス
 	class RootRenderingPath                                                             
 	{
 	private:
@@ -32,6 +32,10 @@ namespace K3D12 {
 		bool IsEnable();
 
 		RootRenderingPath(CommandQueue& excutionQueueRef);
+		RootRenderingPath(const RootRenderingPath& other);
+		RootRenderingPath(RootRenderingPath&& other);
+		RootRenderingPath& operator =(const RootRenderingPath& other);
+		RootRenderingPath& operator =(RootRenderingPath&& other);
 		~RootRenderingPath();
 	};
 

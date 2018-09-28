@@ -32,8 +32,9 @@ namespace K3D12 {
 		void CreateIndexBuffer();
 		void CreateVertexBuffer();
 
-		MeshComponent() {};
-		~MeshComponent() {};
+
+		MeshComponent();
+		~MeshComponent();
 	};
 
 }
@@ -86,4 +87,18 @@ template<class T>
 inline void K3D12::MeshComponent<T>::CreateVertexBuffer()
 {
 	this->_vertexBuffer->Create(_vertexes.size() * sizeof(T), sizeof(T), &_vertexes[0]);
+}
+
+template<class T>
+inline K3D12::MeshComponent<T>::MeshComponent() :
+	_vertexBuffer(std::make_unique<K3D12::VertexBuffer>()),
+	_indexBuffer(std::make_unique<K3D12::IndexBuffer>())
+{
+}
+
+template<class T>
+inline K3D12::MeshComponent<T>::~MeshComponent()
+{
+	_vertexBuffer.release();
+	_indexBuffer.release();
 }

@@ -14,8 +14,11 @@ namespace K3D12 {
 	public:
 	private:
 	public:
+		//レンダリングパイプラインを破棄する
 		void DiscardRenderingPipeline();
+		//シーンレンダリングを設定する
 		void SetSceneRenderer(std::shared_ptr<SceneRenderer> sceneRenderer);
+		//レンダリングする
 		void Rendering();
 		RenderingPathManager();
 		~RenderingPathManager();

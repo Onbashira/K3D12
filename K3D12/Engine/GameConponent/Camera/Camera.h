@@ -10,7 +10,7 @@ namespace K3D12 {
 
 	class GraphicsCommandList;
 
-	enum class CameraType {
+	enum class CameraMode {
 		Perspective,
 		Orthogonal
 	};
@@ -27,16 +27,21 @@ namespace K3D12 {
 		public GameObject
 	{
 	private:
-		CameraType		_type;
+		CameraMode		_mode;
+		
 		float			_fov;
 		float			_aspectRatio;
 		float			_near;
 		float			_far;
+
 		float			_windowWidth;
 		float			_windowHeight;
+
 		Matrix			_projection;
+
 		ConstantBuffer	_cameraMatrixBuffer;
 		DepthStencil	_depthStencillRersource;
+
 		CameraInfo		_info;
 	public:
 
@@ -45,7 +50,7 @@ namespace K3D12 {
 		HRESULT InitializeOrthogonal(const float width, const float height, const float nearClip, const float farClip, const Vector3& position, const Vector3& target, const Vector3& upWard);
 		HRESULT initializePerspective(const float width, const float height, const float nearClip, const float farClip, const Vector3& position, const Vector3& target, const Vector3& upWard);
 	public:
-		CameraType		GetType();
+		CameraMode		GetMode();
 
 		const Matrix&	GetProjection();
 		const Matrix	GetViewProjection();
@@ -59,14 +64,21 @@ namespace K3D12 {
 		float GetFarClip();
 
 		void Update();
+
 		void DebugMove(InputManager& input);
 		void DebugRotate(InputManager& input);
-		void InitializeCamera(CameraType type, const float width, const float height, const float nearClip, const float farClip, const Vector3& position, const Vector3& target, const Vector3& upWard);
+
+		void ChangeCameraMode(CameraMode mode);
+
+		void InitializeCamera(CameraMode type, const float width, const float height, const float nearClip, const float farClip, const Vector3& position, const Vector3& target, const Vector3& upWard);
 		void InitializeCameraFOV(const float fov, const float width, const float height, const float nearClip, const float farClip, const Vector3& position, const Vector3& target, const Vector3& upWard);
+		
 		HRESULT InitializeCameraDepthStencill(DXGI_FORMAT depthFormat, unsigned int windowWidth, unsigned int windowHeight);
-		void SetConstantBuffer(GraphicsCommandList* list, UINT paramaterIndex = 0);
+
 		void SetCameraParamater(std::weak_ptr<GraphicsCommandList> list, unsigned int paramaterIndex = 0);
+		
 		void Discard();
+
 		Camera();
 
 		~Camera();

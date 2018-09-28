@@ -29,6 +29,14 @@ struct SpriteVSInput
     float2 texCoord : TEXCOORD;
 };
 
+struct SpriteVSInstacingInput
+{
+    float3 pos : POSITION;
+    float2 texCoord : TEXCOORD;
+    uint instancingIndex : Sv_InstanceID;
+    
+};
+
 struct SpriteVSOutput
 {
     float4 pos : SV_POSITION;
@@ -66,7 +74,7 @@ cbuffer SpriteInfo : register(b2)
 SamplerState spriteSampler : register(s0);
 
 Texture2D<float4> spriteTexture : register(t0);
-
+//(w,h) + (w/2,h/2) * (m,n)
 [RootSignature(SpriteRootSignature)]
 SpriteVSOutput VsMain(SpriteVSInput input)
 {

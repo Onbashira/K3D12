@@ -17,7 +17,7 @@
 #include "../CommandContext/GraphicsCommandList.h"
 #include "../CommandContext/GraphicsContextLibrary.h"
 #include "../CommandContext/CommandQueue.h"
-#include "../Resource/RenderTarget.h"
+#include "../SwapChain/SwapChain.h"
 #include "../Input/InputManager.h"
 #include "../GameConponent/Camera/Camera.h"
 #include "../Model/ModelPool.h"
@@ -40,7 +40,7 @@ namespace K3D12 {
 		UINT							_windowHeight;
 		std::wstring					_appClassName;
 		CommandQueue					_commandQueue;
-		RenderTarget					_renderTarget;
+		SwapChain					_renderTarget;
 		InputManager					_inputManager;
 		Camera							_mainCamera;
 		ModelPool						_modelPool;
@@ -111,6 +111,10 @@ namespace K3D12 {
 
 		friend static void Destroy();
 
+		friend static HRESULT Initialize(UINT windowWidth, UINT windowHeight, UINT backBufferCount, bool useWarpDevice );
+
+		friend static HRESULT Initialize(UINT backBufferCount , bool useWarpDevice );
+
 		static void InitializeCamera(CameraType type, const Vector3& pos, const Vector3 & target, const Vector3& up, float nearClip, float farClip, float fov);
 
 		friend static void SetWindowSize(UINT widths, UINT height);
@@ -158,17 +162,7 @@ namespace K3D12 {
 		~D3D12System();
 	};
 
-#ifndef GET_DEVICE
-#define GET_DEVICE K3D12::GetDevice()
-#endif // !GET_DEVICE
 
-#ifndef CHECK_RESULT 
-#define CHECK_RESULT(result) if(FAILED(result)){return result;}
-#endif // !CHECK_RESULT
-
-#ifndef GET_SYSTEM_FENCE 
-#define GET_SYSTEM_FENCE K3D12::GetFence()
-#endif // !GET_DEVICE
 
 	//static global function
 
@@ -205,4 +199,15 @@ namespace K3D12 {
 	static std::weak_ptr<MMDModel> LoadModel(std::string modelPath);
 
 
+#ifndef GET_DEVICE
+#define GET_DEVICE K3D12::GetDevice()
+#endif // !GET_DEVICE
+
+#ifndef CHECK_RESULT 
+#define CHECK_RESULT(result) if(FAILED(result)){return result;}
+#endif // !CHECK_RESULT
+
+#ifndef GET_SYSTEM_FENCE 
+#define GET_SYSTEM_FENCE K3D12::GetFence()
+#endif // !GET_DEVICE
 }

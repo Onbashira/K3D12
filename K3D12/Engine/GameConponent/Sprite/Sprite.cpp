@@ -30,7 +30,7 @@ void K3D12::Sprite::Draw()
 	this->_commandList.lock()->GetCommandList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	this->BindingShaderObject();
 
-	this->_commandList.lock()->GetCommandList()->SetGraphicsRootConstantBufferView(0, D3D12System::GetInstance().GetCamera().GetCameraBuffer().GetResource()->GetGPUVirtualAddress());
+	this->_commandList.lock()->GetCommandList()->SetGraphicsRootConstantBufferView(0, GetCamera().GetCameraBuffer().GetResource()->GetGPUVirtualAddress());
 	ID3D12DescriptorHeap* heap[] = { _heap->GetPtr() };
 	this->_commandList.lock()->GetCommandList()->SetDescriptorHeaps(1, heap);
 	this->_commandList.lock()->GetCommandList()->ExecuteBundle(_bundleList.GetCommandList().Get());
@@ -178,7 +178,7 @@ void K3D12::Sprite::Initializer()
 	}
 
 	//MaterialFactor Update
-	this->_info.alphaFactor = 1.0f;
+	this->_info.alpha = 1.0f;
 	this->_info.color = Vector3::zero;
 	_materialBuffer.Update(&_info, sizeof(SpriteInfo), 0);
 
@@ -309,7 +309,7 @@ void K3D12::Sprite::SetColor(float r, float g, float b)
 
 void K3D12::Sprite::SetTransparency(float alpha)
 {
-	this->_info.alphaFactor = std::move(alpha);
+	this->_info.alpha = std::move(alpha);
 
 	_materialBuffer.Update(&_info, sizeof(SpriteInfo), 0);
 

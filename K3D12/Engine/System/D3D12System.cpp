@@ -8,7 +8,7 @@
 #include "../CommandContext/GraphicsCommandList.h"
 #include "../CommandContext/GraphicsContextLibrary.h"
 #include "../CommandContext/CommandQueue.h"
-#include "../Resource/RenderTarget.h"
+#include "../SwapChain/SwapChain.h"
 #include "../Input/InputManager.h"
 #include "../GameConponent/Camera/Camera.h"
 #include "../Model/ModelPool.h"
@@ -27,20 +27,20 @@
 
 using namespace K3D12;
 
-constexpr unsigned int LIGHT_NUM = 25;
-std::random_device randDev;
-std::mt19937 dev(randDev());
-std::uniform_real_distribution<float> lightRangeZ(-100.0f, 100.0f);
-std::uniform_real_distribution<float> lightRangeX(-100.0f, 100.0f);
-std::uniform_real_distribution<float> lightRangeY(5.0f, 30.0f);
-std::uniform_real_distribution<float> lightRange(30.0f, 80.0f);
-
-std::uniform_real_distribution<float> lightColorR(0.0f, 1.0f);
-std::uniform_real_distribution<float> lightColorG(0.0f, 1.0f);
-std::uniform_real_distribution<float> lightColorB(0.0f, 1.0f);
-
-std::uniform_real_distribution<float> lightAttenuent(1.0f, 50.0f);
-std::uniform_real_distribution<float> lightIntensity(1.0f, 10.0f);
+//constexpr unsigned int LIGHT_NUM = 25;
+//std::random_device randDev;
+//std::mt19937 dev(randDev());
+//std::uniform_real_distribution<float> lightRangeZ(-100.0f, 100.0f);
+//std::uniform_real_distribution<float> lightRangeX(-100.0f, 100.0f);
+//std::uniform_real_distribution<float> lightRangeY(5.0f, 30.0f);
+//std::uniform_real_distribution<float> lightRange(30.0f, 80.0f);
+//
+//std::uniform_real_distribution<float> lightColorR(0.0f, 1.0f);
+//std::uniform_real_distribution<float> lightColorG(0.0f, 1.0f);
+//std::uniform_real_distribution<float> lightColorB(0.0f, 1.0f);
+//
+//std::uniform_real_distribution<float> lightAttenuent(1.0f, 50.0f);
+//std::uniform_real_distribution<float> lightIntensity(1.0f, 10.0f);
 
 
 
@@ -218,7 +218,7 @@ HRESULT D3D12System::InitializeSpritePSO()
 #endif
 	K3D12::HLSLIncluder includes("./Engine/Shader/");
 
-	if (FAILED(D3DCompileFromFile(L"./Engine/Shader/SpriteShader.hlsl", nullptr, &includes, "VsMain", "vs_5_0", compileFlag, 0, &vs, &error))) {
+	if (FAILED(D3DCompileFromFile(L"./Engine/Shader/SpriteDefaultShader.hlsl", nullptr, &includes, "VsMain", "vs_5_0", compileFlag, 0, &vs, &error))) {
 		OutputDebugStringA((char*)error->GetBufferPointer());
 		return E_FAIL;
 	}
@@ -226,7 +226,7 @@ HRESULT D3D12System::InitializeSpritePSO()
 		OutputDebugStringA((char*)error->GetBufferPointer());
 	}
 
-	if (FAILED(D3DCompileFromFile(L"./Engine/Shader/SpriteShader.hlsl", nullptr, &includes, "PsMain", "ps_5_0", compileFlag, 0, &ps, &error))) {
+	if (FAILED(D3DCompileFromFile(L"./Engine/Shader/SpriteDefaultShader.hlsl", nullptr, &includes, "PsMain", "ps_5_0", compileFlag, 0, &ps, &error))) {
 		OutputDebugStringA((char*)error->GetBufferPointer());
 		return E_FAIL;
 	}
@@ -270,7 +270,7 @@ HRESULT D3D12System::InitializeSpritePSO()
 	//ブレンドステートの設定
 	D3D12_BLEND_DESC descBS;
 	//αが一未満をクリップ
-	descBS.AlphaToCoverageEnable = TRUE;
+	descBS.AlphaToCoverageEnable = FALSE;
 	descBS.IndependentBlendEnable = FALSE;
 	for (UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; i++) {
 		descBS.RenderTarget[i] = descRTBS;
@@ -936,14 +936,14 @@ InputManager & K3D12::Input()
 
 void K3D12::SetWindowSize(UINT widths, UINT height)
 {
-	D3D12System::Create();
+	K3D12::Create();
 	D3D12System::GetInstance()._windowHeight = height;
 	D3D12System::GetInstance()._windowWidth = widths;
 }
 
 void K3D12::SetWindowName(std::wstring name)
 {
-	D3D12System::Create();
+	K3D12::Create();
 	D3D12System::GetInstance()._appClassName = name;
 }
 

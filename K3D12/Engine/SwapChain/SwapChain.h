@@ -3,7 +3,7 @@
 #include <vector>
 #include "../Util/D3D12Common.h"
 #include "../DescriptorHeap/DescriptorHeap.h"
-#include "Resource.h"
+#include "../Resource/Resource.h"
 
 
 namespace K3D12 {
@@ -12,7 +12,7 @@ namespace K3D12 {
 	class Factory;
 	class Window;
 
-	class RenderTarget
+	class SwapChain
 	{
 		unsigned int										_bufferNum;
 		unsigned int										_currentIndex;
@@ -37,8 +37,8 @@ namespace K3D12 {
 		void  FlipScreen();
 		HRESULT Present(unsigned int sysncInterval = 1, unsigned int flags = 0);
 		void Discard();
-		RenderTarget();
-		~RenderTarget();
+		SwapChain();
+		~SwapChain();
 	};
 
 };

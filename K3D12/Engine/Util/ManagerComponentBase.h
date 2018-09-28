@@ -33,6 +33,15 @@ namespace K3D12 {
 
 
 		ManagerComponentBase() {};
+		ManagerComponentBase(const ManagerComponentBase<T>& other) {};
+		ManagerComponentBase(ManagerComponentBase<T>&& other) {};
+		ManagerComponentBase<T>& (const ManagerComponentBase<T>& other) {
+			return this*; 
+		};
+		ManagerComponentBase<T>& (ManagerComponentBase<T>&& other) {
+			return this*; 
+		};
+
 		virtual ~ManagerComponentBase() { DiscardMap(); };
 	};
 

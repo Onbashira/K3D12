@@ -198,11 +198,6 @@ void K3D12::Cube::Draw()
 void K3D12::Cube::Update()
 {
 	GameObject::UpdateTransformBuffer();
-
-#pragma region StructuredBufferMappingTest
-	D3D12_RANGE range = { 0,4 };
-	testArray.Read(&buffer[0],4*sizeof(float));
-#pragma endregion
 }
 
 void K3D12::Cube::LateUpdate()

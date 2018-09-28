@@ -1,4 +1,4 @@
-#include "RenderTarget.h"
+#include "SwapChain.h"
 #include "../System/D3D12System.h"
 #include "../Factory/Factory.h"
 #include "../CommandContext/GraphicsCommandList.h"
@@ -8,18 +8,18 @@
 
 constexpr float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 
-K3D12::RenderTarget::RenderTarget()
+K3D12::SwapChain::SwapChain()
 {
 }
 
 
-K3D12::RenderTarget::~RenderTarget()
+K3D12::SwapChain::~SwapChain()
 {
 	Discard();
 }
 
 
-HRESULT K3D12::RenderTarget::CreateSwapChain(CommandQueue & commandQueue, Factory & factory, Window & window, UINT windowWidth, UINT windowHeight, unsigned int bufferNum)
+HRESULT K3D12::SwapChain::CreateSwapChain(CommandQueue & commandQueue, Factory & factory, Window & window, UINT windowWidth, UINT windowHeight, unsigned int bufferNum)
 {
 
 
@@ -46,7 +46,7 @@ HRESULT K3D12::RenderTarget::CreateSwapChain(CommandQueue & commandQueue, Factor
 	return S_OK;
 }
 
-HRESULT K3D12::RenderTarget::CreateRenderTargets(unsigned int bufferNum)
+HRESULT K3D12::SwapChain::CreateRenderTargets(unsigned int bufferNum)
 {
 	this->_bufferNum = bufferNum;
 	D3D12_DESCRIPTOR_HEAP_DESC desc{};
@@ -75,7 +75,7 @@ HRESULT K3D12::RenderTarget::CreateRenderTargets(unsigned int bufferNum)
 	return S_OK;
 }
 
-HRESULT K3D12::RenderTarget::Create(CommandQueue & commandQueue, Factory & factory, Window & window, UINT windowWidth, UINT windowHeight, unsigned int bufferNum)
+HRESULT K3D12::SwapChain::Create(CommandQueue & commandQueue, Factory & factory, Window & window, UINT windowWidth, UINT windowHeight, unsigned int bufferNum)
 {
 	auto hr = CreateSwapChain(commandQueue, factory, window, windowWidth, windowHeight, bufferNum);
 	CHECK_RESULT(hr);
@@ -84,17 +84,17 @@ HRESULT K3D12::RenderTarget::Create(CommandQueue & commandQueue, Factory & facto
 	return hr;
 }
 
-unsigned int K3D12::RenderTarget::GetBufferNum()
+unsigned int K3D12::SwapChain::GetBufferNum()
 {
 	return _bufferNum;
 }
 
-unsigned int K3D12::RenderTarget::GetCurrentBuckBuffer()
+unsigned int K3D12::SwapChain::GetCurrentBuckBuffer()
 {
 	return _currentIndex;
 }
 
-HRESULT K3D12::RenderTarget::SetStatePresent(std::shared_ptr<GraphicsCommandList> list)
+HRESULT K3D12::SwapChain::SetStatePresent(std::shared_ptr<GraphicsCommandList> list)
 {
 	auto hr = _rtResource[_currentIndex].ResourceTransition(list->GetCommandList().Get(), D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT);
 
@@ -102,46 +102,46 @@ HRESULT K3D12::RenderTarget::SetStatePresent(std::shared_ptr<GraphicsCommandList
 	return hr;
 }
 
-HRESULT K3D12::RenderTarget::SetStateRenderTarget(std::shared_ptr<GraphicsCommandList> list)
+HRESULT K3D12::SwapChain::SetStateRenderTarget(std::shared_ptr<GraphicsCommandList> list)
 {
 	auto hr = _rtResource[_currentIndex].ResourceTransition(list->GetCommandList().Get(), D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET);
 	CHECK_RESULT(hr);
 	return hr;
 }
 
-HRESULT K3D12::RenderTarget::SetStateCopyDest(std::shared_ptr<GraphicsCommandList> list)
+HRESULT K3D12::SwapChain::SetStateCopyDest(std::shared_ptr<GraphicsCommandList> list)
 {
 	auto hr =_rtResource[_currentIndex].ResourceTransition(list->GetCommandList().Get(),D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COPY_DEST);
 	CHECK_RESULT(hr);
 	return hr;
 }
 
-HRESULT K3D12::RenderTarget::SetStateGenericRead(std::shared_ptr<GraphicsCommandList> list)
+HRESULT K3D12::SwapChain::SetStateGenericRead(std::shared_ptr<GraphicsCommandList> list)
 {
 	auto hr = _rtResource[_currentIndex].ResourceTransition(list->GetCommandList().Get(), D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ);
 	CHECK_RESULT(hr);
 	return hr;
 }
 
-HRESULT K3D12::RenderTarget::CopyToRenderTarget(std::shared_ptr<GraphicsCommandList> list,Resource* pSrc)
+HRESULT K3D12::SwapChain::CopyToRenderTarget(std::shared_ptr<GraphicsCommandList> list,Resource* pSrc)
 {
 	list->GetCommandList()->CopyResource(this->_rtResource[_currentIndex].GetResource(),pSrc->GetResource());
 	return S_OK;
 }
 
-void K3D12::RenderTarget::ClearScreen(std::shared_ptr<GraphicsCommandList> list)
+void K3D12::SwapChain::ClearScreen(std::shared_ptr<GraphicsCommandList> list)
 {
 	SetStateRenderTarget(list);
 	list->GetCommandList()->ClearRenderTargetView(this->_rtHeap.GetCPUHandle(_currentIndex), clearColor, 0, nullptr);
 
 }
 
-void K3D12::RenderTarget::FlipScreen()
+void K3D12::SwapChain::FlipScreen()
 {
 	_currentIndex = _swapChain->GetCurrentBackBufferIndex();
 }
 
-HRESULT K3D12::RenderTarget::Present(unsigned int sysncInterval, unsigned int flags)
+HRESULT K3D12::SwapChain::Present(unsigned int sysncInterval, unsigned int flags)
 {
 	auto hr = _swapChain->Present(sysncInterval, flags);
 	CHECK_RESULT(hr);
@@ -149,7 +149,7 @@ HRESULT K3D12::RenderTarget::Present(unsigned int sysncInterval, unsigned int fl
 	return hr;
 }
 
-void K3D12::RenderTarget::Discard()
+void K3D12::SwapChain::Discard()
 {
 	_swapChain.Reset();
 	for (auto& res : _rtResource) {

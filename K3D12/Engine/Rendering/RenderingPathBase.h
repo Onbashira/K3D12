@@ -30,12 +30,17 @@ namespace K3D12 {
 		virtual void SetAfterExcutionInitializer(std::function<void(std::weak_ptr<GraphicsCommandList>)>function);
 		virtual void SetFrameStartInitializer(std::function<void(std::weak_ptr<GraphicsCommandList>)>function);
 
-		virtual void SetEnable(bool enable);
-		virtual void SetCommandList(std::weak_ptr<GraphicsCommandList> list);
+		virtual RenderingPathBase& SetEnable(bool enable);
+		virtual RenderingPathBase& SetCommandList(std::weak_ptr<GraphicsCommandList> list);
 
 		bool IsEnable();
 
+
 		RenderingPathBase();
+		RenderingPathBase(const RenderingPathBase& other);
+		RenderingPathBase(RenderingPathBase&& other);
+		RenderingPathBase& operator =(const RenderingPathBase& other);
+		RenderingPathBase& operator =(RenderingPathBase&& other);
 		virtual ~RenderingPathBase();
 	};
 }

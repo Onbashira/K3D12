@@ -6,6 +6,7 @@
 #include "../../Animator/StateMachineController.h"
 #include "./MMDModelResourceData.h"
 #include "../ModelMesh.h"
+#include "../../Mesh/MeshComponent.h"
 
 namespace K3D12 {
 
@@ -30,7 +31,7 @@ namespace K3D12 {
 
 	//ゲーム本編で使うモデル
 	class MMDModel :
-		public ModelMesh
+		public ModelMesh,public MeshComponent<MMDVertex>,public GameObject
 	{
 		friend class ModelConverter;
 		friend class ModelPool;
