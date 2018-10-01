@@ -9,6 +9,9 @@ namespace K3D12 {
 	class MeshRenderer
 	{
 	private:
+	public:
+
+	protected:
 		std::unique_ptr<K3D12::DescriptorHeap>				_heap;					//デスクリプタヒープ　					(変形情報 + マテリアル数 + テクスチャ数)　カメラの情報は別で投げる
 		unsigned int										_transformStartPoint;	//変形情報デスクリプタの開始位置		(maybe 0)
 		unsigned int										_materialStartPoint;	//マテリアルデスクリプタの開始位置		(maybe 0+1 ~ x)
@@ -16,8 +19,6 @@ namespace K3D12 {
 
 		K3D12::ConstantBuffer								_materialBuffer;		//マテリアル情報のバッファ 　　
 		std::vector<std::weak_ptr<K3D12::ShaderResource>>	_textureResource;		//テクスチャリソースへの参照	
-	public:
-
 	private:
 
 	public:

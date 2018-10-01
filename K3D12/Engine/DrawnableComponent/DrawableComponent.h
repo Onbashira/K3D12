@@ -28,7 +28,7 @@ namespace K3D12 {
 		virtual void SetRootSignature(K3D12::RootSignature* rootSignature) = 0;
 		virtual void SetMasterCommandList(std::shared_ptr<K3D12::GraphicsCommandList> masterCommandList);
 
-		//PSOとRSを設定されたマスターコマンドリストにセットする
+		//PSOとRootSignatureを設定されたマスターコマンドリストにセットする
 		virtual void BindingShaderObject();
 		virtual void BindingShaderObjectToBundle();
 

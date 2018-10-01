@@ -146,6 +146,7 @@ namespace K3D12 {
 		VKS_OME_CLEAR
 	};
 
+	//インプット全体を管理
 	class InputManager
 	{
 	private:
@@ -153,6 +154,7 @@ namespace K3D12 {
 		BYTE _key[256];
 		Vector2 _mousePos;
 		GamePadManager _gamePadManager;
+		HWND _forcusWindowHandle;
 	public:
 	private:
 
@@ -165,6 +167,7 @@ namespace K3D12 {
 		bool IsToggle(VIRTUAL_KEY_STATE code);
 		Vector2 GetMousePos();
 		void Discard();
+		void SetFocusWindow(HWND forcusWindow);
 
 		void GamePadInitialize(int cotrollerNum = 4);
 		GamePadManager& GetGamePadManager();

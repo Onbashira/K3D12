@@ -4,6 +4,7 @@
 #include "../Util/Utility.h"
 #include "../System/D3D12System.h"
 #include "../Util/Logger.h"
+#include "../CommandContext/GraphicsCommandList.h"
 
 
 K3D12::Resource::Resource() :
@@ -156,6 +157,22 @@ HRESULT K3D12::Resource::ResourceTransition(ID3D12GraphicsCommandList * list, D3
 
 }
 
+HRESULT K3D12::Resource::ResourceTransition(std::weak_ptr<GraphicsCommandList> list, D3D12_RESOURCE_STATES nextState)
+{
+	D3D12_RESOURCE_BARRIER resource_barrier{};
+
+	resource_barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	resource_barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	resource_barrier.Transition.pResource = this->_resource.Get();
+	resource_barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	resource_barrier.Transition.StateBefore = _currentResourceState;
+	resource_barrier.Transition.StateAfter = nextState;
+	_currentResourceState = nextState;
+	list.lock()->GetCommandList()->ResourceBarrier(1, &resource_barrier);
+
+	return S_OK;
+}
+
 D3D12_CLEAR_VALUE K3D12::Resource::GetClearValue()
 {
 	return _clearValue;
@@ -165,6 +182,15 @@ void K3D12::Resource::SetName(std::string name)
 {
 	_name = name;
 	_resource->SetName(Util::StringToWString(_name).c_str());
+}
+
+void K3D12::Resource::RegisterShaderSlot(unsigned int number)
+{
+	this->_shaderRegisterNumber = number;
+}
+
+void K3D12::Resource::BindingResource(std::weak_ptr<K3D12::GraphicsCommandList> list)
+{
 }
 
 

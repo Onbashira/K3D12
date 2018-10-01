@@ -5,7 +5,7 @@
 K3D12::InputManager::InputManager() :
 	_mousePos({})
 {
-
+	_forcusWindowHandle = K3D12::D3D12System::GetWindow().GetWindowHandle();
 }
 
 
@@ -23,8 +23,7 @@ void K3D12::InputManager::InputUpdate()
 	}
 	POINT pos;
 	GetCursorPos(&pos);
-	const HWND hwnd = K3D12::D3D12System::GetWindow().GetWindowHandle();
-	ScreenToClient(hwnd, &pos);
+	ScreenToClient(_forcusWindowHandle, &pos);
 #ifdef _DEBUG
 	//std::cout <<pos.x << std::endl;
 	//std::cout <<pos.y << std::endl;
@@ -78,6 +77,11 @@ bool K3D12::InputManager::IsDown(K3D12::VIRTUAL_KEY_STATE code)
 void K3D12::InputManager::Discard()
 {
 
+}
+
+void K3D12::InputManager::SetFocusWindow(HWND forcusWindow)
+{
+	_forcusWindowHandle = forcusWindow;
 }
 
 void K3D12::InputManager::GamePadInitialize(int cotrollerNum)

@@ -28,9 +28,9 @@ namespace K3D12 {
 		};
 		//CounterReosurce
 		Microsoft::WRL::ComPtr<ID3D12Resource>	_counterResource;
-		//StagingResource
+		//ステージング用のメモリ
 		Resource								_stagingResource;
-		//UploadResource
+		//GPUMemにアップロードするためのメモリ　（リードバック用のメモリは継承元のリソース
 		Resource								_uploadResource;
 
 		D3D12_RANGE								_cpuReadRange;

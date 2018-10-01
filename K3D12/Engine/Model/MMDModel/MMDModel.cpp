@@ -16,7 +16,7 @@ K3D12::MMDModel::MMDModel()
 
 K3D12::MMDModel::~MMDModel()
 {
-	_materialBuffer.Discard();
+	GetMaterialBufffer().Discard();
 }
 
 
