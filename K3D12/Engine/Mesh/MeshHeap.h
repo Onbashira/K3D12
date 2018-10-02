@@ -24,10 +24,12 @@ namespace K3D12 {
 
 	public:
 		void BindingDescriptorHeaps(std::weak_ptr<K3D12::GraphicsCommandList> list);
-		void SetHeapOffsetTransformStartIndex(unsigned int startIndex = 0);
-		void SetHeapOffsetTextureStartIndex(unsigned int startIndex = 1);
-		void SetHeapOffsetMaterialStartIndex(unsigned int startIndex = 2);
-
+		void SetTransformDescStartIndex(unsigned int startIndex = 0);
+		void SetTextureDescStartIndex(unsigned int startIndex = 1);
+		void SettMaterialDescStartIndex(unsigned int startIndex = 2);
+		unsigned int GetTransformDescStartIndex();
+		unsigned int GetTextureDescStartIndex();
+		unsigned int GetMaterialDescStartIndex();
 		K3D12::DescriptorHeap& GetHeap();
 		ConstantBuffer& GetMaterialBufffer();
 		std::vector<std::weak_ptr<K3D12::ShaderResource>>& GetTexturesRef();

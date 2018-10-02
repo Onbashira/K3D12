@@ -26,24 +26,35 @@ namespace K3D12 {
 		std::vector<unsigned int>		_defaultIndexList;
 		//ユーザー頂点（カスタム頂点）は派生クラスで持たせる方がよい？
 	public:
+
 	private:
+		virtual void BindVertexBufferToBundle() = 0;
+
+		virtual void BindIndexBufferToBundle() = 0;
 	public:
-		std::vector<VertexBuffer&> GetMeshVBOs();
+		std::vector<D3D12_VERTEX_BUFFER_VIEW> GetMeshVBViews();
+
 		void SetDefaultVBO(VertexBuffer* defaultVBO);
+
 		VertexBuffer* GetDefaultVBO();
+
 		void SetupCustomVBO(VertexBuffer* customVBO);
+
 		VertexBuffer* GetCustomVBO();
+
 		void SetDefaultIBO(IndexBuffer* defaultIBO);
+
 		IndexBuffer * GetDefaultIBO();
+
 		std::vector<Vertex3D>& GetDefaultVertexData();
+
 		std::vector<unsigned int>& GetDefaultIndexListData();
 
 		virtual void InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData) = 0;
-		virtual void InitializeCustomVBO(void** customVertexDataSrc) = 0;
-		virtual void InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData) = 0;
 
-		virtual void BindingVertexBuffer(std::weak_ptr<K3D12::GraphicsCommandList> list) = 0;
-		virtual void BindingIndexBuffer(std::weak_ptr<K3D12::GraphicsCommandList> list) = 0;
+		virtual void InitializeCustomVBO(void** customVertexDataSrc) = 0;
+
+		virtual void InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData) = 0;
 
 		virtual void DiscardMesh();
 

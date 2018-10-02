@@ -27,19 +27,37 @@ void K3D12::MeshHeap::BindingDescriptorHeaps(std::weak_ptr<K3D12::GraphicsComman
 	}
 }
 
-void K3D12::MeshHeap::SetHeapOffsetTransformStartIndex(unsigned int startIndex)
-{
+void K3D12::MeshHeap::SetTransformDescStartIndex(unsigned int startIndex)
+{	
 	this->_transformStartPoint = startIndex;
+
 }
 
-void K3D12::MeshHeap::SetHeapOffsetTextureStartIndex(unsigned int startIndex)
-{
+void K3D12::MeshHeap::SetTextureDescStartIndex(unsigned int startIndex)
+{	
 	this->_textureStartPoint = startIndex;
+
 }
 
-void K3D12::MeshHeap::SetHeapOffsetMaterialStartIndex(unsigned int startIndex)
+void K3D12::MeshHeap::SettMaterialDescStartIndex(unsigned int startIndex)
 {
 	this->_materialStartPoint = startIndex;
+
+}
+
+unsigned int K3D12::MeshHeap::GetTransformDescStartIndex()
+{
+	return _transformStartPoint;
+}
+
+unsigned int K3D12::MeshHeap::GetTextureDescStartIndex()
+{
+	return _textureStartPoint;
+}
+
+unsigned int K3D12::MeshHeap::GetMaterialDescStartIndex()
+{
+	return _materialStartPoint;
 }
 
 K3D12::DescriptorHeap & K3D12::MeshHeap::GetHeap()

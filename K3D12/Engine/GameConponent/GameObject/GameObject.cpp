@@ -5,10 +5,28 @@
 #include "../../Util/Utility.h"
 #include "../../Util/Math.h"
 
-void K3D12::GameObject::UpdateTransformBuffer()
+
+K3D12::GameObject::GameObject() :
+	_transform({}), _isEnable(true), _scale(Vector3::one)
 {
 
+}
 
+
+K3D12::GameObject::GameObject(K3D12::Transform transform) :
+	_transform(transform)
+{
+}
+
+
+K3D12::GameObject::~GameObject()
+{
+	_transformBuffer.Discard();
+}
+
+
+void K3D12::GameObject::UpdateTransformBuffer()
+{
 	auto mat = Matrix::CreateFromQuaternion(this->_transform.GetRotation());
 	mat.axisW.x = GetPos().x;
 	mat.axisW.y = GetPos().y;
@@ -147,22 +165,4 @@ OrthonormalBasis K3D12::GameObject::GetLocalAxis()
 Matrix K3D12::GameObject::GetView()
 {
 	return _transform.GetView();
-}
-
-
-K3D12::GameObject::GameObject() :
-	_transform({}), _isEnable(true), _scale(Vector3::one)
-{
-
-}
-
-K3D12::GameObject::GameObject(K3D12::Transform transform) :
-	_transform(transform)
-{
-}
-
-
-K3D12::GameObject::~GameObject()
-{
-	_transformBuffer.Discard();
 }

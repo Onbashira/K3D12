@@ -15,15 +15,15 @@ K3D12::IMesh::~IMesh()
 }
 
 
-std::vector<K3D12::VertexBuffer&> K3D12::IMesh::GetMeshVBOs()
+std::vector<D3D12_VERTEX_BUFFER_VIEW> K3D12::IMesh::GetMeshVBViews()
 {
-	std::vector<VertexBuffer&> vertexes;
+	std::vector<D3D12_VERTEX_BUFFER_VIEW> meshVBViews;
 
-	vertexes.emplace_back(_defaultVBO);
+	meshVBViews.push_back(_defaultVBO->GetView());
 	if (this->_customVBO.get() != nullptr) {
-		vertexes.emplace_back(_customVBO);
+		meshVBViews.push_back(_customVBO->GetView());
 	}
-	return vertexes;
+	return meshVBViews;
 }
 
 void K3D12::IMesh::SetDefaultVBO(VertexBuffer * defaultVBO)

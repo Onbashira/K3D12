@@ -36,7 +36,7 @@ namespace K3D12 {
 		//バンドルリストに継承先特有のドローコールを積む作業を強制
 		virtual void RegisterToBundle() = 0;
 		//描画時呼び出し関数の作成を強制
-		virtual void DrawModel() = 0;
+		virtual void Draw() = 0;
 
 		DrawableComponent();
 		virtual ~DrawableComponent();

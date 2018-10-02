@@ -169,30 +169,16 @@ void K3D12::MMDModel::SetAnimationData(std::string motionPath)
 
 }
 
-void K3D12::MMDModel::SetCommandList(std::weak_ptr<GraphicsCommandList>& commandList)
+void K3D12::MMDModel::RegisterToBundle()
 {
-	this->_commandList = commandList;
-}
 
-void K3D12::MMDModel::SetPipelineState(PipelineStateObject * pso)
-{
-	this->_pipelineState.reset(pso);
-}
-
-void K3D12::MMDModel::SetRootSignature(RootSignature * rootSignature)
-{
-	this->_rootSignature.reset(rootSignature);
-
-}
-
-void K3D12::MMDModel::RegistBundle()
-{
 	_bundleList.GetCommandList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	BindingShaderObjectToBundle();
-	BindingIndexBuffer(&_bundleList);
-	BindingVertexBuffer(&_bundleList);
-	BindingDescriptorHeaps(&_bundleList);
+	BindVertexBufferToBundle();
+	BindingShaderObjectToBundle();
+
+	this->GetMeshHeap().BindingDescriptorHeaps(&_bundleList);
 
 	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(SHADER_ROOT_PARAMATER_INDEX_TRANSFORM, _heap->GetGPUHandle(this->_transformStartPoint));
 	unsigned int surfaceOffset = 0;
@@ -219,6 +205,10 @@ void K3D12::MMDModel::Update()
 	GameObject::UpdateTransformBuffer();
 }
 
+void K3D12::MMDModel::DrawModel()
+{
+}
+
 void K3D12::MMDModel::LateUpdate()
 {
 
@@ -232,8 +222,8 @@ void K3D12::MMDModel::Draw()
 
 	this->BindingShaderObject();
 
-	this->_commandList.lock()->GetCommandList()->SetGraphicsRootConstantBufferView(SHADER_ROOT_PARAMATER_INDEX_CAMERA, D3D12System::GetInstance().GetCamera().GetCameraBuffer().GetResource()->GetGPUVirtualAddress());
-	ID3D12DescriptorHeap* heaps[] = { _heap->GetPtr() };
+	this->_commandList.lock()->GetCommandList()->SetGraphicsRootConstantBufferView(SHADER_ROOT_PARAMATER_INDEX_CAMERA, K3D12::GetCamera().GetCameraBuffer().GetResource()->GetGPUVirtualAddress());
+	ID3D12DescriptorHeap* heaps[] = { this->GetMeshHeap().GetHeap().GetPtr() };
 	this->_commandList.lock()->GetCommandList()->SetDescriptorHeaps(1, heaps);
 	this->_commandList.lock()->GetCommandList()->ExecuteBundle(_bundleList.GetCommandList().Get());
 }
@@ -241,4 +231,27 @@ void K3D12::MMDModel::Draw()
 K3D12::Animator & K3D12::MMDModel::Animator()
 {
 	return _animator;
+}
+
+void K3D12::MMDModel::InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData)
+{
+
+}
+
+void K3D12::MMDModel::InitializeCustomVBO(void ** customVertexDataSrc)
+{
+
+}
+
+void K3D12::MMDModel::InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData)
+{
+
+}
+
+void K3D12::MMDModel::BindingVertexBuffer(std::weak_ptr<K3D12::GraphicsCommandList> list)
+{
+}
+
+void K3D12::MMDModel::BindingIndexBuffer(std::weak_ptr<K3D12::GraphicsCommandList> list)
+{
 }

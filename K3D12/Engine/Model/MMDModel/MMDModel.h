@@ -74,13 +74,7 @@ namespace K3D12 {
 
 		void	SetAnimationData(std::string motionPath);
 
-		virtual void	SetCommandList(std::weak_ptr<GraphicsCommandList>& commandList);
-
-		virtual void	SetPipelineState(PipelineStateObject* pso);
-
-		virtual void    SetRootSignature(RootSignature * rootSignature);
-
-		virtual void	RegistBundle();
+		virtual void RegisterToBundle();
 
 	public:
 		//ƒ‚ƒfƒ‹‰Šú‰»
