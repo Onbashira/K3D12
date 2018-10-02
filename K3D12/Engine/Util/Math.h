@@ -105,6 +105,9 @@ UINT		Perm(UINT n, UINT r);
 //‘g‚İ‡‚í‚¹
 UINT		Comb(UINT n, UINT r);
 
+//‚¿‚å‚Á‚Æ‘‚¢SQRT
+float		QuickSqrt(float value);
+
 //ƒtƒŒƒlƒ‹€
 float		Fresnel(float n1, float n2, float cosTheta);
 double		Fresnel(double n1, double n2, double cosTheta);

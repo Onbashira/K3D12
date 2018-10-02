@@ -95,6 +95,25 @@ UINT   Comb(UINT n, UINT r)
 	return Fact(n) / (Fact(n - r) * Fact(r));
 }
 
+float QuickSqrt(float value)
+{
+
+	union {
+		float f;
+		unsigned int i;
+	}conv;
+
+	float x2 = 0;
+	float threehalf = 1.5f;
+
+	x2 = value * 0.5f;
+	conv.f = value;
+	conv.i = 0x5f3759f - (conv.i >> 1);
+	conv.f = conv.f*(threehalf - x2 * (conv.f * conv.f));
+
+	return conv.f;
+}
+
 float   Fresnel(float n1, float n2, float cosTheta)
 {
 	auto a = n1 + n2;

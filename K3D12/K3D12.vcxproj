@@ -133,9 +133,9 @@
     <ClCompile Include="Engine\Animator\VMD.cpp" />
     <ClCompile Include="Engine\Animator\VMDLoader.cpp" />
     <ClCompile Include="Engine\AsyncComponent\Fence.cpp" />
-    <ClCompile Include="Engine\Audio\AudioComponent.cpp" />
     <ClCompile Include="Engine\Audio\AudioLoader.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
+    <ClCompile Include="Engine\Audio\IAudio.cpp" />
     <ClCompile Include="Engine\CommandContext\CommandAllocator.cpp" />
     <ClCompile Include="Engine\CommandContext\CommandListLibrary.cpp" />
     <ClCompile Include="Engine\CommandContext\CommandQueue.cpp" />
@@ -167,9 +167,8 @@
     <ClCompile Include="Engine\Input\GamePadManager.cpp" />
     <ClCompile Include="Engine\Input\InputManager.cpp" />
     <ClCompile Include="Engine\InstancingComponent\InstanceDataManager.cpp" />
-    <ClCompile Include="Engine\Mesh\MeshComponent.cpp" />
-    <ClCompile Include="Engine\Mesh\MeshFilterManager.cpp" />
-    <ClCompile Include="Engine\Mesh\MeshRenderer.cpp" />
+    <ClCompile Include="Engine\Mesh\IMesh.cpp" />
+    <ClCompile Include="Engine\Mesh\MeshHeap.cpp" />
     <ClCompile Include="Engine\Mesh\ModelMesh.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModel.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModelManager.cpp" />
@@ -233,9 +232,9 @@
     <ClInclude Include="Engine\Animator\VMDLoader.h" />
     <ClInclude Include="Engine\AsyncComponent\Fence.h" />
     <ClInclude Include="Engine\AsyncComponent\ThreadPool.h" />
-    <ClInclude Include="Engine\Audio\AudioComponent.h" />
     <ClInclude Include="Engine\Audio\AudioLoader.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
+    <ClInclude Include="Engine\Audio\IAudio.h" />
     <ClInclude Include="Engine\CommandContext\CommandAllocator.h" />
     <ClInclude Include="Engine\CommandContext\CommandListLibrary.h" />
     <ClInclude Include="Engine\CommandContext\CommandQueue.h" />
@@ -267,9 +266,8 @@
     <ClInclude Include="Engine\Input\GamePadManager.h" />
     <ClInclude Include="Engine\Input\InputManager.h" />
     <ClInclude Include="Engine\InstancingComponent\InstanceDataManager.h" />
-    <ClInclude Include="Engine\Mesh\MeshComponent.h" />
-    <ClInclude Include="Engine\Mesh\MeshFilterManager.h" />
-    <ClInclude Include="Engine\Mesh\MeshRenderer.h" />
+    <ClInclude Include="Engine\Mesh\IMesh.h" />
+    <ClInclude Include="Engine\Mesh\MeshHeap.h" />
     <ClInclude Include="Engine\Mesh\ModelMesh.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModel.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModelManager.h" />

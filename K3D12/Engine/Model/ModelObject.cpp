@@ -1,12 +1,19 @@
 #include "ModelObject.h"
 
 
-
-ModelObject::ModelObject()
+K3D12::ModelObject::ModelObject()
 {
+
 }
 
 
-ModelObject::~ModelObject()
+K3D12::ModelObject::~ModelObject()
 {
+
+}
+
+void K3D12::ModelObject::DiscardModelObject()
+{
+	this->DiscardMeshHeap();
+	this->DiscardMesh();
 }

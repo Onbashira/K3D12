@@ -12,8 +12,8 @@ namespace K3D12 {
 	public:
 		virtual HRESULT Create(ULONG64 size, UINT stride, const void* pVertices);
 		void Discard();
-		D3D12_VERTEX_BUFFER_VIEW GetView() const;
 
+		D3D12_VERTEX_BUFFER_VIEW GetView() const;
 		VertexBuffer();
 		~VertexBuffer();
 	};

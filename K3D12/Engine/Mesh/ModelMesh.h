@@ -7,41 +7,32 @@
 #include "../Resource/ShaderResource.h"
 #include "../DrawnableComponent/DrawableComponent.h"
 #include "../GameConponent/GameObject/GameObject.h"
-#include "MeshComponent.h"
-#include "MeshRenderer.h"
+#include "IMesh.h"
+#include "MeshHeap.h"
 
 
 
 
 namespace K3D12 {
 
-	class IndexBuffer;
-	class VertexBuffer;
-	class ConstantBuffer;
-	class ShaderResource;
-
-	//モデルのメッシュに必要な情報を持ったクラス	
-	template <class VertexType>
-	class ModelMesh : public K3D12::DrawableComponent, public MeshComponent<VertexType>,public MeshRenderer
+	//モデルのメッシュに必要な情報を持ったクラス(ハブ
+	class ModelMesh : public DrawableComponent, public IMesh
 	{
 	private:
-		
+		MeshHeap _meshHeap;
 	protected:
-
 	public:
-		
+
 	private:
 
 	protected:
 
 	public:
+		MeshHeap& GetMeshHeap();
 		
-
-		const MeshComponent& GetMesh()const;
-		const MeshRenderer&  GetMeshRenderer()const;
-
+		void DiscardMeshHeap();
 		ModelMesh();
-		~ModelMesh();
+		virtual ~ModelMesh();
 	};
 };
 

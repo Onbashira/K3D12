@@ -5,9 +5,10 @@
 #include "../../Animator/Animator.h"
 #include "../../Animator/StateMachineController.h"
 #include "./MMDModelResourceData.h"
-#include "../ModelMesh.h"
-#include "../../Mesh/MeshComponent.h"
-#include "../../Mesh/MeshRenderer.h"
+#include "../../Mesh/ModelMesh.h"
+#include "../../GameConponent/GameObject/GameObject.h"
+#include "../../Mesh/MeshHeap.h"
+#include "../../Model/ModelObject.h"
 
 namespace K3D12 {
 
@@ -32,7 +33,7 @@ namespace K3D12 {
 
 	//ゲーム本編で使うモデル
 	class MMDModel :
-		public GameObject ,public ModelMesh,public MeshRenderer
+		public ModelObject
 	{
 		friend class ModelConverter;
 		friend class ModelPool;
@@ -49,7 +50,6 @@ namespace K3D12 {
 		//モデルのオリジナルデータ
 		std::weak_ptr<MMDModelResourceData>	_resourceData;
 	protected:
-		std::vector<Vertex3D>				_vertexes;
 
 		Animator							_animator;
 

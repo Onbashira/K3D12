@@ -21,6 +21,24 @@ namespace K3D12 {
 		SDEF,
 		QDEF
 	};
+	union MMDWeightDeform
+	{
+		BDEF1	bdef1;
+		BDEF2	bdef2;
+		BDEF4	bdef4;
+		SDEF	sdef;
+		QDEF	qdef;
+
+		MMDWeightDeform() : sdef() {};
+		MMDWeightDeform(const WeightDeform& other) {
+			this->sdef = other.sdef;
+		};
+		MMDWeightDeform& operator=(const MMDWeightDeform& value) {
+			sdef = value.sdef;
+			return *this;
+		};
+		~MMDWeightDeform() {};
+	};
 
 	struct MMDWeightDeform {
 		unsigned int deformType;

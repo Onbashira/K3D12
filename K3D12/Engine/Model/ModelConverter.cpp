@@ -11,7 +11,7 @@
 #include "../TextureComponent/TextureLoader.h"
 #include "../Util/Utility.h"
 #include "../Model/MMDModel/MMDModel.h"
-#include "./ModelMesh.h"
+#include "../Mesh/ModelMesh.h"
 #include "../Resource/IndexBuffer.h"
 #include "../Resource/VertexBuffer.h"
 #include "../Resource/UnorderedAccessValue.h"

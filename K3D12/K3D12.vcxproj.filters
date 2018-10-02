@@ -369,9 +369,6 @@
     <ClCompile Include="Engine\Resource\UnorderedAccessValue.cpp">
       <Filter>Engine\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Audio\AudioComponent.cpp">
-      <Filter>Engine\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Audio\AudioLoader.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
@@ -392,9 +389,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Rendering\SceneRenderer.cpp">
       <Filter>Engine\Rendering\SceneRenderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Mesh\MeshComponent.cpp">
-      <Filter>Engine\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="Engine\TaskSystem\TaskInvoker.cpp">
       <Filter>Engine\TaskComponent</Filter>
@@ -450,13 +444,16 @@
     <ClCompile Include="Engine\Rendering\UIRenderer.cpp">
       <Filter>Engine\Rendering\UIRenderer</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Mesh\MeshRenderer.cpp">
-      <Filter>Engine\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Mesh\ModelMesh.cpp">
       <Filter>Engine\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Mesh\MeshFilterManager.cpp">
+    <ClCompile Include="Engine\Mesh\IMesh.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\IAudio.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Mesh\MeshHeap.cpp">
       <Filter>Engine\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
@@ -671,9 +668,6 @@
     <ClInclude Include="Engine\Resource\UnorderedAccessValue.h">
       <Filter>Engine\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Audio\AudioComponent.h">
-      <Filter>Engine\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Audio\AudioLoader.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
@@ -694,9 +688,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Rendering\SceneRenderer.h">
       <Filter>Engine\Rendering\SceneRenderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Mesh\MeshComponent.h">
-      <Filter>Engine\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Engine\TaskSystem\TaskInvoker.h">
       <Filter>Engine\TaskComponent</Filter>
@@ -749,16 +740,19 @@
     <ClInclude Include="Engine\Rendering\UIRenderer.h">
       <Filter>Engine\Rendering\UIRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Mesh\MeshRenderer.h">
-      <Filter>Engine\Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Model\ModelObject.h">
       <Filter>Engine\Model</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Mesh\ModelMesh.h">
       <Filter>Engine\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Mesh\MeshFilterManager.h">
+    <ClInclude Include="Engine\Mesh\IMesh.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\IAudio.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Mesh\MeshHeap.h">
       <Filter>Engine\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
