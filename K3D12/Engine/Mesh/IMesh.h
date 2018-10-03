@@ -28,9 +28,19 @@ namespace K3D12 {
 	public:
 
 	private:
+
+	protected:
+
 		virtual void BindVertexBufferToBundle() = 0;
 
-		virtual void BindIndexBufferToBundle() = 0;
+		virtual void BindIndexBufferToBundle() = 0;	
+		
+		virtual void InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData) = 0;
+
+		virtual void InitializeCustomVBO(void** customVertexDataSrc) = 0;
+
+		virtual void InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData) = 0;
+
 	public:
 		std::vector<D3D12_VERTEX_BUFFER_VIEW> GetMeshVBViews();
 
@@ -50,15 +60,10 @@ namespace K3D12 {
 
 		std::vector<unsigned int>& GetDefaultIndexListData();
 
-		virtual void InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData) = 0;
-
-		virtual void InitializeCustomVBO(void** customVertexDataSrc) = 0;
-
-		virtual void InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData) = 0;
-
 		virtual void DiscardMesh();
 
 		bool UseCustomVertex();
+
 		IMesh();
 		virtual ~IMesh();
 

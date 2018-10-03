@@ -27,7 +27,7 @@ K3D12::GraphicsCommandList::~GraphicsCommandList()
 HRESULT K3D12::GraphicsCommandList::Create(unsigned int nodeMask, D3D12_COMMAND_LIST_TYPE listType)
 {
 	HRESULT result;
-	result = D3D12System::GetInstance().GetDevice()->CreateCommandAllocator(listType,IID_PPV_ARGS(&_commandAllocator));
+	result = K3D12::GetDevice()->CreateCommandAllocator(listType,IID_PPV_ARGS(&_commandAllocator));
 	if (result != S_OK) {
 		return E_FAIL;
 	}

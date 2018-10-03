@@ -1,11 +1,11 @@
 #pragma once
-#include "../../Model/ModelMesh.h"
+#include "../../Model/ModelObject.h"
 #include "PrimitiveComponent.h"
-#include "PrimitiveObject.h"
+#include "../../Model/ModelObject.h"
 
 namespace K3D12 {
 	class Capsule :
-		public ModelMesh, public PrimitiveObject
+		public ModelObject
 	{
 	private:
 	protected:

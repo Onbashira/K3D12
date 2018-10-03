@@ -63,17 +63,17 @@ D3D12System & D3D12System::GetInstance()
 }
 
 
-void D3D12System::InitializeCamera(CameraType type, const Vector3 & pos, const Vector3 & target, const Vector3 & up, float nearClip, float farClip, float fov)
+void D3D12System::InitializeCamera(CameraMode mode, const Vector3 & pos, const Vector3 & target, const Vector3 & up, float nearClip, float farClip, float fov)
 {
 
-	switch (type)
+	switch (mode)
 	{
-	case CameraType::Perspective:
-		GetInstance()._mainCamera.InitializeCamera(CameraType::Perspective, static_cast<float>(GetInstance()._windowWidth), static_cast<float>(GetInstance()._windowHeight), 1.0f, 500.0f, pos, target, up);
+	case CameraMode::Perspective:
+		GetInstance()._mainCamera.InitializeCamera(CameraMode::Perspective, static_cast<float>(GetInstance()._windowWidth), static_cast<float>(GetInstance()._windowHeight), 1.0f, 500.0f, pos, target, up);
 
 		break;
-	case CameraType::Orthogonal:
-		GetInstance()._mainCamera.InitializeCamera(CameraType::Orthogonal, static_cast<float>(GetInstance()._windowWidth), static_cast<float>(GetInstance()._windowHeight), 1.0f, 500.0f, pos, target, up);
+	case CameraMode::Orthogonal:
+		GetInstance()._mainCamera.InitializeCamera(CameraMode::Orthogonal, static_cast<float>(GetInstance()._windowWidth), static_cast<float>(GetInstance()._windowHeight), 1.0f, 500.0f, pos, target, up);
 
 		break;
 	default:
@@ -724,7 +724,7 @@ HRESULT D3D12System::InitializeMainCamera()
 	Vector3 cameraPos(0.0f, 20.0f, -20.0f);
 	Vector3 target = Vector3(0, 10.0f, 0);
 	Vector3 upward = Vector3::up;
-	this->_mainCamera.InitializeCamera(CameraType::Perspective, static_cast<float>(this->_windowWidth), static_cast<float>(this->_windowHeight), 1.0f, 500.0f, cameraPos, target, upward);
+	this->_mainCamera.InitializeCamera(CameraMode::Perspective, static_cast<float>(this->_windowWidth), static_cast<float>(this->_windowHeight), 1.0f, 500.0f, cameraPos, target, upward);
 	auto hr = this->_mainCamera.InitializeCameraDepthStencill(DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT, _windowWidth, _windowHeight);
 	CHECK_RESULT(hr);
 
@@ -868,7 +868,7 @@ HRESULT K3D12::Initialize(UINT backBufferCount, bool useWarpDevice)
 	DEBUG_LOG(std::string("D3D12‚ª³í‚É‰Šú‰»‚³‚ê‚Ü‚µ‚½\n"));
 	K3D12::D3D12System::InitializeController();
 	DEBUG_LOG(std::string("ƒRƒ“ƒgƒ[ƒ‰‚ÌÅ‘åÚ‘±”‚ğ‚S‚Å‰Šú‰»‚µ‚Ü‚µ‚½\n"));
-
+	return S_OK;
 }
 
 void K3D12::ScreenFlip()

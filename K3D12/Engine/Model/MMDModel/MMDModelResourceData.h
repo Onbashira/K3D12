@@ -21,6 +21,7 @@ namespace K3D12 {
 		SDEF,
 		QDEF
 	};
+
 	union MMDWeightDeform
 	{
 		BDEF1	bdef1;
@@ -40,7 +41,7 @@ namespace K3D12 {
 		~MMDWeightDeform() {};
 	};
 
-	struct MMDWeightDeform {
+	/*struct MMDWeightDeform {
 		unsigned int deformType;
 		int boneIndex01;
 		int boneIndex02;
@@ -60,7 +61,7 @@ namespace K3D12 {
 		{};
 		~MMDWeightDeform() {};
 	};
-
+*/
 	enum class MMDMaterialFlags {
 		NO_CULL,
 		GROUND_SHADOW,
@@ -104,9 +105,9 @@ namespace K3D12 {
 		//UV座標
 		Vector2 texCoord;
 		//変形タイプ
-		//MMDWeightDeformType deformType;
+		MMDWeightDeformType deformType;
 		//変形参照情報
-		//MMDWeightDeform deformation;
+		MMDWeightDeform deformation;
 		MMDVertex() : 
 			pos(), normal(), texCoord(){};
 		~MMDVertex() {};
@@ -117,8 +118,8 @@ namespace K3D12 {
 			pos = rhs.pos;
 			normal = rhs.normal;
 			texCoord = rhs.texCoord;
-			//deformType = rhs.deformType;
-			//deformation = rhs.deformation;
+			deformType = rhs.deformType;
+			deformation = rhs.deformation;
 			return *this;
 		}
 	};
@@ -232,7 +233,6 @@ namespace K3D12 {
 		//頂点情報
 		std::vector<MMDVertex>						_vertexes;
 		std::vector<MMDWeightDeform>				_deformationData;
-		K3D12::UnorderedAccessValue					_deformation;
 		//頂点インデックス情報
 		MMDIndexList								_indexList;
 		//テクスチャ情報

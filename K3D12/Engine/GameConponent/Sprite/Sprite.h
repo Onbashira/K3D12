@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "../../Util/Math.h"
-#include "../../Model/ModelMesh.h"
+#include "../../Model/ModelObject.h"
 #include "../../Util/Math.h"
 
 namespace K3D12 {
@@ -15,7 +15,7 @@ namespace K3D12 {
 
 	//2DSprite@³Ë‰e“Š‰e‚Åg‚¤
 	class Sprite :
-		public ModelMesh
+		public ModelObject
 	{
 	private:
 		struct SpriteInfo {

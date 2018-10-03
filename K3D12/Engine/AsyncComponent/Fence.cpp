@@ -16,7 +16,7 @@ K3D12::Fence::~Fence()
 
 HRESULT K3D12::Fence::Create(UINT64 initialFenceValue, D3D12_FENCE_FLAGS flags)
 {
-	auto hresult = GET_DEVICE->CreateFence(0,flags,IID_PPV_ARGS(&_fence));
+	auto hresult = K3D12::GetDevice()->CreateFence(0,flags,IID_PPV_ARGS(&_fence));
 	if (FAILED(hresult)) {
 		return hresult;
 	}

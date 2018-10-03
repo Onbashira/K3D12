@@ -6,7 +6,12 @@ namespace K3D12 {
 	class ModelObject : public GameObject ,public ModelMesh
 	{
 	private:
-
+		enum class PRIMITIVE_ROOT_IDNEX {
+			CAMERA_PARAMATER_INDEX = 0,
+			TRANSFORM_PARAMATER_INDEX,
+			MATERIAL_PARAMATER_INDEX,
+			SHADER_PARAMATER_INDEX
+		};
 	public:
 
 	protected:
@@ -17,21 +22,21 @@ namespace K3D12 {
 		//バンドルリストに継承先特有のドローコールを積む作業を強制
 		virtual void RegisterToBundle()override = 0;
 		//バンドルにバインドする頂点バッファ
-		virtual void BindVertexBufferToBundle();
+		virtual void BindVertexBufferToBundle()override;
 		//バンドルにバインドするインデックスバッファ
-		virtual void BindIndexBufferToBundle();
+		virtual void BindIndexBufferToBundle()override;
+
 	public:
 		//モデルのアップデート
 		virtual void Update()override = 0;
 		//描画時呼び出し関数の作成を強制
 		virtual void Draw()override = 0;
 		//デフォルトで使うVBOのセットアップ
-		virtual void InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData)override = 0;
-
+		virtual void InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData);
+		//デフォルトで使うIBOのセットアップ
+		virtual void InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData);
+		//ユーザー指定のVBOのセットアップ
 		virtual void InitializeCustomVBO(void** customVertexDataSrc)override = 0;
-
-		virtual void InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData)override = 0;
-
 
 		void DiscardModelObject();
 		ModelObject();

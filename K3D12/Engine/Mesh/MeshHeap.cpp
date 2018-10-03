@@ -27,14 +27,22 @@ void K3D12::MeshHeap::BindingDescriptorHeaps(std::weak_ptr<K3D12::GraphicsComman
 	}
 }
 
+void K3D12::MeshHeap::BindingDescriptorHeaps(K3D12::GraphicsCommandList & lsit)
+{
+	ID3D12DescriptorHeap* heaps[] = { this->_heap.GetPtr() };
+
+	lsit.GetCommandList()->SetDescriptorHeaps(1, heaps);
+
+}
+
 void K3D12::MeshHeap::SetTransformDescStartIndex(unsigned int startIndex)
-{	
+{
 	this->_transformStartPoint = startIndex;
 
 }
 
 void K3D12::MeshHeap::SetTextureDescStartIndex(unsigned int startIndex)
-{	
+{
 	this->_textureStartPoint = startIndex;
 
 }

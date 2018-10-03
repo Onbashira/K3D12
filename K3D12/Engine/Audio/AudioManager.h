@@ -1,5 +1,4 @@
 #pragma once
-#include "../Util/ManagerComponentBase.h"
 #include "../Util/NonCopyable.h"
 
 namespace K3D12 {

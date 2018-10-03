@@ -21,9 +21,12 @@ namespace K3D12 {
 	private:
 		MeshHeap _meshHeap;
 	protected:
+
 	public:
 
 	private:
+
+	protected:
 
 		virtual void BindVertexBufferToBundle()override = 0;
 
@@ -31,22 +34,40 @@ namespace K3D12 {
 		//バンドルリストに継承先でドローコールバッチ化作業を強制
 		virtual void RegisterToBundle()override = 0;
 
-	protected:
-
-	public:
-
-
-		//描画時呼び出し関数の作成を強制
-		virtual void Draw()override = 0;
-
 		virtual void InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData)override = 0;
 
 		virtual void InitializeCustomVBO(void** customVertexDataSrc)override = 0;
 
 		virtual void InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData)override = 0;
 
+		virtual void IntializeMeshHeap() = 0;
+
+	public:
+
+		//描画時呼び出し関数の作成を強制
+		virtual void Draw()override = 0;
+
 		MeshHeap& GetMeshHeap();
-		
+
+
+		void SetTransformDescStartIndex(unsigned int startIndex = 0);
+
+		void SetTextureDescStartIndex(unsigned int startIndex = 1);
+
+		void SettMaterialDescStartIndex(unsigned int startIndex = 2);
+
+		unsigned int GetTransformDescStartIndex();
+
+		unsigned int GetTextureDescStartIndex();
+
+		unsigned int GetMaterialDescStartIndex();
+
+		ConstantBuffer& GetMaterialBufffer();
+
+		std::vector<std::weak_ptr<K3D12::ShaderResource>>& GetTexturesRef();
+
+		MeshHeap& AddTextureRef(std::weak_ptr<K3D12::ShaderResource> textureRef);
+
 		void DiscardMeshHeap();
 
 		ModelMesh();

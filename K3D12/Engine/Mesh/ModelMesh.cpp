@@ -21,3 +21,4 @@ void K3D12::ModelMesh::DiscardMeshHeap()
 {
 	_meshHeap.GetHeap().Discard();
 }
+

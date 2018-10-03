@@ -1,5 +1,5 @@
 #pragma once
-#include "../../Model/ModelMesh.h"
+#include "../../Model/ModelObject.h"
 #include "PrimitiveComponent.h"
 #include "PrimitiveObject.h"
 

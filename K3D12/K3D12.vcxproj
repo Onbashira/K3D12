@@ -157,7 +157,6 @@
     <ClCompile Include="Engine\GameConponent\Primitive\Plane.cpp" />
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveComponent.cpp" />
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveCreater.cpp" />
-    <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveObject.cpp" />
     <ClCompile Include="Engine\GameConponent\Primitive\Sphere.cpp" />
     <ClCompile Include="Engine\GameConponent\RendererMaterial.cpp" />
     <ClCompile Include="Engine\GameConponent\Scene\Scene.cpp" />
@@ -166,7 +165,6 @@
     <ClCompile Include="Engine\Input\GamePad.cpp" />
     <ClCompile Include="Engine\Input\GamePadManager.cpp" />
     <ClCompile Include="Engine\Input\InputManager.cpp" />
-    <ClCompile Include="Engine\InstancingComponent\InstanceDataManager.cpp" />
     <ClCompile Include="Engine\Mesh\IMesh.cpp" />
     <ClCompile Include="Engine\Mesh\MeshHeap.cpp" />
     <ClCompile Include="Engine\Mesh\ModelMesh.cpp" />
@@ -218,8 +216,6 @@
     <ClCompile Include="Engine\Window\Window.cpp" />
     <ClCompile Include="Engine\Window\WindowManager.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="TaskBase.cpp" />
-    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Animator\Animator.h" />
@@ -256,7 +252,6 @@
     <ClInclude Include="Engine\GameConponent\Primitive\Plane.h" />
     <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveComponent.h" />
     <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveCreater.h" />
-    <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveObject.h" />
     <ClInclude Include="Engine\GameConponent\Primitive\Sphere.h" />
     <ClInclude Include="Engine\GameConponent\RendererMaterial.h" />
     <ClInclude Include="Engine\GameConponent\Scene\Scene.h" />
@@ -265,7 +260,6 @@
     <ClInclude Include="Engine\Input\GamePad.h" />
     <ClInclude Include="Engine\Input\GamePadManager.h" />
     <ClInclude Include="Engine\Input\InputManager.h" />
-    <ClInclude Include="Engine\InstancingComponent\InstanceDataManager.h" />
     <ClInclude Include="Engine\Mesh\IMesh.h" />
     <ClInclude Include="Engine\Mesh\MeshHeap.h" />
     <ClInclude Include="Engine\Mesh\ModelMesh.h" />
@@ -319,8 +313,6 @@
     <ClInclude Include="Engine\Util\WICTextureLoader12.h" />
     <ClInclude Include="Engine\Window\Window.h" />
     <ClInclude Include="Engine\Window\WindowManager.h" />
-    <ClInclude Include="TaskBase.h" />
-    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">

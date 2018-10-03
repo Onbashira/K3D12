@@ -59,7 +59,7 @@ HRESULT K3D12::DescriptorHeap::Create(D3D12_DESCRIPTOR_HEAP_DESC* desc)
 	if (desc == nullptr) {
 		return E_FAIL;
 	}
-	auto hr = GET_DEVICE->CreateDescriptorHeap(desc, IID_PPV_ARGS(&_heap));
+	auto hr = K3D12::GetDevice()->CreateDescriptorHeap(desc, IID_PPV_ARGS(&_heap));
 	if (FAILED(hr)) {
 		return  E_FAIL;
 	}

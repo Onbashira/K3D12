@@ -1,6 +1,5 @@
 #include "Plane.h"
 #include "../../Util/Math.h"
-#include "../../Model/ModelMesh.h"
 #include "../../Resource/IndexBuffer.h"
 #include "../../Resource/VertexBuffer.h"
 #include "../../System/D3D12System.h"

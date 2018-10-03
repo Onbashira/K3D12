@@ -196,8 +196,8 @@ void K3D12::UnorderedAccessValue::WriteToBuffer(unsigned int numElements, unsign
 
 		ID3D12CommandList* lists[] = { D3D12System::GetCommandList("CommandList")->GetCommandList().Get() };
 
-		D3D12System::GetInstance().GetCommandQueue()->GetQueue()->ExecuteCommandLists(1, lists);
-		GET_SYSTEM_FENCE->Wait(D3D12System::GetInstance().GetCommandQueue());
+		D3D12System::GetInstance().GetMasterCommandQueue().GetQueue()->ExecuteCommandLists(1, lists);
+		GET_SYSTEM_FENCE->Wait(&D3D12System::GetInstance().GetMasterCommandQueue());
 
 		D3D12System::GetCommandList("CommandList")->ResetAllocator();
 		D3D12System::GetCommandList("CommandList")->ResetCommandList();
@@ -249,8 +249,8 @@ void K3D12::UnorderedAccessValue::ReadBack()
 
 		ID3D12CommandList* lists[] = { D3D12System::GetCommandList("CommandList")->GetCommandList().Get() };
 
-		D3D12System::GetInstance().GetCommandQueue()->GetQueue()->ExecuteCommandLists(1, lists);
-		GET_SYSTEM_FENCE->Wait(D3D12System::GetInstance().GetCommandQueue());
+		D3D12System::GetInstance().GetMasterCommandQueue().GetQueue()->ExecuteCommandLists(1, lists);
+		GET_SYSTEM_FENCE->Wait(&D3D12System::GetInstance().GetMasterCommandQueue());
 
 		D3D12System::GetCommandList("CommandList")->ResetAllocator();
 		D3D12System::GetCommandList("CommandList")->ResetCommandList();

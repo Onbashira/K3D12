@@ -1,14 +1,12 @@
 #pragma once
-#include "../../Model/ModelMesh.h"
+#include "../../Model/ModelObject.h"
 #include "PrimitiveComponent.h"
-#include "PrimitiveObject.h"
-
 #include "../../Resource/UnorderedAccessValue.h"
-
+#include "../../Model/ModelObject.h"
 
 namespace K3D12 {
 	class Cube :
-		public ModelMesh, public PrimitiveObject
+		public ModelObject
 	{
 	private:
 	protected:

@@ -15,7 +15,7 @@ K3D12::CommandQueue::~CommandQueue()
 HRESULT K3D12::CommandQueue::Create(D3D12_COMMAND_QUEUE_DESC desc)
 {
 
-	CHECK_RESULT(GET_DEVICE->CreateCommandQueue(&desc, IID_PPV_ARGS(&_commandQueue)));
+	CHECK_RESULT(K3D12::GetDevice()->CreateCommandQueue(&desc, IID_PPV_ARGS(&_commandQueue)));
 	CHECK_RESULT(_fence.Create(0, D3D12_FENCE_FLAGS::D3D12_FENCE_FLAG_NONE));
 
 	return S_OK;

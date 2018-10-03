@@ -225,9 +225,6 @@
     <ClCompile Include="Engine\Input\InputManager.cpp">
       <Filter>Engine\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\InstancingComponent\InstanceDataManager.cpp">
-      <Filter>Engine\InstancingComponent</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\PipelineState\PipelineStateObject.cpp">
       <Filter>Engine\PipelineState</Filter>
     </ClCompile>
@@ -333,9 +330,6 @@
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveCreater.cpp">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveObject.cpp">
-      <Filter>Engine\GameComponent\PrimitiveObject</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\GameConponent\RendererMaterial.cpp">
       <Filter>Engine\GameComponent\RenderingMaterial</Filter>
     </ClCompile>
@@ -347,9 +341,6 @@
     </ClCompile>
     <ClCompile Include="Engine\GameConponent\Sprite\Sprite.cpp">
       <Filter>Engine\GameComponent\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Engine\Timer</Filter>
     </ClCompile>
     <ClCompile Include="Engine\CommandContext\CommandQueue.cpp">
       <Filter>Engine\CommandContext\CommandQueue</Filter>
@@ -397,9 +388,6 @@
       <Filter>Engine\TaskComponent</Filter>
     </ClCompile>
     <ClCompile Include="Engine\TaskSystem\TaskManager.cpp">
-      <Filter>Engine\TaskComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="TaskBase.cpp">
       <Filter>Engine\TaskComponent</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Model\PMD\PMDLoader.cpp">
@@ -515,9 +503,6 @@
     <ClInclude Include="Engine\Input\InputManager.h">
       <Filter>Engine\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\InstancingComponent\InstanceDataManager.h">
-      <Filter>Engine\InstancingComponent</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\PipelineState\PipelineStateObject.h">
       <Filter>Engine\PipelineState</Filter>
     </ClInclude>
@@ -632,9 +617,6 @@
     <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveCreater.h">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveObject.h">
-      <Filter>Engine\GameComponent\PrimitiveObject</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\GameConponent\RendererMaterial.h">
       <Filter>Engine\GameComponent\RenderingMaterial</Filter>
     </ClInclude>
@@ -646,9 +628,6 @@
     </ClInclude>
     <ClInclude Include="Engine\GameConponent\Sprite\Sprite.h">
       <Filter>Engine\GameComponent\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Engine\Timer</Filter>
     </ClInclude>
     <ClInclude Include="Engine\CommandContext\CommandQueue.h">
       <Filter>Engine\CommandContext\CommandQueue</Filter>
@@ -696,9 +675,6 @@
       <Filter>Engine\TaskComponent</Filter>
     </ClInclude>
     <ClInclude Include="Engine\TaskSystem\TaskManager.h">
-      <Filter>Engine\TaskComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="TaskBase.h">
       <Filter>Engine\TaskComponent</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Model\PMX\PMXModel.h">

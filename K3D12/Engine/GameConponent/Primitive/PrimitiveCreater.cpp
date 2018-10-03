@@ -3,9 +3,9 @@
 #include "../../CommandContext/GraphicsCommandList.h"
 #include "../../PipelineState/PipelineStateObject.h"
 #include "../../Signature/RootSignature.h"
-#include "Cube.h"
-#include "Sphere.h"
-#include "Plane.h"
+#include "../Primitive/Cube.h"
+#include "../Primitive/Sphere.h"
+#include "../Primitive/Plane.h"
 
 
 K3D12::PrimitiveCreater::PrimitiveCreater()

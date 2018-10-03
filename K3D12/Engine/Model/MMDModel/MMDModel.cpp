@@ -178,21 +178,26 @@ void K3D12::MMDModel::RegisterToBundle()
 	BindVertexBufferToBundle();
 	BindingShaderObjectToBundle();
 
-	this->GetMeshHeap().BindingDescriptorHeaps(&_bundleList);
+	this->GetMeshHeap().BindingDescriptorHeaps(_bundleList);
 
-	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(SHADER_ROOT_PARAMATER_INDEX_TRANSFORM, _heap->GetGPUHandle(this->_transformStartPoint));
+	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(SHADER_ROOT_PARAMATER_INDEX_TRANSFORM, GetMeshHeap().GetHeap().GetGPUHandle(this->GetMeshHeap().GetTransformDescStartIndex()));
 	unsigned int surfaceOffset = 0;
 	for (UINT index = 0; index < _resourceData.lock()->_materials.size(); index++) {
 
-		_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(SHADER_ROOT_PARAMATER_INDEX_MATERIAL, _heap->GetGPUHandle(_materialStartPoint + index));
-		_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(SHADER_ROOT_PARAMATER_INDEX_TEXTURE, _heap->GetGPUHandle(_textureStartPoint + _resourceData.lock()->_materials[index].textureTableIndex));
-		_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(SHADER_ROOT_PARAMATER_INDEX_TOON_MAP, _heap->GetGPUHandle(_textureStartPoint + _resourceData.lock()->_materials[index].toonIndex));
-		_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(SHADER_ROOT_PARAMATER_INDEX_SPHERE_TEXTURE, _heap->GetGPUHandle(_textureStartPoint + _resourceData.lock()->_materials[index].sphereIndex));
+		_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(SHADER_ROOT_PARAMATER_INDEX_MATERIAL, GetMeshHeap().GetHeap().GetGPUHandle(this->GetMeshHeap().GetMaterialDescStartIndex() + index));
+		_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(SHADER_ROOT_PARAMATER_INDEX_TEXTURE, GetMeshHeap().GetHeap().GetGPUHandle(this->GetMeshHeap().GetTextureDescStartIndex() + _resourceData.lock()->_materials[index].textureTableIndex));
+		_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(SHADER_ROOT_PARAMATER_INDEX_TOON_MAP, GetMeshHeap().GetHeap().GetGPUHandle(this->GetMeshHeap().GetTextureDescStartIndex() + _resourceData.lock()->_materials[index].toonIndex));
+		_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(SHADER_ROOT_PARAMATER_INDEX_SPHERE_TEXTURE, GetMeshHeap().GetHeap().GetGPUHandle(this->GetMeshHeap().GetTextureDescStartIndex() + _resourceData.lock()->_materials[index].sphereIndex));
 
 		_bundleList.GetCommandList()->DrawIndexedInstanced(_resourceData.lock()->_materials[index].surfaceCount, 1, surfaceOffset, 0, 0);
 		surfaceOffset += _resourceData.lock()->_materials[index].surfaceCount;
 	};
 	_bundleList.CloseCommandList();
+}
+
+void K3D12::MMDModel::InitializeCustomVBO(void ** customVertexDataSrc)
+{
+
 }
 
 void K3D12::MMDModel::Initialize()
@@ -205,15 +210,6 @@ void K3D12::MMDModel::Update()
 	GameObject::UpdateTransformBuffer();
 }
 
-void K3D12::MMDModel::DrawModel()
-{
-}
-
-void K3D12::MMDModel::LateUpdate()
-{
-
-}
-
 void K3D12::MMDModel::Draw()
 {
 
@@ -223,35 +219,13 @@ void K3D12::MMDModel::Draw()
 	this->BindingShaderObject();
 
 	this->_commandList.lock()->GetCommandList()->SetGraphicsRootConstantBufferView(SHADER_ROOT_PARAMATER_INDEX_CAMERA, K3D12::GetCamera().GetCameraBuffer().GetResource()->GetGPUVirtualAddress());
-	ID3D12DescriptorHeap* heaps[] = { this->GetMeshHeap().GetHeap().GetPtr() };
-	this->_commandList.lock()->GetCommandList()->SetDescriptorHeaps(1, heaps);
+	//ID3D12DescriptorHeap* heaps[] = { this->GetMeshHeap().GetHeap().GetPtr() };
+	//this->_commandList.lock()->GetCommandList()->SetDescriptorHeaps(1, heaps);
+	GetMeshHeap().BindingDescriptorHeaps(_commandList);
 	this->_commandList.lock()->GetCommandList()->ExecuteBundle(_bundleList.GetCommandList().Get());
 }
 
 K3D12::Animator & K3D12::MMDModel::Animator()
 {
 	return _animator;
-}
-
-void K3D12::MMDModel::InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData)
-{
-
-}
-
-void K3D12::MMDModel::InitializeCustomVBO(void ** customVertexDataSrc)
-{
-
-}
-
-void K3D12::MMDModel::InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData)
-{
-
-}
-
-void K3D12::MMDModel::BindingVertexBuffer(std::weak_ptr<K3D12::GraphicsCommandList> list)
-{
-}
-
-void K3D12::MMDModel::BindingIndexBuffer(std::weak_ptr<K3D12::GraphicsCommandList> list)
-{
 }

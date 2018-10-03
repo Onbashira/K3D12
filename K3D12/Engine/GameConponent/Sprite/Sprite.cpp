@@ -2,7 +2,6 @@
 #include "Math.h"
 #include "../Primitive/PrimitiveComponent.h"
 #include "../../TextureComponent/TextureManager.h"
-#include "../../Model/ModelMesh.h"
 #include "../../Resource/IndexBuffer.h"
 #include "../../Resource/VertexBuffer.h"
 #include "../../Resource/ShaderResource.h"

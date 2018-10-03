@@ -87,9 +87,9 @@ HRESULT K3D12::TextureLoader::LoadUpdateSubResource(std::shared_ptr<GraphicsComm
 	ID3D12CommandList* command_lists[] = { list->GetCommandList().Get() };
 
 	// closeしてから呼ぼうね
-	D3D12System::GetInstance().GetCommandQueue()->GetQueue()->ExecuteCommandLists(1, command_lists); // 実行するコマンドリストの配列をコマンドキューへ送信します
+	D3D12System::GetInstance().GetMasterCommandQueue().GetQueue()->ExecuteCommandLists(1, command_lists); // 実行するコマンドリストの配列をコマンドキューへ送信します
 																						   // Managerと違って1をイベント値として扱う
-	GET_SYSTEM_FENCE->Wait(D3D12System::GetInstance().GetCommandQueue());
+	GET_SYSTEM_FENCE->Wait(&D3D12System::GetInstance().GetMasterCommandQueue());
 
 	list->ResetAllocator();
 	list->ResetCommandList();

@@ -47,44 +47,50 @@ namespace K3D12 {
 			SHADER_ROOT_PARAMATER_INDEX_SPHERE_TEXTURE,
 		};
 	private:
+		
+	protected:
 		//モデルのオリジナルデータ
 		std::weak_ptr<MMDModelResourceData>	_resourceData;
-	protected:
-
+		//アニメーターコントローラー
 		Animator							_animator;
 
 	public:
 
 	private:
-
+		//BDEF1計算
 		Matrix CulcBDEF1(K3D12::WeightDeform& deform);
+		//BDEF2計算
 		Matrix CulcBDEF2(WeightDeform& deform);
+		//BDEF4計算
 		Matrix CulcBDEF4(WeightDeform& deform);
+		//SDEF計算
 		std::pair<Vector3, float> CulcSDEF(WeightDeform& deform);
+		//QDEF計算
 		Matrix CulcQDEF(WeightDeform& deform);
+		//SDEF重み計算
 		std::pair<float, float> CulcSDEFWaight(Vector3 r0, Vector3 r1);
 
 	protected:
-
+		//トランスフォームアップデート
 		void	TransformUpdate();
-
+		//アニメーションのアップデート
 		void	AnimationUpdate();
-
+		//ボーンのアップデート
 		void	SkeltonReset();
-
+		//アニメーションデーターの登録とロード
 		void	SetAnimationData(std::string motionPath);
+		//バンドルへの登録
+		virtual void RegisterToBundle()override;
 
-		virtual void RegisterToBundle();
+		virtual void InitializeCustomVBO(void** customVertexDataSrc)override;
 
 	public:
 		//モデル初期化
 		void Initialize();
 		//トランスフォームのアップデート
-		virtual void Update();
-		//アップデート関数と分離したいアップデートを行う
-		virtual void LateUpdate();
+		virtual void Update()override;
 		//リストにDrawコマンドを積み込む(ジオメトリレンダリング）
-		virtual void Draw();
+		virtual void Draw()override;
 
 		virtual Animator& Animator();
 

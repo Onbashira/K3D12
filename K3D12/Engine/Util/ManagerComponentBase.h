@@ -33,14 +33,14 @@ namespace K3D12 {
 
 
 		ManagerComponentBase() {};
-		ManagerComponentBase(const ManagerComponentBase<T>& other) {};
-		ManagerComponentBase(ManagerComponentBase<T>&& other) {};
-		ManagerComponentBase<T>& (const ManagerComponentBase<T>& other) {
-			return this*; 
-		};
-		ManagerComponentBase<T>& (ManagerComponentBase<T>&& other) {
-			return this*; 
-		};
+		//ManagerComponentBase(const ManagerComponentBase<T>& other) {};
+		//ManagerComponentBase(ManagerComponentBase<T>&& other) {};
+		//ManagerComponentBase<T>& (const ManagerComponentBase<T>& other) {
+		//	return this*; 
+		//};
+		//ManagerComponentBase<T>& (ManagerComponentBase<T>&& other) {
+		//	return this*; 
+		//};
 
 		virtual ~ManagerComponentBase() { DiscardMap(); };
 	};
@@ -56,7 +56,7 @@ namespace K3D12 {
 	private:
 	public:
 		//要素の追加。第三引き数をTrueで強制上書き
-		void Set(std::string name, T& resource, bool forceOverride = false);
+		void Set(std::string name,const T& resource, bool forceOverride = false);
 		//要素の取得
 		T*	 Get(std::string name);
 		//要素の削除
@@ -83,6 +83,8 @@ namespace K3D12 {
 	public:
 		//要素の追加。第三引き数をTrueで強制上書き
 		void Set(std::string name, std::shared_ptr<T> resource, bool forceOverride = false);
+		//要素の追加。第三引き数をTrueで強制上書き
+		void Set(std::string name, const T & resource, bool forceOverride = false);
 		//要素の取得
 		std::weak_ptr<T>  Get(std::string name);
 		//要素の削除
@@ -92,7 +94,7 @@ namespace K3D12 {
 		//リソースがロード済みか否か
 		bool IsLooded(std::string name);
 		//マップ自体の参照を取得する
-		std::map<std::string, std::shared_ptr<T>>& GetMap();
+		std::unordered_map<std::string, std::shared_ptr<T>>& GetMap();
 
 		UnorderedManagerComponentBase() {};
 		virtual ~UnorderedManagerComponentBase() { DiscardMap(); };
@@ -168,19 +170,22 @@ inline std::map<std::string, std::shared_ptr<T>>& K3D12::ManagerComponentBase<T>
 
 //NoRaii
 
+
 template<class T>
-inline void K3D12::NonRaiiManagerComponentBase<T>::Set(std::string name, T& resource, bool forceOverride)
+inline void K3D12::NonRaiiManagerComponentBase<T>::Set(std::string name, const T & resource, bool forceOverride)
 {
 	if (_resourceMap.find(name) == _resourceMap.end()) {
-		_resourceMap[name] = std::move(resource);
+		_resourceMap[name] = resource;
 	}
 	else if (forceOverride) {
-		_resourceMap[name] = std::move(resource);
+		//_resourceMap[name];
+		_resourceMap[name] = resource;
+
 	}
 }
 
 template<class T>
-inline T * K3D12::NonRaiiManagerComponentBase<T>::Get(std::string name)
+inline T* K3D12::NonRaiiManagerComponentBase<T>::Get(std::string name)
 {
 	if (_resourceMap.find(name) != _resourceMap.end()) {
 		return &_resourceMap[name];
@@ -213,9 +218,8 @@ inline bool K3D12::NonRaiiManagerComponentBase<T>::IsLooded(std::string name)
 }
 
 template<class T>
-inline std::map<std::string, std::shared_ptr<T>>& K3D12::NonRaiiManagerComponentBase<T>::GetMap()
+inline std::map<std::string, T>& K3D12::NonRaiiManagerComponentBase<T>::GetMap()
 {
-
 	return _resourceMap;
 }
 
@@ -279,10 +283,11 @@ inline bool K3D12::UnorderedManagerComponentBase<T>::IsLooded(std::string name)
 	}
 	return false;
 }
-template<class T>
-inline std::map<std::string, std::shared_ptr<T>>& K3D12::UnorderedManagerComponentBase<T>::GetMap()
-{
 
+template<class T>
+inline std::unordered_map<std::string, std::shared_ptr<T>>& K3D12::UnorderedManagerComponentBase<T>::GetMap()
+{
 	return _resourceMap;
 }
+
 

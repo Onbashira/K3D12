@@ -15,7 +15,8 @@
 #include "../Resource/IndexBuffer.h"
 #include "../Resource/VertexBuffer.h"
 #include "../Resource/UnorderedAccessValue.h"
-
+#include "../Model/ModelObject.h"
+#include "../Mesh/ModelMesh.h"
 
 constexpr UINT ToonMapTextureNum = 11;
 //固定値
@@ -66,19 +67,18 @@ std::shared_ptr<K3D12::MMDModelResourceData> K3D12::ModelConverter::ConvertPMDMo
 			convertModel->_vertexes[i].pos = Vector3::Transform(model->vertices[i].pos, rotMat);
 			convertModel->_vertexes[i].normal = Vector3::Transform(model->vertices[i].normal, rotMat);
 			convertModel->_vertexes[i].texCoord = std::move(Vector2(model->vertices[i].texCoord.x, model->vertices[i].texCoord.y));
-			//convertModel->_vertexes[i].deformType = MMDWeightDeformType::BDEF2;
-			convertModel->_deformationData[i].deformType = static_cast<int>(MMDWeightDeformType::BDEF2);
-			convertModel->_deformationData[i].boneIndex01 = model->vertices[i].boneIndex[0];
-			convertModel->_deformationData[i].boneIndex02 = model->vertices[i].boneIndex[1];
-			convertModel->_deformationData[i].boneWeight01 = model->vertices[i].boneWeight;
-			convertModel->_deformationData[i].boneWeight02 = 1.0f - model->vertices[i].boneWeight;
+			convertModel->_vertexes[i].deformType = MMDWeightDeformType::BDEF2;
+			convertModel->_vertexes[i].deformation.bdef2.boneIndex01 = model->vertices[i].boneIndex[0];
+			convertModel->_vertexes[i].deformation.bdef2.boneIndex02 = model->vertices[i].boneIndex[1];
+			convertModel->_vertexes[i].deformation.bdef2.boneWeight01 = model->vertices[i].boneWeight;
+			convertModel->_vertexes[i].deformation.bdef2.boneWeight02 = 1.0f - model->vertices[i].boneWeight;
 
 		}
 
-		//GPU渡し用の変形データの構築
-		{
-			convertModel->_deformation.Create(convertModel->_vertexes.size(), convertModel->_vertexes.size() * sizeof(MMDWeightDeform), &convertModel->_deformationData[0]);
-		}
+		////GPU渡し用の変形データの構築
+		//{
+		//	convertModel->_deformation.Create(convertModel->_vertexes.size(), convertModel->_vertexes.size() * sizeof(MMDWeightDeform), &convertModel->_deformationData[0]);
+		//}
 	}
 	//	インデックスリストコンバート
 	{
@@ -150,7 +150,7 @@ std::shared_ptr<K3D12::MMDModelResourceData> K3D12::ModelConverter::ConvertPMDMo
 
 			}
 			convertModel->_texturePaths = std::move(paths);
-			TextureLoader::GetInstance().LoadModelTexture(D3D12System::GetInstance().GetCommandList("CommandList"), D3D12System::GetInstance().GetCommandQueue(), model->modelPath, convertModel->_texturePaths);
+			TextureLoader::GetInstance().LoadModelTexture(D3D12System::GetInstance().GetCommandList("CommandList"), &D3D12System::GetInstance().GetMasterCommandQueue(), model->modelPath, convertModel->_texturePaths);
 
 		}
 	}
@@ -224,28 +224,28 @@ std::shared_ptr<K3D12::MMDModelResourceData> K3D12::ModelConverter::ConvertPMXMo
 			convertModel->_vertexes[i].pos = Vector3::Transform(model->vertcies[i].position, rotMat);
 			convertModel->_vertexes[i].normal = Vector3::Transform(model->vertcies[i].normal, rotMat);;
 			convertModel->_vertexes[i].texCoord = model->vertcies[i].uv;
-			//convertModel->_vertexes[i].deformType = static_cast<MMDWeightDeformType>(model->vertcies[i].weightDeformType);
+			convertModel->_vertexes[i].deformType = static_cast<MMDWeightDeformType>(model->vertcies[i].weightDeformType);
+			convertModel->_vertexes[i].deformation.sdef = model->vertcies[i].weightDeform.sdef;
 
-			convertModel->_deformationData[i].deformType = static_cast<int>(model->vertcies[i].weightDeformType);
-			convertModel->_deformationData[i].boneIndex01 = model->vertcies[i].weightDeform.qdef.boneIndex01;
-			convertModel->_deformationData[i].boneIndex02 = model->vertcies[i].weightDeform.qdef.boneIndex02;
-			convertModel->_deformationData[i].boneIndex03 = model->vertcies[i].weightDeform.qdef.boneIndex03;
-			convertModel->_deformationData[i].boneIndex04 = model->vertcies[i].weightDeform.qdef.boneIndex04;
-			convertModel->_deformationData[i].boneWeight01 = model->vertcies[i].weightDeform.qdef.boneWeight01;
-			convertModel->_deformationData[i].boneWeight02 = model->vertcies[i].weightDeform.qdef.boneWeight02;
-			convertModel->_deformationData[i].boneWeight03 = model->vertcies[i].weightDeform.qdef.boneWeight03;
-			convertModel->_deformationData[i].boneWeight04 = model->vertcies[i].weightDeform.qdef.boneWeight04;
-			convertModel->_deformationData[i].c = model->vertcies[i].weightDeform.sdef.c;
-			convertModel->_deformationData[i].r0 = model->vertcies[i].weightDeform.sdef.r0;
-			convertModel->_deformationData[i].r1 = model->vertcies[i].weightDeform.sdef.r1;
+			//convertModel->_deformationData[i].deformType = static_cast<int>(model->vertcies[i].weightDeformType);
+			//convertModel->_deformationData[i].boneIndex01 = model->vertcies[i].weightDeform.qdef.boneIndex01;
+			//convertModel->_deformationData[i].boneIndex02 = model->vertcies[i].weightDeform.qdef.boneIndex02;
+			//convertModel->_deformationData[i].boneIndex03 = model->vertcies[i].weightDeform.qdef.boneIndex03;
+			//convertModel->_deformationData[i].boneIndex04 = model->vertcies[i].weightDeform.qdef.boneIndex04;
+			//convertModel->_deformationData[i].boneWeight01 = model->vertcies[i].weightDeform.qdef.boneWeight01;
+			//convertModel->_deformationData[i].boneWeight02 = model->vertcies[i].weightDeform.qdef.boneWeight02;
+			//convertModel->_deformationData[i].boneWeight03 = model->vertcies[i].weightDeform.qdef.boneWeight03;
+			//convertModel->_deformationData[i].boneWeight04 = model->vertcies[i].weightDeform.qdef.boneWeight04;
+			//convertModel->_deformationData[i].c = model->vertcies[i].weightDeform.sdef.c;
+			//convertModel->_deformationData[i].r0 = model->vertcies[i].weightDeform.sdef.r0;
+			//convertModel->_deformationData[i].r1 = model->vertcies[i].weightDeform.sdef.r1;
 
-			//convertModel->_vertexes[i].deformation.sdef = model->vertcies[i].weightDeform.sdef;
 		}
 
-		//GPU渡し用の変形データの構築
-		{
-			convertModel->_deformation.Create(convertModel->_vertexes.size(), convertModel->_vertexes.size() * sizeof(MMDWeightDeform), &convertModel->_deformationData[0]);
-		}
+		////GPU渡し用の変形データの構築
+		//{
+		//	convertModel->_deformation.Create(convertModel->_vertexes.size(), convertModel->_vertexes.size() * sizeof(MMDWeightDeform), &convertModel->_deformationData[0]);
+		//}
 	}
 	//	インデックスリストコンバート
 	{
@@ -325,7 +325,7 @@ std::shared_ptr<K3D12::MMDModelResourceData> K3D12::ModelConverter::ConvertPMXMo
 		//テクスチャパスの取得およびリソースバッファの確保
 		{
 			convertModel->_texturePaths = std::move(textureTable);
-			TextureLoader::GetInstance().LoadModelTexture(D3D12System::GetInstance().GetCommandList("CommandList"), D3D12System::GetInstance().GetCommandQueue(), model->modelPath, convertModel->_texturePaths);
+			TextureLoader::GetInstance().LoadModelTexture(D3D12System::GetInstance().GetCommandList("CommandList"), &D3D12System::GetInstance().GetMasterCommandQueue(), model->modelPath, convertModel->_texturePaths);
 
 		}
 	}
@@ -384,34 +384,38 @@ std::shared_ptr<K3D12::MMDModel> K3D12::ModelConverter::ExtructMMDModel(std::wea
 		materials[i].sphereBlendType = modelResource->_materials[i].sphereBlendType;
 	}
 	//頂点抽出
-	extructedModel->_vertexes.resize(modelResource->_vertexes.size());
-	for (UINT i = 0; i < extructedModel->_vertexes.size(); i++) {
-		extructedModel->_vertexes[i].pos = modelResource->_vertexes[i].pos;
-		extructedModel->_vertexes[i].normal = modelResource->_vertexes[i].normal;
-		extructedModel->_vertexes[i].texCoord = modelResource->_vertexes[i].texCoord;
+	extructedModel->GetDefaultVertexData().resize(modelResource->_vertexes.size());
+	for (UINT i = 0; i < extructedModel->GetDefaultVertexData().size(); i++) {
+		extructedModel->GetDefaultVertexData()[i].pos = modelResource->_vertexes[i].pos;
+		extructedModel->GetDefaultVertexData()[i].normal = modelResource->_vertexes[i].normal;
+		extructedModel->GetDefaultVertexData()[i].texCoord = modelResource->_vertexes[i].texCoord;
 	}
 	extructedModel->_resourceData = modelResource;
 
 	//オリジナルデータからインデックスバッファ、頂点バッファを作成、さらにリソースに対して名前を付ける。（デバッグ時に確認しやすくするため）；
-	extructedModel->_indexBuffer->Create(modelResource->_indexList.list.size() * sizeof(UINT), sizeof(UINT), &modelResource->_indexList.list[0]);
-	extructedModel->_indexBuffer->SetName("MMDModelIndexData");
+	extructedModel->GetDefaultIBO()->Create(modelResource->_indexList.list.size() * sizeof(UINT), sizeof(UINT), &modelResource->_indexList.list[0]);
+	extructedModel->GetDefaultIBO()->SetName("MMDModelIndexData");
 
-	extructedModel->_vertexBuffer->Create(extructedModel->_vertexes.size() * sizeof(Vertex3D), sizeof(Vertex3D), &extructedModel->_vertexes[0]);
-	extructedModel->_vertexBuffer->SetName("MMDModelVertexData");
+	//extructedModel->GetDefaultVBO()->Create(extructedModel->GetDefaultVertexData().size() * sizeof(Vertex3D), sizeof(Vertex3D), &extructedModel->_vertexes[0]);
+	extructedModel->InitializeDefaultVBO(extructedModel->GetDefaultVertexData());
+	extructedModel->GetDefaultVBO()->SetName("MMDModelVertexData");
 
 	//マテリアルバッファを作成。256Byteアラインでマテリアル数だけ領域を確保
-	extructedModel->_materialBuffer.Create(materials.size() * Util::Alignment256Bytes(sizeof(MMDRendererMaterial)));
-	extructedModel->_materialBuffer.SetName("ModelMaterialBuffer");
+	extructedModel->GetMeshHeap().GetMaterialBufffer().Create(materials.size() * Util::Alignment256Bytes(sizeof(MMDRendererMaterial)));
+	extructedModel->GetMeshHeap().GetMaterialBufffer().SetName("ModelMaterialBuffer");
 
 	//ヒープの作成・各情報のスタートポイントの設定
 	{
 		unsigned int heapSize = static_cast<unsigned int>(1 + modelResource->_materials.size() + modelResource->_texturePaths.size()); //カメラ情報を除いたモデルに必要な情報の数を加算。（変形情報、マテリアル数、テクスチャ数）
-		extructedModel->_heap->Create(D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, heapSize);
-		extructedModel->_heap->SetName("ModelHeap");
+		extructedModel->GetMeshHeap().GetHeap().Create(D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, heapSize);
+		extructedModel->GetMeshHeap().GetHeap().SetName("ModelHeap");
 
-		extructedModel->_transformStartPoint = 0;
-		extructedModel->_materialStartPoint = extructedModel->_transformStartPoint + 1;
-		extructedModel->_textureStartPoint = extructedModel->_materialStartPoint + static_cast<unsigned int>(modelResource->_materials.size());
+		//extructedModel->_transformStartPoint = 0;
+		extructedModel->GetMeshHeap().SetTransformDescStartIndex(0);
+		extructedModel->GetMeshHeap().SettMaterialDescStartIndex(extructedModel->GetMeshHeap().GetTransformDescStartIndex() + 1);
+		extructedModel->GetMeshHeap().SetTextureDescStartIndex(extructedModel->GetMeshHeap().GetMaterialDescStartIndex() + static_cast<unsigned int>(modelResource->_materials.size()));
+
+		//extructedModel->_textureStartPoint = extructedModel->_materialStartPoint + static_cast<unsigned int>(modelResource->_materials.size());
 
 	}
 	//変形情報の構築およびそれに対しての見方を定義
@@ -425,7 +429,7 @@ std::shared_ptr<K3D12::MMDModel> K3D12::ModelConverter::ExtructMMDModel(std::wea
 		view.BufferLocation = extructedModel->_transformBuffer.GetResource()->GetGPUVirtualAddress();
 		view.SizeInBytes = static_cast<unsigned int>(Util::Alignment256Bytes(sizeof(Transform)));
 
-		extructedModel->_transformBuffer.CreateView(view, extructedModel->_heap->GetCPUHandle(extructedModel->_transformStartPoint));
+		extructedModel->_transformBuffer.CreateView(view, extructedModel->GetMeshHeap().GetHeap().GetCPUHandle(extructedModel->GetMeshHeap().GetTransformDescStartIndex()));
 
 		//位置情報の初期設定
 		{
@@ -438,19 +442,19 @@ std::shared_ptr<K3D12::MMDModel> K3D12::ModelConverter::ExtructMMDModel(std::wea
 	}
 	//マテリアルの書き込みとデスクリプタ作成
 	{
-		auto gpuPtr = extructedModel->_materialBuffer.GetResource()->GetGPUVirtualAddress();
+		auto gpuPtr = extructedModel->GetMeshHeap().GetMaterialBufffer().GetResource()->GetGPUVirtualAddress();
 		D3D12_CONSTANT_BUFFER_VIEW_DESC view{};
 		UINT writeOffset = 0;
 		for (UINT i = 0; i < materials.size(); i++) {
 
 			//確保したリソースの領域に書き込み
-			extructedModel->_materialBuffer.Update(&materials[i], sizeof(MMDRendererMaterial), writeOffset);
+			extructedModel->GetMeshHeap().GetMaterialBufffer().Update(&materials[i], sizeof(MMDRendererMaterial), writeOffset);
 
 			//デスクリプタが見る、GPUにミラーリングされた領域をスライドする
 			view.BufferLocation = gpuPtr;
 			view.SizeInBytes = static_cast<unsigned int>(Util::Alignment256Bytes(sizeof(MMDRendererMaterial)));
 
-			extructedModel->_materialBuffer.CreateView(view, extructedModel->_heap->GetCPUHandle(extructedModel->_materialStartPoint + i));
+			extructedModel->GetMeshHeap().GetMaterialBufffer().CreateView(view, extructedModel->GetMeshHeap().GetHeap().GetCPUHandle(extructedModel->GetMeshHeap().GetMaterialDescStartIndex() + i));
 
 			gpuPtr += static_cast<unsigned int>(Util::Alignment256Bytes(sizeof(MMDRendererMaterial)));
 			writeOffset += static_cast<unsigned int>(Util::Alignment256Bytes(sizeof(MMDRendererMaterial)));
@@ -458,16 +462,16 @@ std::shared_ptr<K3D12::MMDModel> K3D12::ModelConverter::ExtructMMDModel(std::wea
 	}
 	//テクスチャリソースのビューの作成
 	{
-		TextureLoader::GetInstance().LoadModelTexture(D3D12System::GetInstance().GetCommandList("CommandList"), D3D12System::GetInstance().GetCommandQueue(), *extructedModel->_heap, extructedModel->_textureStartPoint, modelResource->_modelPath, modelResource->_texturePaths);
+		TextureLoader::GetInstance().LoadModelTexture(D3D12System::GetInstance().GetCommandList("CommandList"), &D3D12System::GetInstance().GetMasterCommandQueue(), extructedModel->GetMeshHeap().GetHeap(), extructedModel->GetMeshHeap().GetTextureDescStartIndex(), modelResource->_modelPath, modelResource->_texturePaths);
 	}
 
 	//ローダーにセットされたコマンドリストをモデルにセット
 	extructedModel->_commandList = list;
 
 	//モデルにパイプラインとルートシグネチャをセット
-	extructedModel->SetPipelineState(pso.lock().get());
-	extructedModel->SetRootSignature(rootSignature.lock().get());
-	extructedModel->RegistBundle();
+	extructedModel->SetPipelineState(pso);
+	extructedModel->SetRootSignature(rootSignature);
+	extructedModel->RegisterToBundle();
 	return extructedModel;
 }
 
@@ -481,7 +485,7 @@ void CreatePMXBoneTree(K3D12::MMDBoneTree* skelton, std::vector<K3D12::PMXBone>&
 		if (node->index == info->parentBoneIndex) {
 			K3D12::MMDBoneNode newNode;
 			//ボーンの位置を180度回転
-			newNode.pos = Vector3::Transform(info->bonePosition,rotMat);
+			newNode.pos = Vector3::Transform(info->bonePosition, rotMat);
 			newNode.parentIndex = node->index;
 			newNode.rotation = Quaternion::CreateIdentity();
 			newNode.index = static_cast<UINT>(std::distance(bonesInfo.begin(), info));
@@ -529,7 +533,7 @@ void CreatePMDBoneTree(K3D12::MMDBoneTree* skelton, std::vector<K3D12::PMDBone>&
 		if (node->index == info->parentIndex) {
 			K3D12::MMDBoneNode newNode;
 			//ボーンの位置を180度回転
-			newNode.pos = Vector3::Transform(info->boneHeadPosition,rotMat);
+			newNode.pos = Vector3::Transform(info->boneHeadPosition, rotMat);
 			newNode.parentIndex = node->index;
 			newNode.rotation = Quaternion::CreateIdentity();
 			newNode.index = static_cast<UINT>(std::distance(bonesInfo.begin(), info));

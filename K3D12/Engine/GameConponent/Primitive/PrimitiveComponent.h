@@ -18,9 +18,6 @@ namespace K3D12 {
 			MATERIAL_PARAMATER_INDEX,
 			SHADER_PARAMATER_INDEX
 		};
-
-		std::vector<Vertex3D> _vertexes;
-		std::vector<unsigned int> _list;
 		std::weak_ptr<ShaderResource> _shaderResource;
 		RendererMaterial _materialInfo;
 		void AttachTexture(std::string texturePath, D3D12_CPU_DESCRIPTOR_HANDLE handle);
