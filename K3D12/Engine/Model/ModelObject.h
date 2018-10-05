@@ -6,12 +6,7 @@ namespace K3D12 {
 	class ModelObject : public GameObject ,public ModelMesh
 	{
 	private:
-		enum class PRIMITIVE_ROOT_IDNEX {
-			CAMERA_PARAMATER_INDEX = 0,
-			TRANSFORM_PARAMATER_INDEX,
-			MATERIAL_PARAMATER_INDEX,
-			SHADER_PARAMATER_INDEX
-		};
+
 	public:
 
 	protected:

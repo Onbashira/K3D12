@@ -29,6 +29,7 @@ namespace K3D12 {
 	private:
 
 	public:
+
 		void BindingDescriptorHeaps(std::weak_ptr<K3D12::GraphicsCommandList> list);
 
 		void BindingDescriptorHeaps(K3D12::GraphicsCommandList& lsit);
@@ -37,7 +38,7 @@ namespace K3D12 {
 
 		void SetTextureDescStartIndex(unsigned int startIndex = 1);
 
-		void SettMaterialDescStartIndex(unsigned int startIndex = 2);
+		void SetMaterialDescStartIndex(unsigned int startIndex = 2);
 
 		unsigned int GetTransformDescStartIndex();
 

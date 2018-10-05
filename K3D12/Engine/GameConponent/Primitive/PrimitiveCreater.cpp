@@ -4,7 +4,6 @@
 #include "../../PipelineState/PipelineStateObject.h"
 #include "../../Signature/RootSignature.h"
 #include "../Primitive/Cube.h"
-#include "../Primitive/Sphere.h"
 #include "../Primitive/Plane.h"
 
 
@@ -29,11 +28,6 @@ K3D12::Cube * K3D12::PrimitiveCreater::CreateCube()
 	ptr->SetMasterCommandList(_primitiveDrawCommandList.lock());
 	ptr->Initializer();
 	return ptr;
-}
-
-K3D12::Sphere * K3D12::PrimitiveCreater::CreateSphere()
-{
-	return new K3D12::Sphere();
 }
 
 K3D12::Plane * K3D12::PrimitiveCreater::CreatePlane()

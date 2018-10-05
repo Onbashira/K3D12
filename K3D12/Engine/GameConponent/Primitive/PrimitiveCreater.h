@@ -8,7 +8,6 @@ namespace K3D12 {
 	class GraphicsCommandList;
 
 	class Cube;
-	class Sphere;
 	class Plane;
 
 
@@ -24,7 +23,6 @@ namespace K3D12 {
 	public:
 
 		Cube * CreateCube();
-		Sphere* CreateSphere();
 		Plane*	CreatePlane();
 
 		void SetPrimitiveRootSignature(std::weak_ptr<RootSignature> rootSignature);

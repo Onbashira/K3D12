@@ -29,7 +29,6 @@ void K3D12::ModelObject::BindVertexBufferToBundle()
 void K3D12::ModelObject::BindIndexBufferToBundle()
 {
 	_bundleList.GetCommandList()->IASetIndexBuffer(&this->GetDefaultIBO()->GetView());
-
 }
 
 void K3D12::ModelObject::InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData)

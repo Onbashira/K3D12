@@ -412,7 +412,7 @@ std::shared_ptr<K3D12::MMDModel> K3D12::ModelConverter::ExtructMMDModel(std::wea
 
 		//extructedModel->_transformStartPoint = 0;
 		extructedModel->GetMeshHeap().SetTransformDescStartIndex(0);
-		extructedModel->GetMeshHeap().SettMaterialDescStartIndex(extructedModel->GetMeshHeap().GetTransformDescStartIndex() + 1);
+		extructedModel->GetMeshHeap().SetMaterialDescStartIndex(extructedModel->GetMeshHeap().GetTransformDescStartIndex() + 1);
 		extructedModel->GetMeshHeap().SetTextureDescStartIndex(extructedModel->GetMeshHeap().GetMaterialDescStartIndex() + static_cast<unsigned int>(modelResource->_materials.size()));
 
 		//extructedModel->_textureStartPoint = extructedModel->_materialStartPoint + static_cast<unsigned int>(modelResource->_materials.size());

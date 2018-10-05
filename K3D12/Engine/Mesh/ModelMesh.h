@@ -7,7 +7,7 @@
 #include "../Resource/ShaderResource.h"
 #include "../DrawnableComponent/DrawableComponent.h"
 #include "../GameConponent/GameObject/GameObject.h"
-#include "IMesh.h"
+#include "MeshBuffer.h"
 #include "MeshHeap.h"
 
 
@@ -16,10 +16,11 @@
 namespace K3D12 {
 
 	//モデルのメッシュ描画に必要なクラス
-	class ModelMesh : public DrawableComponent, public IMesh
+	class ModelMesh : public DrawableComponent
 	{
 	private:
 		MeshHeap _meshHeap;
+		MeshBuffer _meshBuffer;
 	protected:
 
 	public:
@@ -28,19 +29,17 @@ namespace K3D12 {
 
 	protected:
 
-		virtual void BindVertexBufferToBundle()override = 0;
+		virtual void BindVertexBufferToBundle() = 0;
 
-		virtual void BindIndexBufferToBundle()override = 0;
+		virtual void BindIndexBufferToBundle() = 0;
 		//バンドルリストに継承先でドローコールバッチ化作業を強制
 		virtual void RegisterToBundle()override = 0;
 
-		virtual void InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData)override = 0;
+		virtual void InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData);
 
-		virtual void InitializeCustomVBO(void** customVertexDataSrc)override = 0;
+		virtual void InitializeCustomVBO(unsigned int size, unsigned int stride, void* customVertexDataSrc);
 
-		virtual void InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData)override = 0;
-
-		virtual void IntializeMeshHeap() = 0;
+		virtual void InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData);
 
 	public:
 
@@ -49,12 +48,15 @@ namespace K3D12 {
 
 		MeshHeap& GetMeshHeap();
 
+		void BindDescriptorHeaps(std::weak_ptr<K3D12::GraphicsCommandList> list);
+
+		void BindDescriptorHeaps(K3D12::GraphicsCommandList& list);
 
 		void SetTransformDescStartIndex(unsigned int startIndex = 0);
 
 		void SetTextureDescStartIndex(unsigned int startIndex = 1);
 
-		void SettMaterialDescStartIndex(unsigned int startIndex = 2);
+		void SetMaterialDescStartIndex(unsigned int startIndex = 2);
 
 		unsigned int GetTransformDescStartIndex();
 

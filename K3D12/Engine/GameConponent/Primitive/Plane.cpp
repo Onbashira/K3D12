@@ -7,9 +7,6 @@
 #include "../RendererMaterial.h"
 #include "../../PipelineState/PipelineStateObject.h"
 #include "../../Signature/RootSignature.h"
-#include "PrimitiveComponent.h"
-#include "PrimitiveObject.h"
-
 
 constexpr float debugScale = 50.0f;
 
@@ -112,6 +109,10 @@ void K3D12::Plane::Initializer()
 	{
 		RegistBundle();
 	}
+}
+
+void K3D12::Plane::RegisterToBundle()
+{
 }
 
 void K3D12::Plane::RegistBundle()

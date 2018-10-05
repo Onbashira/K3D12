@@ -294,19 +294,10 @@
     <ClCompile Include="Engine\Util\WICTextureLoader12.cpp">
       <Filter>Engine\Util</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GameConponent\Primitive\Capsule.cpp">
-      <Filter>Engine\GameComponent\PrimitiveObject</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\GameConponent\Primitive\Cube.cpp">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GameConponent\Primitive\Cylinder.cpp">
-      <Filter>Engine\GameComponent\PrimitiveObject</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\GameConponent\Primitive\Plane.cpp">
-      <Filter>Engine\GameComponent\PrimitiveObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GameConponent\Primitive\Sphere.cpp">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GameConponent\Scene\Scene.cpp">
@@ -435,13 +426,13 @@
     <ClCompile Include="Engine\Mesh\ModelMesh.cpp">
       <Filter>Engine\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Mesh\IMesh.cpp">
-      <Filter>Engine\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Audio\IAudio.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Mesh\MeshHeap.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Mesh\MeshBuffer.cpp">
       <Filter>Engine\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
@@ -581,19 +572,10 @@
     <ClInclude Include="Engine\Util\WICTextureLoader12.h">
       <Filter>Engine\Util</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GameConponent\Primitive\Capsule.h">
-      <Filter>Engine\GameComponent\PrimitiveObject</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\GameConponent\Primitive\Cube.h">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GameConponent\Primitive\Cylinder.h">
-      <Filter>Engine\GameComponent\PrimitiveObject</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\GameConponent\Primitive\Plane.h">
-      <Filter>Engine\GameComponent\PrimitiveObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GameConponent\Primitive\Sphere.h">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GameConponent\Scene\Scene.h">
@@ -722,13 +704,13 @@
     <ClInclude Include="Engine\Mesh\ModelMesh.h">
       <Filter>Engine\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Mesh\IMesh.h">
-      <Filter>Engine\Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Audio\IAudio.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Mesh\MeshHeap.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Mesh\MeshBuffer.h">
       <Filter>Engine\Mesh</Filter>
     </ClInclude>
   </ItemGroup>

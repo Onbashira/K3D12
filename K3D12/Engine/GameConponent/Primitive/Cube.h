@@ -1,7 +1,6 @@
 #pragma once
 #include "../../Model/ModelObject.h"
 #include "PrimitiveComponent.h"
-#include "../../Resource/UnorderedAccessValue.h"
 #include "../../Model/ModelObject.h"
 
 namespace K3D12 {
@@ -11,18 +10,21 @@ namespace K3D12 {
 	private:
 	protected:
 		PrimitiveComponent _info;
-		std::vector<float>   buffer;
 	public:
 	private:
 	protected:
+		//バンドルリストに継承先特有のドローコールを積む作業を強制
+		virtual void RegisterToBundle()override;
+		//カスタム頂点バッファをセットアップさせるための関数
+		virtual void InitializeCustomVBO(void** customVertexDataSrc)override;
+
 	public:
+
+		virtual void Update()override;
+		//描画時呼び出し関数
+		virtual void Draw()override;
+		//モデルのセットアップ
 		void Initializer();
-		void RegistBundle();
-		void SetPipelineState(PipelineStateObject* pipelineState);
-		void SetRootSignature(RootSignature* rootSignature);
-		void Draw();
-		void Update();
-		void LateUpdate();
 		void AttachTexture(std::string pathName);
 		void SetUV(float compressionRatio);
 

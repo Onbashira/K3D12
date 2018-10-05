@@ -151,13 +151,10 @@
     <ClCompile Include="Engine\GameConponent\GameObject\GameObject.cpp" />
     <ClCompile Include="Engine\GameConponent\Light\Light.cpp" />
     <ClCompile Include="Engine\GameConponent\Light\LightManager.cpp" />
-    <ClCompile Include="Engine\GameConponent\Primitive\Capsule.cpp" />
     <ClCompile Include="Engine\GameConponent\Primitive\Cube.cpp" />
-    <ClCompile Include="Engine\GameConponent\Primitive\Cylinder.cpp" />
     <ClCompile Include="Engine\GameConponent\Primitive\Plane.cpp" />
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveComponent.cpp" />
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveCreater.cpp" />
-    <ClCompile Include="Engine\GameConponent\Primitive\Sphere.cpp" />
     <ClCompile Include="Engine\GameConponent\RendererMaterial.cpp" />
     <ClCompile Include="Engine\GameConponent\Scene\Scene.cpp" />
     <ClCompile Include="Engine\GameConponent\Sprite\Sprite.cpp" />
@@ -165,7 +162,7 @@
     <ClCompile Include="Engine\Input\GamePad.cpp" />
     <ClCompile Include="Engine\Input\GamePadManager.cpp" />
     <ClCompile Include="Engine\Input\InputManager.cpp" />
-    <ClCompile Include="Engine\Mesh\IMesh.cpp" />
+    <ClCompile Include="Engine\Mesh\MeshBuffer.cpp" />
     <ClCompile Include="Engine\Mesh\MeshHeap.cpp" />
     <ClCompile Include="Engine\Mesh\ModelMesh.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModel.cpp" />
@@ -246,13 +243,10 @@
     <ClInclude Include="Engine\GameConponent\GameObject\GameObject.h" />
     <ClInclude Include="Engine\GameConponent\Light\Light.h" />
     <ClInclude Include="Engine\GameConponent\Light\LightManager.h" />
-    <ClInclude Include="Engine\GameConponent\Primitive\Capsule.h" />
     <ClInclude Include="Engine\GameConponent\Primitive\Cube.h" />
-    <ClInclude Include="Engine\GameConponent\Primitive\Cylinder.h" />
     <ClInclude Include="Engine\GameConponent\Primitive\Plane.h" />
     <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveComponent.h" />
     <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveCreater.h" />
-    <ClInclude Include="Engine\GameConponent\Primitive\Sphere.h" />
     <ClInclude Include="Engine\GameConponent\RendererMaterial.h" />
     <ClInclude Include="Engine\GameConponent\Scene\Scene.h" />
     <ClInclude Include="Engine\GameConponent\Sprite\Sprite.h" />
@@ -260,7 +254,7 @@
     <ClInclude Include="Engine\Input\GamePad.h" />
     <ClInclude Include="Engine\Input\GamePadManager.h" />
     <ClInclude Include="Engine\Input\InputManager.h" />
-    <ClInclude Include="Engine\Mesh\IMesh.h" />
+    <ClInclude Include="Engine\Mesh\MeshBuffer.h" />
     <ClInclude Include="Engine\Mesh\MeshHeap.h" />
     <ClInclude Include="Engine\Mesh\ModelMesh.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModel.h" />

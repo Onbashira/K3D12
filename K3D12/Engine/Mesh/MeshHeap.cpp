@@ -47,7 +47,7 @@ void K3D12::MeshHeap::SetTextureDescStartIndex(unsigned int startIndex)
 
 }
 
-void K3D12::MeshHeap::SettMaterialDescStartIndex(unsigned int startIndex)
+void K3D12::MeshHeap::SetMaterialDescStartIndex(unsigned int startIndex)
 {
 	this->_materialStartPoint = startIndex;
 
