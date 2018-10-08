@@ -15,9 +15,6 @@ namespace K3D12 {
 	protected:
 		//バンドルリストに継承先特有のドローコールを積む作業を強制
 		virtual void RegisterToBundle()override;
-		//カスタム頂点バッファをセットアップさせるための関数
-		virtual void InitializeCustomVBO(void** customVertexDataSrc)override;
-
 	public:
 
 		virtual void Update()override;

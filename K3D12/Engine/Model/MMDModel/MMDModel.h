@@ -83,8 +83,6 @@ namespace K3D12 {
 		virtual void RegisterToBundle()override;
 
 	public:
-		//モデル初期化
-		void Initialize();
 		//トランスフォームのアップデート
 		virtual void Update()override;
 		//リストにDrawコマンドを積み込む(ジオメトリレンダリング）

@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include "../Util/Math.h"
 #include "../GameConponent/GameObject/GameObject.h"
 #include "../Mesh/ModelMesh.h"
 namespace K3D12 {
@@ -10,7 +12,8 @@ namespace K3D12 {
 	public:
 
 	protected:
-
+		std::vector<Vertex3D> _vertexes;
+		std::vector<unsigned int> _indexList;
 	private:
 
 	protected:

@@ -8,7 +8,6 @@ K3D12::MeshHeap::MeshHeap() :
 	_textureStartPoint(0),
 	_materialStartPoint(0)
 {
-
 }
 
 
@@ -81,6 +80,14 @@ K3D12::ConstantBuffer & K3D12::MeshHeap::GetMaterialBufffer()
 std::vector<std::weak_ptr<K3D12::ShaderResource>>& K3D12::MeshHeap::GetTexturesRef()
 {
 	return this->_textureResource;
+}
+
+std::weak_ptr<K3D12::ShaderResource> K3D12::MeshHeap::GetTexturteRef(unsigned int textureIndex)
+{
+	if (_textureResource.size() == 0 || _textureResource.size() <= textureIndex) {
+		return std::weak_ptr<K3D12::ShaderResource>();
+	}
+	return _textureResource[textureIndex];
 }
 
 K3D12::MeshHeap & K3D12::MeshHeap::AddTextureRef(std::weak_ptr<K3D12::ShaderResource> textureRef)

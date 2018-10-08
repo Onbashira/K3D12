@@ -384,22 +384,22 @@ std::shared_ptr<K3D12::MMDModel> K3D12::ModelConverter::ExtructMMDModel(std::wea
 		materials[i].sphereBlendType = modelResource->_materials[i].sphereBlendType;
 	}
 	//頂点抽出
-	extructedModel->GetDefaultVertexData().resize(modelResource->_vertexes.size());
-	for (UINT i = 0; i < extructedModel->GetDefaultVertexData().size(); i++) {
-		extructedModel->GetDefaultVertexData()[i].pos = modelResource->_vertexes[i].pos;
-		extructedModel->GetDefaultVertexData()[i].normal = modelResource->_vertexes[i].normal;
-		extructedModel->GetDefaultVertexData()[i].texCoord = modelResource->_vertexes[i].texCoord;
+	extructedModel->_vertexes.reserve(modelResource->_vertexes.size());
+	for (UINT i = 0; i < extructedModel->_vertexes.size(); i++) {
+		extructedModel->_vertexes[i].pos = modelResource->_vertexes[i].pos;
+		extructedModel->_vertexes[i].normal = modelResource->_vertexes[i].normal;
+		extructedModel->_vertexes[i].texCoord = modelResource->_vertexes[i].texCoord;
 	}
 	extructedModel->_resourceData = modelResource;
+	{
+		//オリジナルデータからインデックスバッファ、頂点バッファを作成、さらにリソースに対して名前を付ける。（デバッグ時に確認しやすくするため）；
+		extructedModel->GetMeshBuffer().GetIBO().Create(modelResource->_indexList.list.size() * sizeof(UINT), sizeof(UINT), &modelResource->_indexList.list[0]);
+		extructedModel->GetMeshBuffer().GetIBO().SetName("MMDModelIndexData");
 
-	//オリジナルデータからインデックスバッファ、頂点バッファを作成、さらにリソースに対して名前を付ける。（デバッグ時に確認しやすくするため）；
-	extructedModel->GetDefaultIBO()->Create(modelResource->_indexList.list.size() * sizeof(UINT), sizeof(UINT), &modelResource->_indexList.list[0]);
-	extructedModel->GetDefaultIBO()->SetName("MMDModelIndexData");
-
-	//extructedModel->GetDefaultVBO()->Create(extructedModel->GetDefaultVertexData().size() * sizeof(Vertex3D), sizeof(Vertex3D), &extructedModel->_vertexes[0]);
-	extructedModel->InitializeDefaultVBO(extructedModel->GetDefaultVertexData());
-	extructedModel->GetDefaultVBO()->SetName("MMDModelVertexData");
-
+		//extructedModel->GetDefaultVBO()->Create(extructedModel->GetDefaultVertexData().size() * sizeof(Vertex3D), sizeof(Vertex3D), &extructedModel->_vertexes[0]);
+		extructedModel->GetMeshBuffer().InitializeVBO(extructedModel->_vertexes.size() * sizeof(Vertex3D), sizeof(Vertex3D), &extructedModel->_vertexes[0]);
+		extructedModel->GetMeshBuffer().GetVBO().SetName("MMDModelVertexData");
+	}
 	//マテリアルバッファを作成。256Byteアラインでマテリアル数だけ領域を確保
 	extructedModel->GetMeshHeap().GetMaterialBufffer().Create(materials.size() * Util::Alignment256Bytes(sizeof(MMDRendererMaterial)));
 	extructedModel->GetMeshHeap().GetMaterialBufffer().SetName("ModelMaterialBuffer");
@@ -436,7 +436,7 @@ std::shared_ptr<K3D12::MMDModel> K3D12::ModelConverter::ExtructMMDModel(std::wea
 			extructedModel->SetRotation(Quaternion::CreateIdentity());
 			extructedModel->SetPos(Vector3::zero);
 			extructedModel->SetScale(Vector3::one);
-
+			extructedModel->TransformUpdate();
 			extructedModel->Update();
 		}
 	}

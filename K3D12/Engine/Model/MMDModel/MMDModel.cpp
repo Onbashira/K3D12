@@ -195,16 +195,6 @@ void K3D12::MMDModel::RegisterToBundle()
 	_bundleList.CloseCommandList();
 }
 
-void K3D12::MMDModel::InitializeCustomVBO(void ** customVertexDataSrc)
-{
-
-}
-
-void K3D12::MMDModel::Initialize()
-{
-	InitalizeTransformBuffer(Util::Alignment256Bytes(sizeof(Transform)));
-}
-
 void K3D12::MMDModel::Update()
 {
 	GameObject::UpdateTransformBuffer();

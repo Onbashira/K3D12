@@ -53,6 +53,8 @@ namespace K3D12 {
 
 		std::vector<std::weak_ptr<K3D12::ShaderResource>>& GetTexturesRef();
 
+		std::weak_ptr<K3D12::ShaderResource> GetTexturteRef(unsigned int textureIndex);
+
 		MeshHeap& AddTextureRef(std::weak_ptr<K3D12::ShaderResource> textureRef);
 		
 		void Discard();
