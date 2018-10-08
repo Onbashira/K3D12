@@ -48,7 +48,12 @@ namespace K3D12 {
 		void																BindingResource(std::weak_ptr<GraphicsCommandList> list);
 
 
+
 		Resource();
+		Resource(const Resource& other);
+		Resource(Resource&& value);
+		Resource& operator= (const Resource& value);
+		Resource& operator= (Resource&& value);
 		virtual ~Resource();
 	};
 }

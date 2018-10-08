@@ -1,5 +1,4 @@
 #include "MeshBuffer.h"
-#include "../Resource/VertexBuffer.h"
 
 
 
@@ -11,64 +10,67 @@ K3D12::MeshBuffer::MeshBuffer()
 
 K3D12::MeshBuffer::~MeshBuffer()
 {
-	DiscardMesh();
+	Discard();
 }
 
 
-void K3D12::MeshBuffer::InitializeDefaultVBO(ULONG64 size, unsigned int stride, void* defaultVertexDataSrc)
+void K3D12::MeshBuffer::InitializeVBO(ULONG64 size, unsigned int stride, void* vertexDataSrc)
 {
-	_defaultVBO->Create(size, stride, defaultVertexDataSrc);
+	_vertexBuffer.Create(size, stride, vertexDataSrc);
 }
 
-void K3D12::MeshBuffer::InitializeCustomVBO(ULONG64 size, unsigned int stride, void * customVertexDataSrc)
+void K3D12::MeshBuffer::AddCustomVBO(ULONG64 size, unsigned int stride, void * customVertexDataSrc)
 {
-	_customVBO->Create(size, stride, customVertexDataSrc);
-
+	_customVBOs.push_back(K3D12::VertexBuffer());
+	_customVBOs.back().Create(size, stride, customVertexDataSrc);
 }
 
-void K3D12::MeshBuffer::InitializeIBO(std::vector<unsigned int>& defaultIndexListData)
+void K3D12::MeshBuffer::InitializeIBO(std::vector<unsigned int>& indexListDataSrc)
 {
-	_defaultIBO->Create(sizeof(unsigned int)*defaultIndexListData.size(),sizeof(unsigned int),  &defaultIndexListData[0]);
+	_indexBuffer.Create(sizeof(unsigned int)*indexListDataSrc.size(), sizeof(unsigned int), &indexListDataSrc[0]);
 }
 
 std::vector<D3D12_VERTEX_BUFFER_VIEW> K3D12::MeshBuffer::GetMeshVBViews()
 {
 	std::vector<D3D12_VERTEX_BUFFER_VIEW> meshVBViews;
 
-	meshVBViews.push_back(_defaultVBO->GetView());
-	if (this->_customVBO.get() != nullptr) {
-		meshVBViews.push_back(_customVBO->GetView());
+	meshVBViews.push_back(_vertexBuffer.GetView());
+	if (this->_customVBOs.size() != 0) {
+		for (auto& vb : _customVBOs) {
+			meshVBViews.push_back(vb.GetView());
+		}
 	}
 	return meshVBViews;
 }
 
-K3D12::VertexBuffer * K3D12::MeshBuffer::GetDefaultVBO()
+K3D12::VertexBuffer& K3D12::MeshBuffer::GetVBO()
 {
-	return this->_defaultVBO.get();
+	return _vertexBuffer;
 }
 
-K3D12::VertexBuffer * K3D12::MeshBuffer::GetCustomVBO()
+K3D12::VertexBuffer* K3D12::MeshBuffer::GetCustomVBO(unsigned int index)
 {
-	return this->_customVBO.get();
+	if (this->_customVBOs.size() == 0 || (index >= _customVBOs.size())) {
+		return nullptr;
+	}
+	return &_customVBOs[index];
+
 }
 
-K3D12::IndexBuffer * K3D12::MeshBuffer::GetIBO()
+K3D12::IndexBuffer& K3D12::MeshBuffer::GetIBO()
 {
-	return _defaultIBO.get();
+	return _indexBuffer;
 }
 
-void K3D12::MeshBuffer::DiscardMesh()
+void K3D12::MeshBuffer::Discard()
 {
-	this->_customVBO.reset();
-	this->_defaultVBO.reset();
-	this->_defaultIBO.reset();
-	//this->_defaultVertexes.clear();
-	//this->_defaultVertexes.shrink_to_fit();
-	//this->_defaultIndexList.clear();
-	//this->_defaultIndexList.shrink_to_fit();
+	this->_customVBOs.clear();
+	this->_vertexBuffer.Discard();
+	this->_indexBuffer.Discard();
+
 }
 
 bool K3D12::MeshBuffer::UseCustomVertex()
 {
-	return  this->_customVBO.get() == nullptr ? false:true;
+	return  this->_customVBOs.size() == 0 ? false : true;
 }

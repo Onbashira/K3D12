@@ -165,6 +165,8 @@
     <ClCompile Include="Engine\Mesh\MeshBuffer.cpp" />
     <ClCompile Include="Engine\Mesh\MeshHeap.cpp" />
     <ClCompile Include="Engine\Mesh\ModelMesh.cpp" />
+    <ClCompile Include="Engine\Mesh\SkinedMeshComponent.cpp" />
+    <ClCompile Include="Engine\Mesh\StaticMeshComponent.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModel.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModelManager.cpp" />
     <ClCompile Include="Engine\Model\MMDModel\MMDModelResourceData.cpp" />
@@ -257,6 +259,8 @@
     <ClInclude Include="Engine\Mesh\MeshBuffer.h" />
     <ClInclude Include="Engine\Mesh\MeshHeap.h" />
     <ClInclude Include="Engine\Mesh\ModelMesh.h" />
+    <ClInclude Include="Engine\Mesh\SkinedMeshComponent.h" />
+    <ClInclude Include="Engine\Mesh\StaticMeshComponent.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModel.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModelManager.h" />
     <ClInclude Include="Engine\Model\MMDModel\MMDModelResourceData.h" />

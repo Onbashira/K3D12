@@ -16,11 +16,11 @@ namespace K3D12 {
 	{
 	private:
 		//SysMemに確保される頂点インデックスリスト
-		std::unique_ptr<IndexBuffer>	_defaultIBO;
-		//デフォルトで使用するVBO Stream0 PerVertex　デフォルトで頂点位置、法線、二次元UVテクスチャ座標をVBOにマップ
-		std::unique_ptr<VertexBuffer>	_defaultVBO;
+		IndexBuffer		_indexBuffer;
+		//デフォルトで使用するVBO Stream0 PerVertex　デフォルトで頂点位置、法線、二次元UVテクスチャ座標をVBOにマップ?
+		VertexBuffer	_vertexBuffer;
 		//ユーザーカスタム型のVBO Stream1 PerVertex
-		std::unique_ptr<VertexBuffer>	_customVBO;
+		std::vector<VertexBuffer>	_customVBOs;
 	
 	public:
 
@@ -30,21 +30,21 @@ namespace K3D12 {
 
 	public:		
 		
-		virtual void InitializeDefaultVBO(ULONG64 size, unsigned int stride, void* defaultVertexDataSrc);
+		virtual void InitializeVBO(ULONG64 size, unsigned int stride, void* vertexDataSrc);
 
-		virtual void InitializeCustomVBO(ULONG64 size, unsigned int stride,void* customVertexDataSrc);
+		virtual void AddCustomVBO(ULONG64 size, unsigned int stride,void* customVertexDataSrc);
 
-		virtual void InitializeIBO(std::vector<unsigned int>& defaultIndexListData);
+		virtual void InitializeIBO(std::vector<unsigned int>& indexListDataSrc);
 
 		std::vector<D3D12_VERTEX_BUFFER_VIEW> GetMeshVBViews();
 
-		VertexBuffer* GetDefaultVBO();
+		VertexBuffer& GetVBO();
 
-		VertexBuffer* GetCustomVBO();
+		VertexBuffer* GetCustomVBO(unsigned int index);
 
-		IndexBuffer * GetIBO();
+		IndexBuffer&  GetIBO();
 
-		virtual void DiscardMesh();
+		virtual void Discard();
 
 		bool UseCustomVertex();
 

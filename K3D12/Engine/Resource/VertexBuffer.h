@@ -14,7 +14,14 @@ namespace K3D12 {
 		void Discard();
 
 		D3D12_VERTEX_BUFFER_VIEW GetView() const;
+		
 		VertexBuffer();
+		VertexBuffer(const VertexBuffer& other);
+		VertexBuffer(VertexBuffer&& value);
+		VertexBuffer& operator =(const VertexBuffer& value);
+		VertexBuffer& operator =(VertexBuffer&& value);
+
+
 		~VertexBuffer();
 	};
 }

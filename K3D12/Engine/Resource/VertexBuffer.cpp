@@ -10,11 +10,44 @@ K3D12::VertexBuffer::VertexBuffer() :
 	_view.StrideInBytes = 0;
 }
 
+K3D12::VertexBuffer::VertexBuffer(const VertexBuffer & other)
+{
+	*this =	other;
+}
+
+K3D12::VertexBuffer::VertexBuffer(VertexBuffer && value)
+{
+	*this = std::move(value);
+}
+
+K3D12::VertexBuffer & K3D12::VertexBuffer::operator=(const VertexBuffer & value)
+{
+	Resource::operator=(value);
+	this->_view = value._view;
+	this->_stride = value._stride;
+	this->_size = value._size;
+	return *this;
+}
+
+K3D12::VertexBuffer & K3D12::VertexBuffer::operator=(VertexBuffer && value)
+{
+	Resource::operator=(std::move(value));
+	this->_view =	value._view;
+	this->_stride = value._stride;
+	this->_size =	value._size;
+
+	value._view = D3D12_VERTEX_BUFFER_VIEW();
+	value._stride = 0;
+	value._size = 0;
+
+	return *this;
+}
 
 K3D12::VertexBuffer::~VertexBuffer()
 {
 	Discard();
 }
+
 
 HRESULT K3D12::VertexBuffer::Create(ULONG64 size, UINT stride, const void * pVertices)
 {

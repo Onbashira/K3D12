@@ -14,6 +14,41 @@ K3D12::Resource::Resource() :
 {
 }
 
+K3D12::Resource::Resource(const Resource & other)
+{
+	*this = other;
+}
+
+K3D12::Resource::Resource(Resource && value)
+{
+	*this = std::move(value);
+}
+
+K3D12::Resource & K3D12::Resource::operator=(const Resource & value)
+{
+	this->Discard();
+	this->_clearValue = value._clearValue;
+	this->_currentResourceState = value._currentResourceState;
+	this->_name = value._name;
+	this->_pDst = value._pDst;
+	this->_resource.Attach(value._resource.Get());
+	this->_shaderRegisterNumber = value._shaderRegisterNumber;
+	return *this;
+}
+
+K3D12::Resource & K3D12::Resource::operator=(Resource && value)
+{
+	*this = value;
+	value.Discard();
+	value._clearValue = D3D12_CLEAR_VALUE();
+	value._currentResourceState = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ;
+	value._name = "MOVED RESOURCE";
+	value._pDst = nullptr;
+	value._resource.Detach;
+	value._shaderRegisterNumber = -1;
+	return *this;
+}
+
 
 K3D12::Resource::~Resource()
 {
@@ -65,8 +100,6 @@ UCHAR* K3D12::Resource::GetMappedPointer()
 
 void K3D12::Resource::Discard()
 {
-
-	//インターフェースへのデタッチを行う。これはポインタの参照カウントのデクリメントを行う操作のはず
 	if (_resource.Get() != nullptr) {
 		if (_pDst != nullptr) {
 			Unmap(0, nullptr);

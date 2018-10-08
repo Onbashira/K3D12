@@ -82,8 +82,6 @@ namespace K3D12 {
 		//ƒoƒ“ƒhƒ‹‚Ö‚Ì“o˜^
 		virtual void RegisterToBundle()override;
 
-		virtual void InitializeCustomVBO(void** customVertexDataSrc)override;
-
 	public:
 		//ƒ‚ƒfƒ‹‰Šú‰»
 		void Initialize();

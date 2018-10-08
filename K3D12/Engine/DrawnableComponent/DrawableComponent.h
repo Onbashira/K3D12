@@ -23,6 +23,8 @@ namespace K3D12 {
 	public:
 	private:
 	protected:
+		//バンドルリストに継承先特有のドローコールを積む作業を強制
+		virtual void RegisterToBundle() = 0;
 	public:
 
 		void SetPipelineState(std::weak_ptr<K3D12::PipelineStateObject> pipelineState);
@@ -33,8 +35,7 @@ namespace K3D12 {
 		void BindingShaderObject();
 		void BindingShaderObjectToBundle();
 
-		//バンドルリストに継承先特有のドローコールを積む作業を強制
-		virtual void RegisterToBundle() = 0;
+
 		//描画時呼び出し関数の作成を強制
 		virtual void Draw() = 0;
 

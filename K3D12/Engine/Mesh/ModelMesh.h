@@ -29,17 +29,11 @@ namespace K3D12 {
 
 	protected:
 
-		virtual void BindVertexBufferToBundle() = 0;
+		virtual void BindVertexBufferToBundle();
 
-		virtual void BindIndexBufferToBundle() = 0;
+		virtual void BindIndexBufferToBundle();
 		//バンドルリストに継承先でドローコールバッチ化作業を強制
 		virtual void RegisterToBundle()override = 0;
-
-		virtual void InitializeDefaultVBO(std::vector<Vertex3D>& defaultVertexData);
-
-		virtual void InitializeCustomVBO(unsigned int size, unsigned int stride, void* customVertexDataSrc);
-
-		virtual void InitializeDefaultIBO(std::vector<unsigned int>& defaultVertexData);
 
 	public:
 
@@ -48,29 +42,15 @@ namespace K3D12 {
 
 		MeshHeap& GetMeshHeap();
 
+		MeshBuffer& GetMeshBuffer();
+
 		void BindDescriptorHeaps(std::weak_ptr<K3D12::GraphicsCommandList> list);
 
-		void BindDescriptorHeaps(K3D12::GraphicsCommandList& list);
-
-		void SetTransformDescStartIndex(unsigned int startIndex = 0);
-
-		void SetTextureDescStartIndex(unsigned int startIndex = 1);
-
-		void SetMaterialDescStartIndex(unsigned int startIndex = 2);
-
-		unsigned int GetTransformDescStartIndex();
-
-		unsigned int GetTextureDescStartIndex();
-
-		unsigned int GetMaterialDescStartIndex();
-
-		ConstantBuffer& GetMaterialBufffer();
-
-		std::vector<std::weak_ptr<K3D12::ShaderResource>>& GetTexturesRef();
-
-		MeshHeap& AddTextureRef(std::weak_ptr<K3D12::ShaderResource> textureRef);
+		void BindDescriptorHeaps(K3D12::GraphicsCommandList & list);
 
 		void DiscardMeshHeap();
+
+		void DiscardMeshBuffer();
 
 		ModelMesh();
 		virtual ~ModelMesh();

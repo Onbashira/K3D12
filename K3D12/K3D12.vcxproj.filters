@@ -408,9 +408,6 @@
     <ClCompile Include="Engine\Model\ModelConverter.cpp">
       <Filter>Engine\Model\ModelUtil</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Model\ModelObject.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Model\ModelPool.cpp">
       <Filter>Engine\Model\ModelUtil</Filter>
     </ClCompile>
@@ -433,6 +430,15 @@
       <Filter>Engine\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Mesh\MeshBuffer.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\ModelObject.cpp">
+      <Filter>Engine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Mesh\SkinedMeshComponent.cpp">
+      <Filter>Engine\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Mesh\StaticMeshComponent.cpp">
       <Filter>Engine\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
@@ -698,9 +704,6 @@
     <ClInclude Include="Engine\Rendering\UIRenderer.h">
       <Filter>Engine\Rendering\UIRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Model\ModelObject.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Mesh\ModelMesh.h">
       <Filter>Engine\Mesh</Filter>
     </ClInclude>
@@ -711,6 +714,15 @@
       <Filter>Engine\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Mesh\MeshBuffer.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\ModelObject.h">
+      <Filter>Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Mesh\SkinedMeshComponent.h">
+      <Filter>Engine\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Mesh\StaticMeshComponent.h">
       <Filter>Engine\Mesh</Filter>
     </ClInclude>
   </ItemGroup>

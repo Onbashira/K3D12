@@ -6,6 +6,7 @@
 namespace K3D12 {
 	class ShaderResource;
 	class GraphicsCommandList;
+
 	//Meshをレンダリングするためのクラス。主にシェーダーに投げるためのヒープを管理する
 	class MeshHeap
 	{
