@@ -3,14 +3,6 @@
 #include "../Resource/ShaderResource.h"
 
 
-
-
-K3D12::TextureManager::~TextureManager()
-{
-	Discard();
-}
-
-
 K3D12::TextureManager::TextureManager()
 {
 	//ヌルテクスチャの作成
@@ -45,6 +37,13 @@ K3D12::TextureManager::TextureManager()
 	resource.reset();
 
 }
+
+
+K3D12::TextureManager::~TextureManager()
+{
+	Discard();
+}
+
 
 std::weak_ptr<K3D12::ShaderResource> K3D12::TextureManager::GetSpriteShaderResource(std::string name)
 {

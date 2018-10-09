@@ -10,8 +10,7 @@
 #include "../../Util/Utility.h"
 #include "../../Util/Math.h"
 #include "../../CommandContext/CommandListLibrary.h"
-#include "../../PipelineState/PipelineStateObject.h"
-#include "../../Signature/RootSignature.h"
+
 
 
 K3D12::Sprite::Sprite() : _height(0), _width(0)
@@ -26,12 +25,15 @@ K3D12::Sprite::~Sprite()
 
 void K3D12::Sprite::Draw()
 {
-	this->_commandList.lock()->GetCommandList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	this->_commandList.lock()->GetCommandList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+
 	this->BindingShaderObject();
 
-	this->_commandList.lock()->GetCommandList()->SetGraphicsRootConstantBufferView(0, GetCamera().GetCameraBuffer().GetResource()->GetGPUVirtualAddress());
-	ID3D12DescriptorHeap* heap[] = { _heap->GetPtr() };
-	this->_commandList.lock()->GetCommandList()->SetDescriptorHeaps(1, heap);
+	this->_commandList.lock()->GetCommandList()->SetGraphicsRootConstantBufferView(0, K3D12::GetCamera().GetCameraBuffer().GetResource()->GetGPUVirtualAddress());
+	//ID3D12DescriptorHeap* heap[] = { GetMeshHeap().GetHeap().GetPtr() };
+	//this->_commandList.lock()->GetCommandList()->SetDescriptorHeaps(1, heap);
+	BindDescriptorHeaps(_commandList);
 	this->_commandList.lock()->GetCommandList()->ExecuteBundle(_bundleList.GetCommandList().Get());
 }
 
@@ -145,51 +147,55 @@ void K3D12::Sprite::DrawString(std::weak_ptr<FontData> font, std::string str)
 
 void K3D12::Sprite::Initializer()
 {
-	this->_transformStartPoint = 0;
-	this->_materialStartPoint = _transformStartPoint + 1;
-	this->_textureStartPoint = _materialStartPoint + 1;
+	this->GetMeshHeap().SetTransformDescStartIndex(0);
+	this->GetMeshHeap().SetMaterialDescStartIndex();
+	this->GetMeshHeap().SetTextureDescStartIndex();
 
 	unsigned int sufaceCount = 1;
 	unsigned int planeVertex = 4;
-	Vertex2D plane[4];
+	Vertex3D plane[4];
 
 	for (unsigned int i = 0; i < planeVertex; ++i) {
-		plane[i].pos = Vector2((2.0f*static_cast<float>((i) % 2) - 1.0f), -(2.0f * static_cast<float>((i) % 4 / 2) - 1.0f));
+		plane[i].pos = Vector3((2.0f*static_cast<float>((i) % 2) - 1.0f), 0.0f, -(2.0f * static_cast<float>((i) % 4 / 2) - 1.0f));
+		plane[i].normal = Vector3::back;
 		plane[i].texCoord = { static_cast<float>(i % 2), static_cast<float>(i / 2) };
-		_vertexes.push_back(plane[i]);
+		this->_vertexes.push_back(plane[i]);
 	}
 	unsigned int planeList[] = { 0,1,2,1,3,2 };
 	for (unsigned int listIndex = 0; listIndex < sufaceCount; ++listIndex) {
-		_list.push_back(planeList[listIndex]);
+		this->_indexList.push_back(planeList[listIndex]);
 	}
 
 	// Resource Creation
 	{
-		_indexBuffer->Create(_list.size() * sizeof(unsigned int), sizeof(unsigned int), &this->_list[0]);
-		_vertexBuffer->Create(_vertexes.size() * sizeof(Vertex2D), sizeof(Vertex2D), &this->_vertexes[0]);
-		_indexBuffer->SetName("SpriteVertexBuffer");
-		_vertexBuffer->SetName("SpriteIndexBuffer");
+		this->GetMeshBuffer().GetIBO().Create(_indexList.size() * sizeof(unsigned int), sizeof(unsigned int), &this->_indexList[0]);
+		this->GetMeshBuffer().GetIBO().SetName("SpriteIndexBuffer");
 
+		this->GetMeshBuffer().GetVBO().Create(_vertexes.size() * sizeof(Vertex3D), sizeof(Vertex3D), &this->_vertexes[0]);
+		this->GetMeshBuffer().GetVBO().SetName("SpriteVertexBuffer;");
 
-		InitalizeTransformBuffer(Util::Alignment256Bytes(sizeof(Matrix)));
-		_materialBuffer.Create(Util::Alignment256Bytes(sizeof(float)));
-		_materialBuffer.SetName("SpriteInfomationBuffer");
+		InitalizeTransformBuffer(Util::Alignment256Bytes(sizeof(Transform)));
+		this->GetMeshHeap().GetMaterialBufffer().Create(Util::Alignment256Bytes(sizeof(RendererMaterial)));
+		this->GetMeshHeap().GetMaterialBufffer().SetName("SpriteMaterialBuffer");
 	}
 
 	//MaterialFactor Update
-	this->_info.alpha = 1.0f;
-	this->_info.color = Vector3::zero;
-	_materialBuffer.Update(&_info, sizeof(SpriteInfo), 0);
-
+	{
+		this->_info.alpha = 1.0f;
+		this->_info.color = Vector3::zero;
+		this->_info.centerOffset = Vector2(0.0f, 0.0f);
+		this->GetMeshHeap().GetMaterialBufffer().Update(&_info, sizeof(SpriteInfo), 0);
+	}
 	//TransformUpdate
-	SetScale(Vector2(1.0f, 1.0f));
-	Translate(Vector2(0.0f, 0.0f));
-	SetRotation(Quaternion::CreateFromEulerAngles(Vector3::zero));
-	GameObject::UpdateTransformBuffer();
-
+	{
+		SetScale(Vector2(1.0f, 1.0f));
+		Translate(Vector2(0.0f, 0.0f));
+		SetRotation(Quaternion::CreateFromEulerAngles(Vector3::zero));
+		GameObject::UpdateTransformBuffer();
+	}
 	//HeapCreation
-	_heap->Create(D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 3);
-
+	GetMeshHeap().GetHeap().Create(D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 3);
+	GetMeshHeap().GetHeap().SetName("SpriteHeap");
 	//ViewCreation
 	{
 		{
@@ -197,78 +203,102 @@ void K3D12::Sprite::Initializer()
 			view.BufferLocation = _transformBuffer.GetResource()->GetGPUVirtualAddress();
 			view.SizeInBytes = static_cast<unsigned int>(Util::Alignment256Bytes(sizeof(Transform)));
 
-			_transformBuffer.CreateView(view, _heap->GetCPUHandle(_transformStartPoint));
+			_transformBuffer.CreateView(view, GetMeshHeap().GetHeap().GetCPUHandle(GetMeshHeap().GetTransformDescStartIndex()));
 		}
 
 		{
 			D3D12_CONSTANT_BUFFER_VIEW_DESC view{};
-			view.BufferLocation = _materialBuffer.GetResource()->GetGPUVirtualAddress();
-			view.SizeInBytes = static_cast<unsigned int>(Util::Alignment256Bytes(sizeof(SpriteInfo)));
-			_materialBuffer.CreateView(view, _heap->GetCPUHandle(_materialStartPoint));
+			view.BufferLocation = this->GetMeshHeap().GetMaterialBufffer().GetResource()->GetGPUVirtualAddress();
+			view.SizeInBytes = static_cast<unsigned int>(Util::Alignment256Bytes(sizeof(RendererMaterial)));
+
+			this->GetMeshHeap().GetMaterialBufffer().CreateView(view, GetMeshHeap().GetHeap().GetCPUHandle(GetMeshHeap().GetMaterialDescStartIndex()));
 		}
 
 		{
 			D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 			// 寿命切れリンク切れ判定
-			if (_shaderResource.expired()) {
-				//もし寿命切れなら
-				_shaderResource = TextureManager::GetInstance().GetNullTextureShaderResource();
-			}
 
-			srvDesc.Format = _shaderResource.lock()->GetResourceDesc()->Format;
+			this->GetMeshHeap().AddTextureRef(TextureManager::GetInstance().GetNullTextureShaderResource().lock());
+			srvDesc.Format = this->GetMeshHeap().GetTexturesRef()[0].lock()->GetResourceDesc()->Format;
 			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 			srvDesc.Texture2D.MipLevels = 1;
 			srvDesc.Texture2D.MostDetailedMip = 0;
 			srvDesc.Texture2D.PlaneSlice = 0;
 			srvDesc.Texture2D.ResourceMinLODClamp = 0.0F;
 			srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+			this->GetMeshHeap().GetTexturesRef()[0].lock()->CreateView(srvDesc, GetMeshHeap().GetHeap().GetCPUHandle(GetMeshHeap().GetTextureDescStartIndex()));
 
-			_shaderResource.lock()->CreateView(srvDesc, _heap->GetCPUHandle(_textureStartPoint));
+			_width = static_cast<unsigned int>(this->GetMeshHeap().GetTexturteRef(0).lock()->GetResourceDesc()->Width);
+			_height = static_cast<unsigned int>(this->GetMeshHeap().GetTexturteRef(0).lock()->GetResourceDesc()->Height);
 
-			_width = static_cast<unsigned int>(_shaderResource.lock()->GetResourceDesc()->Width);
-			_height = static_cast<unsigned int>(_shaderResource.lock()->GetResourceDesc()->Height);
 		}
-	}
 
-	//SetBundleDrawCall
-	{
-		RegistBundle();
+		//SetBundleDrawCall
+		{
+			RegisterToBundle();
+		}
 	}
 }
 
-void K3D12::Sprite::RegistBundle()
+void K3D12::Sprite::RegisterToBundle()
 {
 
 	_bundleList.GetCommandList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	BindingShaderObjectToBundle();
-	BindingIndexBuffer(&_bundleList);
-	BindingVertexBuffer(&_bundleList);
-	BindingDescriptorHeaps(&_bundleList);
+	BindIndexBufferToBundle();
+	BindVertexBufferToBundle();
+	BindDescriptorHeaps(_bundleList);
 
-	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(1, _heap->GetGPUHandle(_transformStartPoint)); //自身の位置情報
-	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(2, _heap->GetGPUHandle(_materialStartPoint));	//自身のアルファ乗算値と切り取り矩形
-	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(3, _heap->GetGPUHandle(_textureStartPoint));	//テクスチャ情報
+	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(1, GetMeshHeap().GetHeap().GetGPUHandle(GetMeshHeap().GetTransformDescStartIndex()));
+	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(2, GetMeshHeap().GetHeap().GetGPUHandle(GetMeshHeap().GetMaterialDescStartIndex()));
+	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(3, GetMeshHeap().GetHeap().GetGPUHandle(GetMeshHeap().GetTextureDescStartIndex()));
 
-	_bundleList.GetCommandList()->DrawIndexedInstanced(static_cast<unsigned int>(this->_list.size()), 1, 0, 0, 0);
+	_bundleList.GetCommandList()->DrawIndexedInstanced(static_cast<unsigned int>(_indexList.size()), 1, 0, 0, 0);
 
 	_bundleList.GetCommandList()->Close();
 }
 
-void K3D12::Sprite::SetPipelineState(PipelineStateObject * pipelineState)
-{
-	_pipelineState.reset(pipelineState);
-}
-
-void K3D12::Sprite::SetRootSignature(RootSignature * rootSignature)
-{
-	_rootSignature.reset(rootSignature);
-}
-
 void K3D12::Sprite::AttachTexture(std::string path)
 {
-	TextureLoader::GetInstance().LoadSpriteTexture(path, _heap->GetCPUHandle(_textureStartPoint));	//ロード処理
-	_shaderResource = TextureManager::GetInstance().GetSpriteShaderResource(path).lock();			//テクスチャゲット
+	//_info.AttachTexture(pathName, _heap->GetCPUHandle(_textureStartPoint));
+	GetMeshHeap().GetHeap().Discard();
+	GetMeshHeap().GetHeap().Create(D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 3);
+	GetMeshHeap().GetHeap().SetName("CubeHeap");
+	//ViewCreation
+	{
+
+		{
+			D3D12_CONSTANT_BUFFER_VIEW_DESC view{};
+			view.BufferLocation = _transformBuffer.GetResource()->GetGPUVirtualAddress();
+			view.SizeInBytes = static_cast<unsigned int>(Util::Alignment256Bytes(sizeof(Transform)));
+
+			_transformBuffer.CreateView(view, GetMeshHeap().GetHeap().GetCPUHandle(GetMeshHeap().GetTransformDescStartIndex()));
+		}
+
+		{
+
+			D3D12_CONSTANT_BUFFER_VIEW_DESC view{};
+			view.BufferLocation = this->GetMeshHeap().GetMaterialBufffer().GetResource()->GetGPUVirtualAddress();
+			view.SizeInBytes = static_cast<unsigned int>(Util::Alignment256Bytes(sizeof(RendererMaterial)));
+
+			this->GetMeshHeap().GetMaterialBufffer().CreateView(view, GetMeshHeap().GetHeap().GetCPUHandle(GetMeshHeap().GetMaterialDescStartIndex()));
+		}
+
+		{
+			//();
+			this->GetMeshHeap().AddTextureRef(TextureManager::GetInstance().GetSpriteShaderResource(path).lock());
+			D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+			srvDesc.Format = this->GetMeshHeap().GetTexturesRef()[0].lock()->GetResourceDesc()->Format;
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+			srvDesc.Texture2D.MipLevels = 1;
+			srvDesc.Texture2D.MostDetailedMip = 0;
+			srvDesc.Texture2D.PlaneSlice = 0;
+			srvDesc.Texture2D.ResourceMinLODClamp = 0.0F;
+			srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+			this->GetMeshHeap().GetTexturesRef()[0].lock()->CreateView(srvDesc, GetMeshHeap().GetHeap().GetCPUHandle(GetMeshHeap().GetTextureDescStartIndex()));
+		}
+	}
 }
 
 void K3D12::Sprite::SetRect(float top, float left, float bottom, float right)
@@ -279,7 +309,7 @@ void K3D12::Sprite::SetRect(float top, float left, float bottom, float right)
 		_vertexes[i].texCoord = Vector2(pos[i % 2], pos[(i) % _vertexes.size() / 2 + 2]);
 	}
 
-	_vertexBuffer->Update(&_vertexes[0], sizeof(Vertex2D)*_vertexes.size(), 0);
+	this->GetMeshBuffer().GetIBO().Update(&_vertexes[0], sizeof(Vertex3D)*_vertexes.size(), 0);
 
 }
 
@@ -291,26 +321,26 @@ void K3D12::Sprite::SetRect(Vector2 topLeft, Vector2 bottomRight)
 		_vertexes[i].texCoord = Vector2(pos[i % 2], pos[(i) % _vertexes.size() / 2 + 2]);
 	}
 
-	_vertexBuffer->Update(&_vertexes[0], sizeof(Vertex2D)*_vertexes.size(), 0);
+	this->GetMeshBuffer().GetIBO().Update(&_vertexes[0], sizeof(Vertex3D)*_vertexes.size(), 0);
 }
 
 void K3D12::Sprite::SetColor(Vector3 color)
 {
 	this->_info.color = std::move(color);
-	_materialBuffer.Update(&_info, sizeof(SpriteInfo), 0);
+	this->GetMeshHeap().GetMaterialBufffer().Update(&_info, sizeof(SpriteInfo), 0);
 }
 
 void K3D12::Sprite::SetColor(float r, float g, float b)
 {
-	this->_info.color = std::move(Vector3::Saturate(Vector3(r,g,b)));
-	_materialBuffer.Update(&_info, sizeof(SpriteInfo), 0);
+	this->_info.color = std::move(Vector3::Saturate(Vector3(r, g, b)));
+	this->GetMeshHeap().GetMaterialBufffer().Update(&_info, sizeof(SpriteInfo), 0);
 }
 
 void K3D12::Sprite::SetTransparency(float alpha)
 {
 	this->_info.alpha = std::move(alpha);
 
-	_materialBuffer.Update(&_info, sizeof(SpriteInfo), 0);
+	this->GetMeshHeap().GetMaterialBufffer().Update(&_info, sizeof(SpriteInfo), 0);
 
 }
 

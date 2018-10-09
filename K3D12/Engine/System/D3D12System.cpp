@@ -44,7 +44,7 @@ using namespace K3D12;
 
 
 
-D3D12System::D3D12System() :
+D3D12System::D3D12System()  :
 	_windowHeight(1280), _windowWidth(720), _appClassName(L"D3D12MiniLib")
 {
 

@@ -36,10 +36,10 @@ namespace K3D12 {
 		void BindingDescriptorHeaps(K3D12::GraphicsCommandList& lsit);
 
 		void SetTransformDescStartIndex(unsigned int startIndex = 0);
+		
+		void SetMaterialDescStartIndex(unsigned int startIndex = 1);
 
-		void SetTextureDescStartIndex(unsigned int startIndex = 1);
-
-		void SetMaterialDescStartIndex(unsigned int startIndex = 2);
+		void SetTextureDescStartIndex(unsigned int startIndex = 2);
 
 		unsigned int GetTransformDescStartIndex();
 

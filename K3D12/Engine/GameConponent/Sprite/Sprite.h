@@ -22,16 +22,12 @@ namespace K3D12 {
 			float	alpha; //0.0~1.0
 			Vector3 color;
 			Vector2 centerOffset; //中心からのオフセットベクトル
-			SpriteInfo() : alpha(1.0f),color(Vector3::one), centerOffset() {};
+			SpriteInfo()  : alpha(1.0f),color(Vector3::one), centerOffset() {};
 			~SpriteInfo() {};
 		}_info;
 
 		unsigned int  _height;
 		unsigned int  _width;
-
-		std::vector<Vertex2D> _vertexes;
-		std::vector<unsigned int> _list;
-		std::weak_ptr<ShaderResource> _shaderResource;
 
 	protected:
 
@@ -43,12 +39,10 @@ namespace K3D12 {
 
 	public:
 
-		void Draw();
+		virtual void Draw()override;
 		void DrawString(std::weak_ptr<FontData> font, std::string str);
 		void Initializer();
-		void RegistBundle();
-		void SetPipelineState(PipelineStateObject* pipelineState);
-		void SetRootSignature(RootSignature* rootSignature);
+		void RegisterToBundle()override;
 		void AttachTexture(std::string path); //テクスチャアタッチ（すでにセットされたテクスチャの所有権を破棄して新しいテクスチャの所有権を得る）
 		void SetRect(float top, float left, float bottom, float right);
 		void SetRect(Vector2 topLeft, Vector2 bottomLeft);

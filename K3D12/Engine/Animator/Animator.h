@@ -22,7 +22,7 @@ namespace K3D12 {
 		void PlayAnimation(std::string animation);
 		void SetTransitionCondition(std::string from, std::string to, TransitionConditions newCondition);
 		void ResetSkelton();
-		Animator();
+		Animator() ;
 		~Animator();
 	};
 

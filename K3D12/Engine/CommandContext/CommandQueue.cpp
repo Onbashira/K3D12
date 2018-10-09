@@ -2,7 +2,7 @@
 #include "../System/D3D12System.h"
 
 
-K3D12::CommandQueue::CommandQueue() : _commandQueue()
+K3D12::CommandQueue::CommandQueue()  : _commandQueue()
 {
 }
 

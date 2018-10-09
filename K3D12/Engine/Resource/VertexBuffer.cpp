@@ -2,7 +2,7 @@
 #include "../System/D3D12System.h"
 
 
-K3D12::VertexBuffer::VertexBuffer() :
+K3D12::VertexBuffer::VertexBuffer()  :
 	_view({}), _size(0), _stride(0)
 {
 	_view.BufferLocation = 0;

@@ -94,8 +94,6 @@ namespace K3D12 {
 
 		void TermD3D12();
 
-		D3D12System();
-
 		friend  void ScreenFlip();
 
 		friend  void ClearScreen();
@@ -103,6 +101,8 @@ namespace K3D12 {
 		friend  void Drawing2DStep();
 
 		friend  void Drawing3DStep();
+
+		D3D12System();
 
 	public:
 		friend  void Create();

@@ -17,7 +17,6 @@ namespace K3D12 {
 	public:
 	private:
 		ShaderManager();
-
 	public:
 
 		static ShaderManager& GetInstance();

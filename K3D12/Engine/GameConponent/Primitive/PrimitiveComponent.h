@@ -19,7 +19,7 @@ namespace K3D12 {
 			SHADER_PARAMATER_INDEX
 		};
 		RendererMaterial _materialInfo;
-		PrimitiveComponent() {};
+		PrimitiveComponent()  {};
 		~PrimitiveComponent() {};
 	};
 }

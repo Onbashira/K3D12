@@ -441,11 +441,8 @@
     <ClCompile Include="Engine\Mesh\StaticMeshComponent.cpp">
       <Filter>Engine\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="PrimitiveObject.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveObject.cpp">
-      <Filter>Engine\GameComponent\PrimitiveObject</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -730,9 +727,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Mesh\StaticMeshComponent.h">
       <Filter>Engine\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="PrimitiveObject.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveObject.h">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>

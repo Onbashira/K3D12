@@ -47,7 +47,7 @@ void K3D12::FontData::Create(LOGFONT paramater, std::string fontName, std::strin
 	_fontName = fontName;
 	_fontPath = fontPath;
 
-	DESIGNVECTOR design;
+	DESIGNVECTOR design ={};
 
 	AddFontResourceEx(
 		Util::StringToWString(_fontPath).c_str(), //ttfファイルへのパス
@@ -60,7 +60,7 @@ void K3D12::FontData::Create(LOGFONT paramater, std::string fontName, std::strin
 void K3D12::FontData::Discard()
 {
 
-	DESIGNVECTOR design;
+	DESIGNVECTOR design = {};
 	RemoveFontResourceEx(
 		Util::StringToWString(_fontPath).c_str(), //ttfファイルへのパス
 		FR_PRIVATE,

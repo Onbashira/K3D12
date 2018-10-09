@@ -3,7 +3,7 @@
 #include "../CommandContext/CommandQueue.h"
 #include "../Util/Logger.h"
 
-K3D12::Fence::Fence():_fence(),_fenceValue(), _fenceEvent(nullptr)
+K3D12::Fence::Fence() :_fence(),_fenceValue(), _fenceEvent(nullptr)
 {
 }
 

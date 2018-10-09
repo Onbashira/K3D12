@@ -44,7 +44,7 @@ K3D12::Resource & K3D12::Resource::operator=(Resource && value)
 	value._currentResourceState = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ;
 	value._name = "MOVED RESOURCE";
 	value._pDst = nullptr;
-	value._resource.Detach;
+	value._resource.Detach();
 	value._shaderRegisterNumber = -1;
 	return *this;
 }

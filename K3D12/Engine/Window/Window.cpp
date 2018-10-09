@@ -5,7 +5,7 @@
 #include "Window.h"
 
 
-K3D12::Window::Window()
+K3D12::Window::Window() 
 {
 
 }

@@ -2,7 +2,7 @@
 #include "../System/D3D12System.h"
 
 
-K3D12::InputManager::InputManager() :
+K3D12::InputManager::InputManager()  :
 	_mousePos({})
 {
 	_forcusWindowHandle = K3D12::D3D12System::GetWindow().GetWindowHandle();

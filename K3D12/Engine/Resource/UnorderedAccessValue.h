@@ -70,7 +70,9 @@ namespace K3D12 {
 		void									Discard();
 		Microsoft::WRL::ComPtr<ID3D12Resource>	GetCounterResource()const;
 		DescriptorHeap*							GetHeap();
-		UnorderedAccessValue();
+		UnorderedAccessValue()
+			
+			;
 		virtual~UnorderedAccessValue();
 	};
 }

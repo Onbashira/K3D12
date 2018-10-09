@@ -6,7 +6,7 @@
 #include "../../Util/Utility.h"
 
 K3D12::Camera::Camera() :
-	GameObject(), _mode(CameraMode::Perspective)
+	_mode(CameraMode::Perspective) ,_aspectRatio(0.0f)
 {
 }
 

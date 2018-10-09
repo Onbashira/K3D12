@@ -2,7 +2,7 @@
 #include "RenderingPathBase.h"
 #include "../CommandContext/GraphicsContextLibrary.h"
 
-K3D12::RootRenderingPath::RootRenderingPath(CommandQueue & excutionQueueRef) : 
+K3D12::RootRenderingPath::RootRenderingPath(CommandQueue & excutionQueueRef) :
 	_excutionQueue(excutionQueueRef) , _isEnable(true)
 {
 }

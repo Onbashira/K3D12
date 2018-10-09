@@ -37,6 +37,7 @@ namespace K3D12 {
 		void  FlipScreen();
 		HRESULT Present(unsigned int sysncInterval = 1, unsigned int flags = 0);
 		void Discard();
+
 		SwapChain();
 		~SwapChain();
 	};

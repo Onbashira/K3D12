@@ -9,6 +9,8 @@ K3D12::ModelMesh::ModelMesh()
 
 K3D12::ModelMesh::~ModelMesh()
 {
+	DiscardMeshBuffer();
+	DiscardMeshHeap();
 }
 
 void K3D12::ModelMesh::BindVertexBufferToBundle()

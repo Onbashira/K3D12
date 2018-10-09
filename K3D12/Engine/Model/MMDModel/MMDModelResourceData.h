@@ -15,7 +15,7 @@ namespace K3D12 {
 	class ModelConverter;
 
 	enum class MMDWeightDeformType {
-		BDEF1,
+		BDEF1 = 0,
 		BDEF2,
 		BDEF4,
 		SDEF,
@@ -30,9 +30,16 @@ namespace K3D12 {
 		SDEF	sdef;
 		QDEF	qdef;
 
-		MMDWeightDeform() : sdef() {};
+		MMDWeightDeform()  : sdef() {};
 		MMDWeightDeform(const WeightDeform& other) {
 			this->sdef = other.sdef;
+		};
+		MMDWeightDeform(const MMDWeightDeform& other) {
+			this->sdef = other.sdef;
+		};
+		MMDWeightDeform& operator=(const WeightDeform& value) {
+			sdef = value.sdef;
+			return *this;
 		};
 		MMDWeightDeform& operator=(const MMDWeightDeform& value) {
 			sdef = value.sdef;
@@ -108,7 +115,7 @@ namespace K3D12 {
 		MMDWeightDeformType deformType;
 		//•ÏŒ`ŽQÆî•ñ
 		MMDWeightDeform deformation;
-		MMDVertex() : 
+		MMDVertex() :
 			pos(), normal(), texCoord(){};
 		~MMDVertex() {};
 		MMDVertex(const MMDVertex& other) {
@@ -185,7 +192,7 @@ namespace K3D12 {
 			this->childrenBone.clear();
 		};
 
-		MMDBoneNode() {
+		MMDBoneNode()  {
 		};
 		~MMDBoneNode() {
 		};
@@ -203,7 +210,7 @@ namespace K3D12 {
 		int loopCount;
 		float limitRadian;
 		std::vector<MMDIKLinkData> ikLinks;
-		MMDIKData() {};
+		MMDIKData()  {};
 		~MMDIKData() {
 			ikLinks.clear();
 		}
@@ -216,7 +223,7 @@ namespace K3D12 {
 		std::vector<Matrix>									bonesMatrix;
 		std::vector<MMDIKData>								modelIKdata;
 		MMDBoneNode											rootBone;
-		MMDBoneTree() {
+		MMDBoneTree()  {
 
 		};
 

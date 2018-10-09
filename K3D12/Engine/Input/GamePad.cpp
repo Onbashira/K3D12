@@ -206,7 +206,7 @@ std::string K3D12::GamePad::GetPadKeyName(GAME_PAD button)
 	default:
 		break;
 	}
-	return 0;
+	return " ";
 }
 
 void K3D12::GamePad::Update()

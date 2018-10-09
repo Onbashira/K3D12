@@ -46,31 +46,43 @@ namespace K3D12 {
 	public:
 
 	private:
+		
 		HRESULT CreateBuffer();
+		
 		HRESULT InitializeOrthogonal(const float width, const float height, const float nearClip, const float farClip, const Vector3& position, const Vector3& target, const Vector3& upWard);
+		
 		HRESULT initializePerspective(const float width, const float height, const float nearClip, const float farClip, const Vector3& position, const Vector3& target, const Vector3& upWard);
 	public:
 		CameraMode		GetMode();
 
 		const Matrix&	GetProjection();
+	
 		const Matrix	GetViewProjection();
+	
 		CameraInfo		GetCameraInfo();
+	
 		ConstantBuffer& GetCameraBuffer();
+	
 		DepthStencil&	GetDepthStencil();
 
 		float GetFov();
+		
 		float GetAspectratio;
+		
 		float GetNearClip();
+		
 		float GetFarClip();
 
 		void Update();
 
 		void DebugMove(InputManager& input);
+		
 		void DebugRotate(InputManager& input);
 
 		void ChangeCameraMode(CameraMode mode);
 
 		void InitializeCamera(CameraMode type, const float width, const float height, const float nearClip, const float farClip, const Vector3& position, const Vector3& target, const Vector3& upWard);
+		
 		void InitializeCameraFOV(const float fov, const float width, const float height, const float nearClip, const float farClip, const Vector3& position, const Vector3& target, const Vector3& upWard);
 		
 		HRESULT InitializeCameraDepthStencill(DXGI_FORMAT depthFormat, unsigned int windowWidth, unsigned int windowHeight);

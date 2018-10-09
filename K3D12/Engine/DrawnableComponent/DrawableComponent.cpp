@@ -3,7 +3,7 @@
 #include "../CommandContext/GraphicsCommandList.h"
 #include "../PipelineState/PipelineStateObject.h"
 
-K3D12::DrawableComponent::DrawableComponent() :
+K3D12::DrawableComponent::DrawableComponent()  :
 	_commandList()
 {
 	_bundleList.Create(0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_BUNDLE);

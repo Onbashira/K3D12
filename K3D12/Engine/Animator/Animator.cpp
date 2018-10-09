@@ -6,7 +6,7 @@
 #include "VMDLoader.h"
 #include "MotionManager.h"
 
-K3D12::Animator::Animator():_animationFrame(0)
+K3D12::Animator::Animator() :_animationFrame(0)
 {
 }
 

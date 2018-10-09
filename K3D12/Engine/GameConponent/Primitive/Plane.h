@@ -1,28 +1,23 @@
 #pragma once
 #include "../../Model/ModelObject.h"
-#include "PrimitiveComponent.h"
+#include "PrimitiveObject.h"
 
 namespace K3D12 {
-	class RootSignature;
-	class PipelineStateObject;
-
 	class Plane :
-		public ModelObject
+		public PrimitiveObject
 	{
 	private:
 	protected:
-		PrimitiveComponent _info;
 	public:
 	private:
 	protected:
+		void RegisterToBundle()override;
 	public:
 		 void Initializer();
-		 void RegisterToBundle()override;
 		 void Draw()override;
 		 void Update()override;
 		 void AttachTexture(std::string pathName);
 		 void SetUV(float compressionRatio);
-
 		Plane();
 		~Plane();
 	};

@@ -4,7 +4,7 @@
 #include "../Util/Utility.h"
 #include "../Util/Logger.h"
 
-K3D12::DescriptorHeap::DescriptorHeap() :
+K3D12::DescriptorHeap::DescriptorHeap() noexcept :
 	_heap(), _incrementSize(0), _gpuHandle(), _cpuHandle(), _heapName("UnNamed Heap ")
 {
 }
@@ -18,14 +18,14 @@ K3D12::DescriptorHeap::~DescriptorHeap()
 D3D12_CPU_DESCRIPTOR_HANDLE K3D12::DescriptorHeap::GetCPUHandle(UINT indexCount)const
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE handle = _heap->GetCPUDescriptorHandleForHeapStart();
-	handle.ptr += (_incrementSize)* indexCount;
+	handle.ptr += (_incrementSize* indexCount);
 	return handle;
 }
 
 D3D12_GPU_DESCRIPTOR_HANDLE K3D12::DescriptorHeap::GetGPUHandle(UINT indexCount)const
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = _heap->GetGPUDescriptorHandleForHeapStart();
-	handle.ptr += (_incrementSize)* indexCount;
+	handle.ptr += (_incrementSize* indexCount);
 	return handle;
 }
 

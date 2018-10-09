@@ -6,7 +6,7 @@
 #include "../Util/Logger.h"
 #include "RootSignature.h"
 
-K3D12::CommandSignature::CommandSignature() :
+K3D12::CommandSignature::CommandSignature()  :
 	_name("UnNamedCommandSignature")
 {
 }

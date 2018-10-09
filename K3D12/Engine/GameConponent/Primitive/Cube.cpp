@@ -5,10 +5,8 @@
 #include "../../System/D3D12System.h"
 #include "../../Util/Utility.h"
 #include "../RendererMaterial.h"
-#include "../../PipelineState/PipelineStateObject.h"
-#include "../../Signature/RootSignature.h"
 #include "PrimitiveComponent.h"
-
+#include "PrimitiveObject.h"
 #include "../../TextureComponent/TextureManager.h"
 
 constexpr float debugScale = 10.0f;
@@ -62,7 +60,7 @@ void K3D12::Cube::Initializer()
 			_vertexes.push_back(p);
 		}
 		for (unsigned int listIndex = 0; listIndex < sufaceCount; listIndex++) {
-			GetDefaultIndexListData().push_back(planeList[listIndex] + (4 * i));
+			_indexList.push_back(planeList[listIndex] + (4 * i));
 		}
 	}
 	//’ê–Êã–Ê
@@ -78,13 +76,13 @@ void K3D12::Cube::Initializer()
 
 		}
 		for (unsigned int listIndex = 0; listIndex < sufaceCount; listIndex++) {
-			GetDefaultIndexListData().push_back(planeList[listIndex] + (4 * i));
+			_indexList.push_back(planeList[listIndex] + (4 * i));
 		}
 	}
 
 	// Resource Creation
 	{
-		this->GetMeshBuffer().GetIBO().Create(GetDefaultIndexListData().size() * sizeof(unsigned int), sizeof(unsigned int), &this->GetDefaultIndexListData()[0]);
+		this->GetMeshBuffer().GetIBO().Create(_indexList.size() * sizeof(unsigned int), sizeof(unsigned int), &this->_indexList[0]);
 		this->GetMeshBuffer().GetIBO().SetName("CubeIndexBuffer");
 
 		this->GetMeshBuffer().GetVBO().Create(_vertexes.size() * sizeof(Vertex3D), sizeof(Vertex3D), &this->_vertexes[0]);
@@ -175,12 +173,13 @@ void K3D12::Cube::RegisterToBundle()
 	BindingShaderObjectToBundle();
 	BindIndexBufferToBundle();
 	BindVertexBufferToBundle();
+	BindDescriptorHeaps(_bundleList);
 
 	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(1, GetMeshHeap().GetHeap().GetGPUHandle(GetMeshHeap().GetTransformDescStartIndex()));
 	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(2, GetMeshHeap().GetHeap().GetGPUHandle(GetMeshHeap().GetMaterialDescStartIndex()));
 	_bundleList.GetCommandList()->SetGraphicsRootDescriptorTable(3, GetMeshHeap().GetHeap().GetGPUHandle(GetMeshHeap().GetTextureDescStartIndex()));
 
-	_bundleList.GetCommandList()->DrawIndexedInstanced(static_cast<unsigned int>(this->_info._list.size()), 1, 0, 0, 0);
+	_bundleList.GetCommandList()->DrawIndexedInstanced(static_cast<unsigned int>(_indexList.size()), 1, 0, 0, 0);
 
 	_bundleList.GetCommandList()->Close();
 }

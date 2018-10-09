@@ -32,7 +32,7 @@ namespace K3D12 {
 		std::map<std::string, std::shared_ptr<T>>& GetMap();
 
 
-		ManagerComponentBase() {};
+		ManagerComponentBase()  {};
 		//ManagerComponentBase(const ManagerComponentBase<T>& other) {};
 		//ManagerComponentBase(ManagerComponentBase<T>&& other) {};
 		//ManagerComponentBase<T>& (const ManagerComponentBase<T>& other) {

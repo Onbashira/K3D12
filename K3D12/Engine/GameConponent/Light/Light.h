@@ -55,8 +55,10 @@ namespace K3D12 {
 		void			 WriteToResourceIndex(Resource* resource, unsigned int index);
 		void			 WriteToResource256ByteAlignment(Resource* resource, unsigned int offset);
 
-		Light(LightInfo lightInfo);
 		Light();
+
+		Light(LightInfo lightInfo);
+
 		~Light();
 	};
 

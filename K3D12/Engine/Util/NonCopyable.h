@@ -13,7 +13,7 @@ namespace K3D12 {
 		void operator =(const NonCopyable& src) {};
 		NonCopyable(const NonCopyable& src) {};
 		void operator =(NonCopyable&& src) {};
-		NonCopyable(NonCopyable&& src) {};
+		NonCopyable(NonCopyable&& src)  {};
 	public:
 	};
 }

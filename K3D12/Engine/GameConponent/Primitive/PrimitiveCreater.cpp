@@ -23,8 +23,8 @@ K3D12::PrimitiveCreater::~PrimitiveCreater()
 K3D12::Cube * K3D12::PrimitiveCreater::CreateCube()
 {
 	auto ptr = new K3D12::Cube();
-	ptr->SetRootSignature(_rootSignature.lock().get());
-	ptr->SetPipelineState(_graphicsPipelineState.lock().get());
+	ptr->SetRootSignature(_rootSignature);
+	ptr->SetPipelineState(_graphicsPipelineState);
 	ptr->SetMasterCommandList(_primitiveDrawCommandList.lock());
 	ptr->Initializer();
 	return ptr;
@@ -33,8 +33,8 @@ K3D12::Cube * K3D12::PrimitiveCreater::CreateCube()
 K3D12::Plane * K3D12::PrimitiveCreater::CreatePlane()
 {
 	auto ptr = new K3D12::Plane();
-	ptr->SetRootSignature(_rootSignature.lock().get());
-	ptr->SetPipelineState(_graphicsPipelineState.lock().get());
+	ptr->SetRootSignature(_rootSignature);
+	ptr->SetPipelineState(_graphicsPipelineState);
 	ptr->SetMasterCommandList(_primitiveDrawCommandList.lock());
 
 	ptr->Initializer();

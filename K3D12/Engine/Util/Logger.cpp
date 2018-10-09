@@ -59,7 +59,7 @@ namespace K3D12{
 }
 
 
-K3D12::SystemLogger::SystemLogger() : _LogFilter(LogLevel::Details)
+K3D12::SystemLogger::SystemLogger(): _LogFilter(LogLevel::Details)
 {
 #ifdef _DEBUG
 	CreateDebugFile();

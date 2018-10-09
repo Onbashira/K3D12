@@ -3,7 +3,7 @@
 #include "../CommandContext/GraphicsCommandList.h"
 
 
-K3D12::MeshHeap::MeshHeap() :
+K3D12::MeshHeap::MeshHeap()  :
 	_heap(),
 	_textureStartPoint(0),
 	_materialStartPoint(0)
@@ -40,15 +40,15 @@ void K3D12::MeshHeap::SetTransformDescStartIndex(unsigned int startIndex)
 
 }
 
-void K3D12::MeshHeap::SetTextureDescStartIndex(unsigned int startIndex)
-{
-	this->_textureStartPoint = startIndex;
-
-}
-
 void K3D12::MeshHeap::SetMaterialDescStartIndex(unsigned int startIndex)
 {
 	this->_materialStartPoint = startIndex;
+
+}
+
+void K3D12::MeshHeap::SetTextureDescStartIndex(unsigned int startIndex)
+{
+	this->_textureStartPoint = startIndex;
 
 }
 

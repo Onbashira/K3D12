@@ -33,7 +33,7 @@ namespace K3D12 {
 
 	struct BDEF1 {
 		int boneIndex;
-		BDEF1() : boneIndex(0) {};
+		BDEF1()  : boneIndex(0) {};
 		~BDEF1() {};
 	};
 
@@ -95,7 +95,7 @@ namespace K3D12 {
 		float boneWeight03;
 		float boneWeight04;
 
-		QDEF() : boneIndex01(0), boneIndex02(0), boneIndex03(0), boneIndex04(0),
+		QDEF()  : boneIndex01(0), boneIndex02(0), boneIndex03(0), boneIndex04(0),
 			boneWeight01(0.0f), boneWeight02(0.0f), boneWeight03(0.0f), boneWeight04(0.0f) {
 
 		}
@@ -112,7 +112,7 @@ namespace K3D12 {
 		SDEF	sdef;
 		QDEF	qdef;
 
-		WeightDeform() : sdef() {};
+		WeightDeform()  : sdef() {};
 		WeightDeform(const WeightDeform& other) {
 			this->sdef = other.sdef;
 		};
@@ -131,9 +131,9 @@ namespace K3D12 {
 		unsigned char weightDeformType;
 		WeightDeform weightDeform;
 		float edgeScale;
-		PMXVertex() {};
-		~PMXVertex() {};
+		PMXVertex() {};	
 		PMXVertex(const PMXVertex &) {};
+		~PMXVertex() {};
 	};
 
 
@@ -148,11 +148,12 @@ namespace K3D12 {
 	union ToonValue {
 		unsigned char	unionToon;
 		int		individualToon;
-		ToonValue() : individualToon(0) {};
-		~ToonValue() {};
+		ToonValue()  : individualToon(0) {};
 		ToonValue(const ToonValue& other) {
 			individualToon = other.individualToon;
 		};
+		~ToonValue() {};
+
 	};
 
 	struct PMXMaterial {
@@ -206,7 +207,7 @@ namespace K3D12 {
 		int boneIndex;
 		unsigned char hasLimit;
 		IKAngleLimit limits;
-		IKLinks() : boneIndex(0), hasLimit(0), limits() {};
+		IKLinks()  : boneIndex(0), hasLimit(0), limits() {};
 		~IKLinks() {};
 	};
 
@@ -328,7 +329,7 @@ namespace K3D12 {
 		BoneMorph boneMorph;
 		MaterialMorph materialMorph;
 		GroupMorph groupMorph;
-		MorphData() {};
+		MorphData()  {};
 		~MorphData() {}
 		MorphData(const MorphData &) {};;
 	};

@@ -6,7 +6,7 @@
 #include "../Util/Logger.h"
 
 
-K3D12::RootSignature::RootSignature() :
+K3D12::RootSignature::RootSignature()  :
 	_name("UnNamed RootSignature")
 {
 }
