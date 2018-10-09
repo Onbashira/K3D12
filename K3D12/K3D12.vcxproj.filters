@@ -442,7 +442,7 @@
       <Filter>Engine\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveObject.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

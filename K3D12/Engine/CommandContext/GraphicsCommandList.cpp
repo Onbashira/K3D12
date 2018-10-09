@@ -173,8 +173,8 @@ void K3D12::GraphicsCommandList::Discard()
 		}
 		this->_commandAllocator.Reset();
 		this->_commandList.Reset();
-		SystemLogger::GetInstance().Log(LogLevel::Details, _commandListName + " is Reset\n");
-		SystemLogger::GetInstance().Log(LogLevel::Details, _commandAllocatorName + " is Reset\n");
+		DEBUG_LOG(std::string(_commandListName + " is Reset"));
+		DEBUG_LOG(std::string(_commandAllocatorName + " is Reset"));
 		_bindedDepthStencil = nullptr;
 		_bindedRenderTargets.clear();
 	}

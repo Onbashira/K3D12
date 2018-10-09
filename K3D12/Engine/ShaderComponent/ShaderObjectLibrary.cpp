@@ -32,8 +32,7 @@ HRESULT K3D12::ShaderObjectLibrary::CreatePSO(std::string psoName, D3D12_GRAPHIC
 		}
 		if (SUCCEEDED(hr)) {
 
-			SystemLogger::GetInstance().Log(LogLevel::Info, "PSO‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + psoName + "\n");
-			DEBUG_LOG(std::string("PSO‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + psoName + "\n"));
+			DEBUG_LOG(std::string("PSO‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + psoName ));
 
 			return hr;
 		}
@@ -56,7 +55,7 @@ HRESULT K3D12::ShaderObjectLibrary::CreatePSO(std::string psoName, D3D12_COMPUTE
 			hr = this->_psolibrary[psoName]->Create(psoName, cps, nullptr);
 		}
 		if (SUCCEEDED(hr)) {
-			SystemLogger::GetInstance().Log(LogLevel::Info, "PSO‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + psoName + "\n");
+			DEBUG_LOG(std::string("PSO‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + psoName));
 			return hr;
 		}
 		return hr;
@@ -72,7 +71,8 @@ HRESULT K3D12::ShaderObjectLibrary::CreateRootSignature(std::string rsName, ID3D
 		this->_rootSignaturelibrary[rsName]->SetName(rsName);
 
 		if (SUCCEEDED(hr)) {
-			SystemLogger::GetInstance().Log(LogLevel::Info, "RootSignature‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + rsName + "\n");
+			DEBUG_LOG(std::string("RootSignature‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + rsName));
+
 			return hr;
 		}
 		return hr;
@@ -84,7 +84,8 @@ void K3D12::ShaderObjectLibrary::SetPSO(std::string psoName, std::shared_ptr<K3D
 {
 	if (_psolibrary.find(psoName) == _psolibrary.end()) {
 		this->_psolibrary[psoName] = pso;
-		SystemLogger::GetInstance().Log(LogLevel::Info, "PSO‚ğ“o˜^‚µ‚Ü‚µ‚½ : " + psoName + "\n");
+		DEBUG_LOG(std::string("PSO‚ğ“o˜^‚µ‚Ü‚µ‚½ : " + psoName));
+
 	}
 }
 
@@ -92,7 +93,7 @@ void K3D12::ShaderObjectLibrary::SetRootSignature(std::string rsName, std::share
 {
 	if (_rootSignaturelibrary.find(rsName) == _rootSignaturelibrary.end()) {
 		this->_rootSignaturelibrary[rsName] = rootSignature;
-		SystemLogger::GetInstance().Log(LogLevel::Info, "RootSignature‚ğ“o˜^‚µ‚Ü‚µ‚½ : " + rsName + "\n");
+		DEBUG_LOG(std::string("RootSignature‚ğ“o˜^‚µ‚Ü‚µ‚½ : " + rsName ));
 	}
 }
 
@@ -101,7 +102,8 @@ std::weak_ptr<K3D12::PipelineStateObject> K3D12::ShaderObjectLibrary::GetPSO(std
 	if (_psolibrary.find(psoName) != _psolibrary.end()) {
 		return  this->_psolibrary[psoName];
 	}
-	SystemLogger::GetInstance().Log(LogLevel::Error, "•s³ŒŸõƒ[ƒh‚Å‚· : " + psoName + "\n");
+	ERROR_LOG(std::string("•s³ŒŸõƒ[ƒh‚Å‚· : " + psoName ));
+
 	return std::weak_ptr<K3D12::PipelineStateObject>();
 }
 
@@ -110,7 +112,8 @@ std::weak_ptr<K3D12::RootSignature> K3D12::ShaderObjectLibrary::GetRootSignature
 	if (_rootSignaturelibrary.find(rsName) != _rootSignaturelibrary.end()) {
 		return  this->_rootSignaturelibrary[rsName];
 	}
-	SystemLogger::GetInstance().Log(LogLevel::Error, "•s³ŒŸõƒ[ƒh‚Å‚· : " + rsName + "\n");
+	ERROR_LOG(std::string("•s³ŒŸõƒ[ƒh‚Å‚· : " + rsName));
+
 	return std::weak_ptr<K3D12::RootSignature>();
 }
 
@@ -118,7 +121,7 @@ void K3D12::ShaderObjectLibrary::ErasePSO(std::string psoName)
 {
 	if (_psolibrary.find(psoName) != _psolibrary.end()) {
 		this->_psolibrary.erase(psoName);
-		SystemLogger::GetInstance().Log(LogLevel::Info, "PSO‚ğíœ‚µ‚Ü‚µ‚½ : " + psoName + "\n");
+		DEBUG_LOG(std::string("PSO‚ğíœ‚µ‚Ü‚µ‚½ : " + psoName));
 
 	}
 }
@@ -127,7 +130,7 @@ void K3D12::ShaderObjectLibrary::EraseRootSignature(std::string rsName)
 {
 	if (_rootSignaturelibrary.find(rsName) != _rootSignaturelibrary.end()) {
 		this->_rootSignaturelibrary.erase(rsName);
-		SystemLogger::GetInstance().Log(LogLevel::Info, "RootSignature‚ğíœ‚µ‚Ü‚µ‚½ : " + rsName + "\n");
+		DEBUG_LOG(std::string("RootSignature‚ğíœ‚µ‚Ü‚µ‚½ : " + rsName));
 
 	}
 }

@@ -33,13 +33,11 @@ namespace K3D12{
 			break;
 
 		case LogLevel::Info:
-			attribute = FOREGROUND_GREEN | FOREGROUND_INTENSITY;
-			break;
-
-		case LogLevel::Debug:
 			attribute = FOREGROUND_BLUE | FOREGROUND_INTENSITY;
 			break;
-
+		case LogLevel::Debug:
+			attribute = FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+			break;
 		case LogLevel::Warning:
 			attribute = FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY;
 			break;
@@ -65,9 +63,6 @@ K3D12::SystemLogger::SystemLogger(): _LogFilter(LogLevel::Details)
 	CreateDebugFile();
 
 #endif // _DEBUG
-
-	CreateDebugFile();
-
 }
 
 
@@ -121,11 +116,12 @@ void K3D12::SystemLogger::Log(LogLevel level , HRESULT hr)
 	{
 		_com_error err(hr);
 		LPCTSTR errMsg = err.ErrorMessage();
-		ConsoleScreen screen;
-		screen.BindColor(level);
+		//ConsoleScreen screen;
+		//screen.BindColor(level);
 		OutputDebugStringW(errMsg);
-		screen.UnBindColor();
-		_debugFile << errMsg;
+		Log(level, reinterpret_cast<const char*>(errMsg));
+		//screen.UnBindColor();
+		//_debugFile << errMsg;
 	}
 #endif
 }
@@ -158,6 +154,7 @@ void K3D12::SystemLogger::Log(LogLevel level, const char * format, ...)
 			printf_s("%s", msg);
 
 			OutputDebugStringA(msg);
+			_debugFile << msg;
 		}
 		screen.UnBindColor();
 	}

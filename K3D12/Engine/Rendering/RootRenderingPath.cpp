@@ -20,12 +20,13 @@ K3D12::RootRenderingPath::RootRenderingPath(RootRenderingPath && other) :
 
 K3D12::RootRenderingPath & K3D12::RootRenderingPath::operator=(const RootRenderingPath & other)
 {
-	// TODO: return ステートメントをここに挿入します
+	return *this;
+
 }
 
 K3D12::RootRenderingPath & K3D12::RootRenderingPath::operator=(RootRenderingPath && other)
 {
-	// TODO: return ステートメントをここに挿入します
+	return *this;
 }
 
 

@@ -658,7 +658,6 @@ void K3D12::GBufferSprite::StartLightingPass(K3D12::UnorderedAccessValue* lights
 
 	//6次元構造を作りそこにスレッドを立てる 16Pix*16Pixで
 	_list->GetCommandList()->Dispatch(80, 45, 1);
-	//SystemLogger::GetInstance().Log(LogLevel::Warning, "DisPatch\n");
 
 }
 

@@ -4,7 +4,7 @@
 #include "../Util/Utility.h"
 #include "../Util/Logger.h"
 
-K3D12::DescriptorHeap::DescriptorHeap() noexcept :
+K3D12::DescriptorHeap::DescriptorHeap():
 	_heap(), _incrementSize(0), _gpuHandle(), _cpuHandle(), _heapName("UnNamed Heap ")
 {
 }
@@ -127,6 +127,7 @@ void K3D12::DescriptorHeap::Discard()
 		_heap.Reset();
 
 		_incrementSize = 0;
-		SystemLogger::GetInstance().Log(LogLevel::Details, _heapName + "is Released\n");
+		DEBUG_LOG(std::string(_heapName + " is Reset"));
+
 	}
 }

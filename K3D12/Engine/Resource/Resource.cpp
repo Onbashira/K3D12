@@ -105,7 +105,7 @@ void K3D12::Resource::Discard()
 			Unmap(0, nullptr);
 		}
 		_resource.Reset();
-		SystemLogger::GetInstance().Log(LogLevel::Debug, _name + " is  Reset \n");
+		DEBUG_LOG(std::string(_name + " is  Reset"));
 	}
 }
 

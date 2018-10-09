@@ -44,7 +44,7 @@ using namespace K3D12;
 
 
 
-D3D12System::D3D12System()  :
+D3D12System::D3D12System() :
 	_windowHeight(1280), _windowWidth(720), _appClassName(L"D3D12MiniLib")
 {
 
@@ -63,17 +63,17 @@ D3D12System & D3D12System::GetInstance()
 }
 
 
-void D3D12System::InitializeCamera(CameraMode mode, const Vector3 & pos, const Vector3 & target, const Vector3 & up, float nearClip, float farClip, float fov)
+void D3D12System::InitializeCamera(CameraMode mode, const Vector3 & pos, const Vector3 & target, const Vector3 & up, float nearClip, float farClip)
 {
 
 	switch (mode)
 	{
 	case CameraMode::Perspective:
-		GetInstance()._mainCamera.InitializeCamera(CameraMode::Perspective, static_cast<float>(GetInstance()._windowWidth), static_cast<float>(GetInstance()._windowHeight), 1.0f, 500.0f, pos, target, up);
+		GetInstance()._mainCamera.InitializeCamera(CameraMode::Perspective, static_cast<float>(GetInstance()._windowWidth), static_cast<float>(GetInstance()._windowHeight), nearClip, farClip, pos, target, up);
 
 		break;
 	case CameraMode::Orthogonal:
-		GetInstance()._mainCamera.InitializeCamera(CameraMode::Orthogonal, static_cast<float>(GetInstance()._windowWidth), static_cast<float>(GetInstance()._windowHeight), 1.0f, 500.0f, pos, target, up);
+		GetInstance()._mainCamera.InitializeCamera(CameraMode::Orthogonal, static_cast<float>(GetInstance()._windowWidth), static_cast<float>(GetInstance()._windowHeight), nearClip, farClip, pos, target, up);
 
 		break;
 	default:
@@ -237,6 +237,7 @@ HRESULT D3D12System::InitializeSpritePSO()
 	//頂点入力レイアウトの定義
 	D3D12_INPUT_ELEMENT_DESC inputElementDesc[] = {
 		{ "POSITION",  0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "NORMAL"	,  0, DXGI_FORMAT_R32G32B32_FLOAT,	  0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD",  0, DXGI_FORMAT_R32G32_FLOAT,		  0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
@@ -334,9 +335,10 @@ HRESULT D3D12System::InitializePrimitivePSO()
 	HLSLIncluder includes("./Engine/Shader/");
 	HRESULT hr;
 	if (FAILED(hr = D3DCompileFromFile(L"./Engine/Shader/PrimitiveShader.hlsl", nullptr, &includes, "VsMain", "vs_5_0", compileFlag, 0, &vs, &error))) {
-		SystemLogger::GetInstance().Log(LogLevel::Warning, hr);
 		OutputDebugStringA((char*)error->GetBufferPointer());
-		return E_FAIL;
+		HRESULT_LOG(hr);
+
+		return hr;
 	}
 	if (error != nullptr) {
 		OutputDebugStringA((char*)error->GetBufferPointer());
@@ -344,7 +346,8 @@ HRESULT D3D12System::InitializePrimitivePSO()
 
 	if (FAILED(D3DCompileFromFile(L"./Engine/Shader/PrimitiveShader.hlsl", nullptr, &includes, "PsMain", "ps_5_0", compileFlag, 0, &ps, &error))) {
 		OutputDebugStringA((char*)error->GetBufferPointer());
-		return E_FAIL;
+		HRESULT_LOG(hr);
+		return hr;
 	}
 	if (error != nullptr) {
 		OutputDebugStringA((char*)error->GetBufferPointer());
@@ -798,6 +801,7 @@ HRESULT D3D12System::InitializeD3D12(unsigned int bufferCount, bool useWarpDevic
 void D3D12System::TermWindow()
 {
 	_window.Discard();
+	DEBUG_LOG(std::string("Terminate Window"));
 }
 
 void D3D12System::TermD3D12()
@@ -822,13 +826,16 @@ void D3D12System::TermD3D12()
 		debugInterface->Release();
 	}
 
+	DEBUG_LOG(std::string("Terminate D3D12"));
 
 }
 
 void K3D12::Create()
 {
 	if (D3D12System::GetInstance()._instance == nullptr) {
+
 		D3D12System::GetInstance()._instance = new D3D12System();
+		DEBUG_LOG(std::string("Create K3DSystem"));
 	}
 	return;
 }
@@ -836,7 +843,9 @@ void K3D12::Create()
 void K3D12::Destroy()
 {
 	if (D3D12System::GetInstance()._instance != nullptr) {
+
 		delete D3D12System::GetInstance()._instance;
+		DEBUG_LOG(std::string("Delete K3DSystem"));
 	}
 	return;
 }
@@ -847,13 +856,13 @@ HRESULT K3D12::Initialize(UINT windowWidth, UINT windowHeight, UINT backBufferCo
 	K3D12::SetWindowSize(windowWidth, windowHeight);
 	auto hr = D3D12System::GetInstance().InitializeWindow();
 	CHECK_RESULT(hr);
-	DEBUG_LOG(std::string("ウインドウが正常に初期化されました\n"));
-	SystemLogger::GetInstance().Log(LogLevel::Debug, "ウインドウが正常に初期化されました\n");
+	DEBUG_LOG(std::string("ウインドウが正常に初期化されました"));
 	hr = D3D12System::GetInstance().InitializeD3D12(backBufferCount, useWarpDevice);
 	CHECK_RESULT(hr);
 	DEBUG_LOG(std::string("D3D12が正常に初期化されました\n"));
 	K3D12::D3D12System::InitializeController();
-	DEBUG_LOG(std::string("コントローラの最大接続数を４で初期化しました\n"));
+	DEBUG_LOG(std::string("コントローラの最大接続数を４で初期化しました"));
+	K3D12::D3D12System::GetInstance()._inputManager.SetFocusWindow(K3D12::D3D12System::GetInstance().GetWindow().GetWindowHandle());
 	return S_OK;
 }
 
@@ -862,12 +871,14 @@ HRESULT K3D12::Initialize(UINT backBufferCount, bool useWarpDevice)
 	SystemLogger::GetInstance().SetFilter(LogLevel::Details);
 	auto hr = D3D12System::GetInstance().InitializeWindow();
 	CHECK_RESULT(hr);
-	DEBUG_LOG(std::string("ウインドウが正常に初期化されました\n"));
+	DEBUG_LOG(std::string("ウインドウが正常に初期化されました"));
 	hr = D3D12System::GetInstance().InitializeD3D12(backBufferCount, useWarpDevice);
 	CHECK_RESULT(hr);
-	DEBUG_LOG(std::string("D3D12が正常に初期化されました\n"));
+	DEBUG_LOG(std::string("D3D12が正常に初期化されました"));
 	K3D12::D3D12System::InitializeController();
-	DEBUG_LOG(std::string("コントローラの最大接続数を４で初期化しました\n"));
+	DEBUG_LOG(std::string("コントローラの最大接続数を４で初期化しました"));
+	K3D12::D3D12System::GetInstance()._inputManager.SetFocusWindow(K3D12::D3D12System::GetInstance().GetWindow().GetWindowHandle());
+
 	return S_OK;
 }
 
@@ -904,9 +915,7 @@ void K3D12::ClearScreen()
 	ref.GetCommandList("CommandList")->GetCommandList()->RSSetScissorRects(1, &ref._window.GetScissorRect());
 	ref.GetCommandList("CommandList")->GetCommandList()->RSSetViewports(1, &ref._window.GetViewPort());
 	ref._mainCamera.GetDepthStencil().ClearDepthStencil(ref.GetCommandList("CommandList"));
-	D3D12System::GetInstance()._geometryBufferSprite.TransitionGeometryPassStart();
-	//ドローコールが呼ばれる可能性のある不透明レンダリングをサポートするコマンドリストに対してディファードレンダリングで用いるテクスチャをバインドする。
-	ref.BindingGBufferRenderTarget();
+
 }
 
 Camera & K3D12::GetCamera()
@@ -962,11 +971,6 @@ int K3D12::MessageLoop()
 			return 0;
 		}
 	}
-}
-
-HRESULT K3D12::LoadTexture(std::string path)
-{
-
 }
 
 std::weak_ptr<MMDModel> K3D12::LoadModel(std::string modelPath)

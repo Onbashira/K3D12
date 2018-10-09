@@ -66,12 +66,12 @@ HRESULT K3D12::Fence::Wait(K3D12::CommandQueue * commandQueue)
 		if (FAILED(hr))
 			return hr;
 		//SystemLogger::GetInstance().Log(LogLevel::Details, "fence waiting... \n");
-		DETAILS_LOG(std::string("fence waiting... \n"));
+		DEBUG_LOG(std::string("fence waiting..."));
 		WaitForSingleObject(_fenceEvent, INFINITE);
 
 	}		
 	//SystemLogger::GetInstance().Log(LogLevel::Details, "fence sysnc complete! \n");
-	DETAILS_LOG(std::string("fence sysnc complete! \n"));
+	DEBUG_LOG(std::string("fence sysnc complete!"));
 
 	return S_OK;
 }

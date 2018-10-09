@@ -136,7 +136,3 @@ std::shared_ptr<K3D12::PMDModel> K3D12::PMDLoader::Load(std::string path)
 	fclose(fp);
 	return model;
 }
-
-
-
-

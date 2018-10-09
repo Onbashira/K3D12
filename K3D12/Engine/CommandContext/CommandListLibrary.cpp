@@ -25,7 +25,8 @@ HRESULT K3D12::CommandListLibrary::Create(std::string commandListName,unsigned i
 		auto hr = this->_library[commandListName]->Create(nodeMask, listType);
 		this->_library[commandListName]->SetName(commandListName);
 		if (SUCCEEDED(hr)) {
-			SystemLogger::GetInstance().Log(LogLevel::Info, "CommandList‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + commandListName + "\n");
+			DEBUG_LOG(std::string( "CommandList‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + commandListName));
+			HRESULT_LOG(hr);
 			return hr;
 		}
 		return hr;
@@ -38,7 +39,8 @@ void K3D12::CommandListLibrary::Set(std::string commandListName, std::shared_ptr
 	if (_library.find(commandListName) == _library.end()) {
 		this->_library[commandListName].reset();
 		this->_library[commandListName] = commandList;
-		SystemLogger::GetInstance().Log(LogLevel::Info, "CommandList‚ª³í‚É“o˜^‚³‚ê‚Ü‚µ‚½ : " + commandListName + "\n");
+		DEBUG_LOG(std::string("CommandList‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + commandListName));
+
 	}
 }
 
@@ -47,7 +49,7 @@ std::shared_ptr<K3D12::GraphicsCommandList> K3D12::CommandListLibrary::Get(std::
 	if (_library.find(commandListName) != _library.end()) {
 		return  this->_library[commandListName];
 	}
-	SystemLogger::GetInstance().Log(LogLevel::Error, "•s³ŒŸõƒ[ƒh‚Å‚· : " + commandListName + "\n");
+	ERROR_LOG(std::string("•s³ŒŸõƒ[ƒh‚Å‚· : " + commandListName));
 
 	return nullptr;
 }
@@ -56,7 +58,8 @@ void K3D12::CommandListLibrary::Erase(std::string commandListName)
 {
 	if (_library.find(commandListName) != _library.end()) {
 		this->_library.erase(commandListName);
-		SystemLogger::GetInstance().Log(LogLevel::Info, "CommandList‚ª³í‚Éíœ‚³‚ê‚Ü‚µ‚½ : " + commandListName + "\n");
+		DEBUG_LOG(std::string("CommandList‚ª³í‚Éíœ‚³‚ê‚Ü‚µ‚½ : " + commandListName));
+
 	}
 }
 
@@ -64,7 +67,8 @@ void K3D12::CommandListLibrary::ConnectingPSO(std::string commandListName, Pipel
 {
 	auto hr = Get(commandListName)->ConnectingPSO(&pso);
 	if (FAILED(hr)) {
-		SystemLogger::GetInstance().Log(LogLevel::Error, "CommandList‚ÆPSO‚ÌÚ‘±‚É¸”s : " + commandListName + "\n");
+		ERROR_LOG(std::string("CommandList‚ÆPSO‚ÌÚ‘±‚É¸”s : " + commandListName));
+
 	}
 }
 

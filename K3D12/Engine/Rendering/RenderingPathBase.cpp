@@ -22,7 +22,7 @@ K3D12::RenderingPathBase & K3D12::RenderingPathBase::operator=(const RenderingPa
 	this->_onInitAE = other._onInitAE;
 	this->_onInitBE = other._onInitBE;
 	this->_onInitFS = other._onInitFS;
-
+	return *this;
 }
 
 K3D12::RenderingPathBase & K3D12::RenderingPathBase::operator=(RenderingPathBase && other)
@@ -35,6 +35,8 @@ K3D12::RenderingPathBase & K3D12::RenderingPathBase::operator=(RenderingPathBase
 
 	other._commandList.reset();
 	other._isEnable = false;
+	return *this;
+
 }
 
 

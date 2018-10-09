@@ -45,7 +45,7 @@ namespace K3D12 {
 		HRESULT									CreateHeap(unsigned numElements, unsigned int nodeMask = 0);
 		HRESULT									CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC* uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
 		HRESULT									CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC* srvDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
-		virtual HRESULT							Create(D3D12_HEAP_PROPERTIES heapProps, D3D12_HEAP_FLAGS flags, D3D12_RESOURCE_DESC resourceDesc, D3D12_RESOURCE_STATES state, D3D12_CLEAR_VALUE* clearValue = nullptr) { return E_FAIL; };
+		//virtual HRESULT						Create(D3D12_HEAP_PROPERTIES heapProps, D3D12_HEAP_FLAGS flags, D3D12_RESOURCE_DESC resourceDesc, D3D12_RESOURCE_STATES state, D3D12_CLEAR_VALUE* clearValue = nullptr) { return E_FAIL; };
 	public:
 		//リードバックバッファとアップロードバッファを作成。ついでにGPUに配置
 		HRESULT									Create(unsigned int elementSize, unsigned int numElements, void* pBufferData);

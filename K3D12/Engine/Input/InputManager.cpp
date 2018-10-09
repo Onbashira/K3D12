@@ -5,7 +5,7 @@
 K3D12::InputManager::InputManager()  :
 	_mousePos({})
 {
-	_forcusWindowHandle = K3D12::D3D12System::GetWindow().GetWindowHandle();
+	//_forcusWindowHandle = K3D12::D3D12System::GetWindow().GetWindowHandle();
 }
 
 

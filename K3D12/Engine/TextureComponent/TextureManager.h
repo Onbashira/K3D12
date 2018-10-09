@@ -18,17 +18,16 @@ namespace K3D12 {
 
 	private:
 		const std::string _nullTextureName = "NULL_TEXTURE";
-		//Key = ModelPath,Value = TextureResources;
 		std::map < std::string, std::shared_ptr<ShaderResource> >				_modelTextureResourceMap;
 
 	public:
 
 	private:
-		//void SetTexture(std::string& path, std::shared_ptr<ShaderResource> resource);
-
-		TextureManager & operator=(const TextureManager& value) { return *this; };
-		TextureManager(const TextureManager& other) {};
 		TextureManager();
+		TextureManager & operator=(const TextureManager& value) { return *this; };
+		TextureManager & operator=(TextureManager&& value) { return *this; };
+		TextureManager(const TextureManager& other) {};
+		TextureManager(TextureManager&& other) {};
 	public:
 		static TextureManager& GetInstance() {
 			static TextureManager instance;
@@ -38,7 +37,6 @@ namespace K3D12 {
 		std::weak_ptr<ShaderResource> GetModelTextureShaderResource(std::string modelPath);
 		std::weak_ptr<ShaderResource> GetNullTextureShaderResource();
 
-		//std::shared_ptr<DescriptorHeap> GetDescriptorHeap(std::string path);
 		void Discard();
 		~TextureManager();
 	};

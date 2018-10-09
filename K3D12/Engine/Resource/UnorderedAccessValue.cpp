@@ -47,8 +47,6 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 		}
 
 		{
-			D3D12_RESOURCE_DESC uploadResourceDesc;
-			D3D12_HEAP_PROPERTIES uploadHeapProp = {};
 
 			uploadHeapProp.Type = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_READBACK;
 			uploadHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_UNKNOWN;

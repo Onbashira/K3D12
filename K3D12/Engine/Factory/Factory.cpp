@@ -44,7 +44,7 @@ void K3D12::Factory::Discard()
 {
 	if (_factory != nullptr) {
 		_factory.Reset();
-		SystemLogger::GetInstance().Log(LogLevel::Debug,"Factory is Reset\n");
+		DEBUG_LOG(std::string("Factory is Reset"));
 	}
 }
 

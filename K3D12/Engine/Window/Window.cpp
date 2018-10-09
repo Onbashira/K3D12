@@ -23,7 +23,7 @@ LRESULT K3D12::Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 	{
 	case WM_PAINT:
 	{
-		PAINTSTRUCT ps;
+		PAINTSTRUCT ps{};
 		HDC hdc = BeginPaint(hWnd, &ps);
 		EndPaint(hWnd, &ps);
 	}

@@ -90,7 +90,8 @@ void K3D12::PipelineStateObject::Discard()
 {
 	if (_pipelineState.Get() != nullptr) {
 		_pipelineState.Reset();
-		SystemLogger::GetInstance().Log(LogLevel::Debug, _name + " is  Reset\n");
+		
+		DEBUG_LOG(std::string(_name + " is  Reset"));
 	}
 	_rootSignature.reset();
 }

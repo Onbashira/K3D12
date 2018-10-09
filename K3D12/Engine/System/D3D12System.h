@@ -40,7 +40,7 @@ namespace K3D12 {
 		UINT							_windowHeight;
 		std::wstring					_appClassName;
 		CommandQueue					_commandQueue;
-		SwapChain					_renderTarget;
+		SwapChain						_renderTarget;
 		InputManager					_inputManager;
 		Camera							_mainCamera;
 		ModelPool						_modelPool;
@@ -115,7 +115,7 @@ namespace K3D12 {
 
 		friend  HRESULT Initialize(UINT backBufferCount , bool useWarpDevice );
 
-		static void InitializeCamera(CameraMode mode , const Vector3& pos, const Vector3 & target, const Vector3& up, float nearClip, float farClip, float fov);
+		static void InitializeCamera(CameraMode mode , const Vector3& pos, const Vector3 & target, const Vector3& up, float nearClip, float farClip);
 
 		friend  void SetWindowSize(UINT widths, UINT height);
 
@@ -191,8 +191,6 @@ namespace K3D12 {
 	 void SetWindowName(std::wstring name);
 
 	 int MessageLoop();
-
-	 HRESULT LoadTexture(std::string path);
 
 	 std::weak_ptr<MMDModel> LoadModel(std::string modelPath);
 

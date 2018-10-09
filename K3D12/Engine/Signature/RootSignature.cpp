@@ -68,6 +68,6 @@ void K3D12::RootSignature::Discard()
 {
 	if (_rootSignature.Get() != nullptr) {
 		_rootSignature.Reset();
-		SystemLogger::GetInstance().Log(LogLevel::Debug, _name + " is  Reset\n");
+		DEBUG_LOG(std::string(_name + " is  Reset"));
 	}
 }
