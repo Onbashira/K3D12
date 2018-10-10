@@ -182,6 +182,7 @@
     <ClCompile Include="Engine\Model\PMX\PMXModel.cpp" />
     <ClCompile Include="Engine\PipelineState\PipelineStateObject.cpp" />
     <ClCompile Include="Engine\Rendering\GBufferSprite.cpp" />
+    <ClCompile Include="Engine\Rendering\RenderingManager.cpp" />
     <ClCompile Include="Engine\Rendering\RootRenderingPath.cpp" />
     <ClCompile Include="Engine\Rendering\RenderingPathBase.cpp" />
     <ClCompile Include="Engine\Rendering\RenderingPathManager.cpp" />
@@ -216,6 +217,7 @@
     <ClCompile Include="Engine\Window\Window.cpp" />
     <ClCompile Include="Engine\Window\WindowManager.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="RenderingManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Animator\Animator.h" />
@@ -277,6 +279,7 @@
     <ClInclude Include="Engine\Model\PMX\PMXModel.h" />
     <ClInclude Include="Engine\PipelineState\PipelineStateObject.h" />
     <ClInclude Include="Engine\Rendering\GBufferSprite.h" />
+    <ClInclude Include="Engine\Rendering\RenderingManager.h" />
     <ClInclude Include="Engine\Rendering\RootRenderingPath.h" />
     <ClInclude Include="Engine\Rendering\RenderingPathBase.h" />
     <ClInclude Include="Engine\Rendering\RenderingPathManager.h" />
@@ -313,6 +316,7 @@
     <ClInclude Include="Engine\Util\WICTextureLoader12.h" />
     <ClInclude Include="Engine\Window\Window.h" />
     <ClInclude Include="Engine\Window\WindowManager.h" />
+    <ClInclude Include="RenderingManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">

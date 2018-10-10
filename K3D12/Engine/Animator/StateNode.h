@@ -22,13 +22,19 @@ namespace K3D12 {
 		//モーションデータへの弱参照
 		std::weak_ptr<K3D12::MotionData>											_animation;
 	public:
+
 	private:
+
 	public:
+		StateNode();
+
+		~StateNode();
+
 		void SetMotionData(std::weak_ptr<K3D12::MotionData> data);
+
 		std::weak_ptr<K3D12::MotionData> GetMotionData();
+
 		void SetTransitionConditions(const std::pair<std::string, std::weak_ptr<K3D12::StateNode>>& destination, K3D12::TransitionConditions consitions);
 
-		StateNode();
-		~StateNode();
 	};
 }

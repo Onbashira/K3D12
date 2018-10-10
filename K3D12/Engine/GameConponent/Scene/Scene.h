@@ -1,19 +1,28 @@
 #pragma once
+#include <string>
 
-class Scene
-{
-private:
+namespace K3D12 {
+	class Scene
+	{
+	private:
+		std::string _sceneName;
+	protected:
 
-protected:
+	public:
 
-public:
+	private:
 
-private:
+	protected:
+		virtual void Rendering() = 0;
+		virtual void Update() = 0;
+		virtual void LateUpdate() = 0;
+		virtual void FixUpdate() = 0;
+	public:
+		Scene();
+		virtual ~Scene();		
+		virtual void ChangeScene() = 0;
+		void SetName(std::string name);
+		std::string GetName();
 
-protected:
-
-public:
-	Scene();
-	virtual ~Scene();
-};
-
+	};
+}

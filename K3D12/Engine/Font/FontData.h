@@ -6,10 +6,15 @@ namespace K3D12 {
 	class FontData
 	{
 	private:
+
 		LOGFONT _fontParamater;
+
 		HFONT	_font;
+
 		std::string _fontName;
+
 		std::string _fontPath;
+
 	public:
 	private:
 

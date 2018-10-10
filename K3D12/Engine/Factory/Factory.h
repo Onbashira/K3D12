@@ -12,12 +12,16 @@ namespace K3D12 {
 	private:
 
 	public:
-		HRESULT	Create(UINT createFlags = 0);
-		Microsoft::WRL::ComPtr<IDXGIFactory6> GetFactory()const;
-		void Discard();
-		Factory();
-		~Factory();
 
+		Factory();
+		
+		~Factory();
+		
+		HRESULT	Create(UINT createFlags = 0);
+	
+		Microsoft::WRL::ComPtr<IDXGIFactory6> GetFactory()const;
+	
+		void Discard();
 	};
 
 }

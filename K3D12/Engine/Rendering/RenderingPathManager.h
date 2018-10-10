@@ -16,10 +16,12 @@ namespace K3D12 {
 	public:
 		//レンダリングパイプラインを破棄する
 		void DiscardRenderingPipeline();
+		//レンダリングパイプラインをマネージするレンダラークラスを取得する
+		std::weak_ptr<SceneRenderer> GetSceneRenderer();
 		//シーンレンダリングを設定する
 		void SetSceneRenderer(std::shared_ptr<SceneRenderer> sceneRenderer);
 		//レンダリングする
-		void Rendering();
+		void RenderingScene();
 		RenderingPathManager();
 		~RenderingPathManager();
 	};

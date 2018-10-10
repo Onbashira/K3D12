@@ -20,8 +20,8 @@ K3D12::RootRenderingPath::RootRenderingPath(RootRenderingPath && other) :
 
 K3D12::RootRenderingPath & K3D12::RootRenderingPath::operator=(const RootRenderingPath & other)
 {
-	return *this;
 
+	return *this;
 }
 
 K3D12::RootRenderingPath & K3D12::RootRenderingPath::operator=(RootRenderingPath && other)

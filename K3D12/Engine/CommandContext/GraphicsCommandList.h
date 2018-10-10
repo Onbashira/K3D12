@@ -35,6 +35,10 @@ namespace K3D12 {
 
 	public:
 
+		GraphicsCommandList();
+
+		~GraphicsCommandList();
+
 		HRESULT Create(unsigned int nodeMask, D3D12_COMMAND_LIST_TYPE listType);
 
 		HRESULT SetResourceBarrie(ID3D12Resource * resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState);
@@ -77,9 +81,6 @@ namespace K3D12 {
 
 		void						SetCommandAllocatorName(std::string name);
 
-
-		GraphicsCommandList();
-		~GraphicsCommandList();
 	};
 
 };

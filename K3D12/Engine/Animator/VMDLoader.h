@@ -13,8 +13,11 @@ namespace K3D12{
 	private:
 
 	public:
+
 		std::shared_ptr<K3D12::MotionData> LoadMotion(std::string path);
+
 		VMDLoader();
+
 		~VMDLoader();
 	};
 }

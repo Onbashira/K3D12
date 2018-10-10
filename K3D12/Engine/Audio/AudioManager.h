@@ -8,7 +8,9 @@ namespace K3D12 {
 	public:
 	private:
 	public:
+
 		AudioManager();
+
 		~AudioManager();
 	};
 }

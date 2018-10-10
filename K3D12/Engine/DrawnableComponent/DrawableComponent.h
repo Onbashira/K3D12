@@ -15,10 +15,12 @@ namespace K3D12 {
 	protected:
 
 		std::weak_ptr<K3D12::PipelineStateObject>		_pipelineState;
-		std::weak_ptr<K3D12::RootSignature>				_rootSignature;
-		std::weak_ptr<K3D12::GraphicsCommandList>		_commandList;
-		K3D12::GraphicsCommandList						_bundleList;
 
+		std::weak_ptr<K3D12::RootSignature>				_rootSignature;
+
+		std::weak_ptr<K3D12::GraphicsCommandList>		_commandList;
+
+		K3D12::GraphicsCommandList						_bundleList;
 
 	public:
 	private:
@@ -27,19 +29,22 @@ namespace K3D12 {
 		virtual void RegisterToBundle() = 0;
 	public:
 
+		DrawableComponent();
+
+		virtual ~DrawableComponent();
+
 		void SetPipelineState(std::weak_ptr<K3D12::PipelineStateObject> pipelineState);
+
 		void SetRootSignature(std::weak_ptr<K3D12::RootSignature> rootSignature);
+
 		void SetMasterCommandList(std::shared_ptr<K3D12::GraphicsCommandList> masterCommandList);
 
 		//PSOとRootSignatureを設定されたマスターコマンドリストにセットする
 		void BindingShaderObject();
-		void BindingShaderObjectToBundle();
 
+		void BindingShaderObjectToBundle();
 
 		//描画時呼び出し関数の作成を強制
 		virtual void Draw() = 0;
-
-		DrawableComponent();
-		virtual ~DrawableComponent();
 	};
 }

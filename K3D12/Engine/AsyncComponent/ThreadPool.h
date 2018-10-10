@@ -15,18 +15,26 @@
 namespace K3D12 {
 	class ThreadPool {
 	private:
+
 		std::vector< std::thread > _workers;
+
 		std::queue< std::function<void()> > _tasks;
 
 		std::mutex _queueMutex;
+
 		std::condition_variable _condition;
+
 		bool _stop;
+
 	public:
+
 	private:
+
 	public:
+
 		ThreadPool(size_t threads);
 
-
+		~ThreadPool();
 
 		//@fn
 		//@brief		キューにタスクを投げる。
@@ -35,7 +43,6 @@ namespace K3D12 {
 		template<class F, class... Args>
 		auto enqueue(F&& f, Args&&... args)
 			->std::future<typename std::result_of<F(Args...)>::type>;
-		~ThreadPool();
 
 	};
 }

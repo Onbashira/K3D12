@@ -7,7 +7,9 @@ namespace K3D12 {
 	public:
 	private:
 	public:
+
 		IAudio();
+
 		virtual ~IAudio();
 	};
 }

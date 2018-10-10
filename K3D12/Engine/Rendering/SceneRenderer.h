@@ -14,7 +14,7 @@ namespace K3D12 {
 	class SceneRenderer
 	{
 	private:
-		std::map<std::string, std::shared_ptr<RootRenderingPath>> _renderingPath;
+		std::map<std::string, std::shared_ptr<d>> _renderingPath;
 	public:
 	private:
 	public:

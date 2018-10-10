@@ -24,12 +24,12 @@ void K3D12::SceneRenderer::Rendering()
 
 std::shared_ptr<K3D12::RootRenderingPath> K3D12::SceneRenderer::AddRootRenderingPath(std::string name, RootRenderingPath rootRenderPath)
 {
-	if (this->_renderingPath.find(name) == _renderingPath.end()) {
-		auto entity = std::make_shared<RootRenderingPath>(rootRenderPath);
-		_renderingPath[name] = entity;
-		return entity;
+	if (this->_renderingPath.find(name) != _renderingPath.end()) {
+		return nullptr;
 	}
-	return nullptr;
+	auto entity = std::make_shared<RootRenderingPath>(rootRenderPath);
+	_renderingPath[name] = entity;
+	return entity;
 }
 
 std::weak_ptr<K3D12::RootRenderingPath> K3D12::SceneRenderer::GetRootRenderingPath(std::string name)
@@ -37,6 +37,7 @@ std::weak_ptr<K3D12::RootRenderingPath> K3D12::SceneRenderer::GetRootRenderingPa
 	if (this->_renderingPath.find(name) != _renderingPath.end()) {
 		return _renderingPath[name];
 	}
+	return std::weak_ptr<K3D12::RootRenderingPath>();
 }
 
 void K3D12::SceneRenderer::EraseRenderingPath(std::string name)

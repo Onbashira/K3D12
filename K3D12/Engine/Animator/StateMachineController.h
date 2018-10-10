@@ -12,10 +12,13 @@ namespace K3D12 {
 		friend class Animator;
 	private:
 		std::shared_ptr<K3D12::StateNode>		_startNode;
+
 		std::shared_ptr<K3D12::StateNode>		_exitNode;
+
 		std::weak_ptr<K3D12::StateNode>		_currentNode;
 
 		std::map<std::string, std::shared_ptr<K3D12::StateNode>> _stateMap;
+
 		std::weak_ptr<K3D12::MMDBoneTree>	_skelton;
 
 		unsigned int _animationFrame;
@@ -24,16 +27,25 @@ namespace K3D12 {
 	public:
 
 	private:
+
 		void CCDIKSolver(MMDIKData& IkData, Vector3& skeltonCenterPos, unsigned int iterationNum, unsigned int numBones, unsigned  int numMaxBones);
+
 		void ApplyRecursionMatirixBone(MMDBoneNode* node);
 
 	public:
-		void SetModelSkelton(std::weak_ptr<MMDBoneTree> skelton);
-		void ResetSkelton();
-		void PlayAnimation(unsigned int& time);
-		void AttachAnimation(std::string animationName, std::weak_ptr<MotionData> motionData);
-		void ConnectingAnimation(std::string from, std::string to, TransitionConditions conditions);
 		StateMachineController();
+
 		~StateMachineController();
+
+		void SetModelSkelton(std::weak_ptr<MMDBoneTree> skelton);
+
+		void ResetSkelton();
+
+		void PlayAnimation(unsigned int& time);
+
+		void AttachAnimation(std::string animationName, std::weak_ptr<MotionData> motionData);
+
+		void ConnectingAnimation(std::string from, std::string to, TransitionConditions conditions);
+
 	};
 }

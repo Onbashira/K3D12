@@ -88,9 +88,6 @@
     <Filter Include="Engine\GameComponent\Sprite">
       <UniqueIdentifier>{599084bf-7303-4cd5-ad2d-640cf51ad5b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\GameComponent\Scene">
-      <UniqueIdentifier>{d487c1da-91a9-442b-b2f5-b437c08ffeaf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\GameComponent\Transform">
       <UniqueIdentifier>{143dd7a8-261c-4e2c-93f9-2dde7db1892b}</UniqueIdentifier>
     </Filter>
@@ -136,9 +133,6 @@
     <Filter Include="Engine\Rendering\GBuffer">
       <UniqueIdentifier>{6bf1c66b-d820-483b-bc62-0b6b337e8885}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Rendering\RenderingPathBase">
-      <UniqueIdentifier>{55df2d35-ce4d-4eec-8c32-82a631583696}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Rendering\RootRenderer">
       <UniqueIdentifier>{d2653110-4dbd-4270-9c79-ef72088aaf96}</UniqueIdentifier>
     </Filter>
@@ -165,6 +159,15 @@
     </Filter>
     <Filter Include="Engine\SwapChain">
       <UniqueIdentifier>{fbcd8cd5-ed71-472b-8906-669e7df27b89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering\RenderingPath">
+      <UniqueIdentifier>{2075e927-c265-43c0-abf1-36ea69063b8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering\RenderingPath\RenderingPathBase">
+      <UniqueIdentifier>{55df2d35-ce4d-4eec-8c32-82a631583696}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene">
+      <UniqueIdentifier>{d487c1da-91a9-442b-b2f5-b437c08ffeaf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -301,7 +304,7 @@
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GameConponent\Scene\Scene.cpp">
-      <Filter>Engine\GameComponent\Scene</Filter>
+      <Filter>Engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GameConponent\Transform\Transform.cpp">
       <Filter>Engine\GameComponent\Transform</Filter>
@@ -357,14 +360,11 @@
     <ClCompile Include="Engine\Audio\AudioManager.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Rendering\RenderingPathManager.cpp">
-      <Filter>Engine\Rendering\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Rendering\GBufferSprite.cpp">
       <Filter>Engine\Rendering\GBuffer</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Rendering\RenderingPathBase.cpp">
-      <Filter>Engine\Rendering\RenderingPathBase</Filter>
+      <Filter>Engine\Rendering\RenderingPath\RenderingPathBase</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Rendering\RootRenderingPath.cpp">
       <Filter>Engine\Rendering\RootRenderer</Filter>
@@ -443,6 +443,15 @@
     </ClCompile>
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveObject.cpp">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Rendering\RenderingPathManager.cpp">
+      <Filter>Engine\Rendering\RenderingPath</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Rendering\RenderingManager.cpp">
+      <Filter>Engine\Rendering\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -588,7 +597,7 @@
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GameConponent\Scene\Scene.h">
-      <Filter>Engine\GameComponent\Scene</Filter>
+      <Filter>Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GameConponent\Transform\Transform.h">
       <Filter>Engine\GameComponent\Transform</Filter>
@@ -644,14 +653,11 @@
     <ClInclude Include="Engine\Audio\AudioManager.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Rendering\RenderingPathManager.h">
-      <Filter>Engine\Rendering\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Rendering\GBufferSprite.h">
       <Filter>Engine\Rendering\GBuffer</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Rendering\RenderingPathBase.h">
-      <Filter>Engine\Rendering\RenderingPathBase</Filter>
+      <Filter>Engine\Rendering\RenderingPath\RenderingPathBase</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Rendering\RootRenderingPath.h">
       <Filter>Engine\Rendering\RootRenderer</Filter>
@@ -730,6 +736,15 @@
     </ClInclude>
     <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveObject.h">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Rendering\RenderingPathManager.h">
+      <Filter>Engine\Rendering\RenderingPath</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Rendering\RenderingManager.h">
+      <Filter>Engine\Rendering\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

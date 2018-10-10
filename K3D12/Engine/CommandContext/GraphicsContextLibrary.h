@@ -16,13 +16,19 @@ namespace K3D12 {
 	class GraphicsContextLibrary : private NonCopyable
 	{
 	private:
+
 		CommandListLibrary			_commandListLibrary;
+
 		ShaderObjectLibrary			_shaderObjectLibrary;
 
 	public:
 	private:
+
 		GraphicsContextLibrary();
-	public:
+
+	public:	
+		
+		~GraphicsContextLibrary();
 
 		void    CloseAllCommandLists();
 
@@ -75,8 +81,5 @@ namespace K3D12 {
 		void Discard();
 
 		static GraphicsContextLibrary& GetInstance();
-
-		~GraphicsContextLibrary();
 	};
-
-}
+};

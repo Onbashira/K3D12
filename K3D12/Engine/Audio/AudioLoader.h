@@ -9,9 +9,13 @@ namespace K3D12{
 	private:
 	public:
 	private:
+
 		AudioLoader();
+
 	public:
+
 		~AudioLoader();
+
 	};
 }
 

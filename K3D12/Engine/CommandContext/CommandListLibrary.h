@@ -16,14 +16,22 @@ namespace K3D12 {
 
 	class CommandListLibrary
 	{
+
 		friend class GraphicsContextLibrary;
+
 	private:
+
 		std::map<std::string, std::shared_ptr<GraphicsCommandList>> _library;
+
 	public:
 
 	private:
 
 	public:
+
+		CommandListLibrary();
+
+		~CommandListLibrary();
 
 		HRESULT Create(std::string commandListName, unsigned int nodeMask, D3D12_COMMAND_LIST_TYPE listType);
 
@@ -47,8 +55,6 @@ namespace K3D12 {
 
 		void Discard();
 
-		CommandListLibrary();
-		~CommandListLibrary();
 	};
 
-}
+};
