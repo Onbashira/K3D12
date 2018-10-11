@@ -20,17 +20,27 @@ public:
 private:
 	ResourceCreater();
 public:
+	
+	~ResourceCreater();
+
 	static ResourceCreater&					GetInstance();
+	
 	void									Initialize(std::weak_ptr<K3D12::D3D12Device> device);
+	
 	std::shared_ptr<ShaderResource>			CreateShaderResource();
+	
 	std::shared_ptr<ConstantBuffer>			CreateConstantBuffer();
+	
 	std::shared_ptr<UnorderedAccessValue>	CreateUAV();
+	
 	std::shared_ptr<VertexBuffer>			CreateVertexBuffer();
+	
 	std::shared_ptr<IndexBuffer>			CreateIndexBuffer();
+	
 	std::shared_ptr<Resource>				CreateResource();
+	
 	std::shared_ptr<DepthStencil>			CreateDepthStencil();
 
-	~ResourceCreater();
 };
 
 }
