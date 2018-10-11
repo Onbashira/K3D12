@@ -8,7 +8,9 @@ namespace K3D12 {
 	class IAudio
 	{
 		friend class AudioManager;
+
 		friend class AudioLoader;
+
 	private:
 
 	protected:
