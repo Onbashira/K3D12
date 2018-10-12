@@ -1,13 +1,11 @@
 #pragma once
 #include <vector>
 namespace K3D12 {
-	class AudioRawResource
+	struct AudioRawResource
 	{
-	private:
-		std::vector<short> _rawAudioResource;
-	public :
-	private:
-	public:
+		std::vector<short>	rawAudioResource;
+		
+		WAVEFORMATEX		waveFormat;
 		
 		AudioRawResource();
 		

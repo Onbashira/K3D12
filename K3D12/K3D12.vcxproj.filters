@@ -462,6 +462,9 @@
     <ClCompile Include="AudioRawResource.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="SubMixVoice.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Animator\Animator.h">
@@ -762,6 +765,9 @@
       <Filter>Engine\Audio</Filter>
     </ClInclude>
     <ClInclude Include="AudioRawResource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SubMixVoice.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

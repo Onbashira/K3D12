@@ -221,6 +221,7 @@
     <ClCompile Include="Engine\Window\Window.cpp" />
     <ClCompile Include="Engine\Window\WindowManager.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="SubMixVoice.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioRawResource.h" />
@@ -323,6 +324,7 @@
     <ClInclude Include="Engine\Util\WICTextureLoader12.h" />
     <ClInclude Include="Engine\Window\Window.h" />
     <ClInclude Include="Engine\Window\WindowManager.h" />
+    <ClInclude Include="SubMixVoice.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">

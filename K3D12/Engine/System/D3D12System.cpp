@@ -802,6 +802,8 @@ void D3D12System::TermWindow()
 {
 	_window.Discard();
 	DEBUG_LOG(std::string("Terminate Window"));
+	CoUninitialize();
+	DEBUG_LOG(std::string("COMの終了"));
 }
 
 void D3D12System::TermD3D12()
@@ -857,9 +859,11 @@ HRESULT K3D12::Initialize(UINT windowWidth, UINT windowHeight, UINT backBufferCo
 	auto hr = D3D12System::GetInstance().InitializeWindow();
 	CHECK_RESULT(hr);
 	DEBUG_LOG(std::string("ウインドウが正常に初期化されました"));
+	CHECK_RESULT(CoInitializeEx(NULL, COINIT_MULTITHREADED));
+	DEBUG_LOG(std::string("COMが初期化されました"));
 	hr = D3D12System::GetInstance().InitializeD3D12(backBufferCount, useWarpDevice);
 	CHECK_RESULT(hr);
-	DEBUG_LOG(std::string("D3D12が正常に初期化されました\n"));
+	DEBUG_LOG(std::string("D3D12が正常に初期化されました"));
 	K3D12::D3D12System::InitializeController();
 	DEBUG_LOG(std::string("コントローラの最大接続数を４で初期化しました"));
 	K3D12::D3D12System::GetInstance()._inputManager.SetFocusWindow(K3D12::D3D12System::GetInstance().GetWindow().GetWindowHandle());

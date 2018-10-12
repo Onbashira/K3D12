@@ -3,16 +3,12 @@
 
 K3D12::AudioManager::~AudioManager()
 {
+	Discard();
 }
 
 
 void K3D12::AudioManager::InitializeXAudio2()
 {
-	HRESULT ret = {};
-	if (FAILED(CoInitializeEx(NULL,COINIT_MULTITHREADED))) {
-		ERROR_LOG(std::string("AudioManager‚Ì‰Šú‰»‚ÉŽ¸”s‚µ‚Ü‚µ‚½"));
-	}
-
 	if (FAILED(XAudio2Create(&_xAudio2))) {
 		ERROR_LOG(std::string("XAudio2‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½"));
 	};
@@ -24,12 +20,20 @@ void K3D12::AudioManager::InitializeXAudio2()
 
 void K3D12::AudioManager::Discard()
 {
+	if (_xAudio2.Get() != nullptr) {
+		_xAudio2.Reset();
+	}
+	if (_masterVoice != nullptr) {
+		_masterVoice.reset();
+	}
 }
 
 void K3D12::AudioManager::StartSoundEngine()
 {
+	_xAudio2->StartEngine();
 }
 
 void K3D12::AudioManager::StopSoundEngine()
 {
+	_xAudio2->StopEngine();
 }

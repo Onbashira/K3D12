@@ -8,6 +8,8 @@
 #include <string>
 #include <wrl.h>
 #include "../Util/NonCopyable.h"
+#include "AudioRawResource.h"
+#include "IAudioSource.h"
 
 
 
@@ -46,5 +48,12 @@ namespace K3D12 {
 
 		void StopSoundEngine();
 
+		void UpdateSounds();
+
+		void StopSounds();
+
+		void CreateSourceVoice(IAudioSource* audio,AudioRawResource source, IXAudio2VoiceCallback *callback = NULL,
+			const XAUDIO2_VOICE_SENDS *sendList = NULL,const XAUDIO2_EFFECT_CHAIN *effectChain = NULL);
+		
 	};
 }
