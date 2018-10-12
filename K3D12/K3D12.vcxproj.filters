@@ -444,9 +444,6 @@
     <ClCompile Include="Engine\GameConponent\Primitive\PrimitiveObject.cpp">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
     </ClCompile>
-    <ClCompile Include="RenderingManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Rendering\RenderingPathManager.cpp">
       <Filter>Engine\Rendering\RenderingPath</Filter>
     </ClCompile>
@@ -736,9 +733,6 @@
     </ClInclude>
     <ClInclude Include="Engine\GameConponent\Primitive\PrimitiveObject.h">
       <Filter>Engine\GameComponent\PrimitiveObject</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderingManager.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Rendering\RenderingPathManager.h">
       <Filter>Engine\Rendering\RenderingPath</Filter>
