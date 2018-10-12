@@ -15,6 +15,8 @@ namespace K3D12 {
 
 	protected:
 
+		std::weak_ptr<IXAudio2SourceVoice> _sourceVoice;
+
 		unsigned int _loopPoint;
 
 		bool _isPlay;
@@ -24,6 +26,8 @@ namespace K3D12 {
 	public:
 
 	private:
+
+		void SetVoiceSource(std::weak_ptr<IXAudio2SourceVoice> sourceVoice);
 
 	public:
 
@@ -38,6 +42,8 @@ namespace K3D12 {
 		void SetLoopPoint(unsigned int frame);
 
 		bool IsPlay();
+
+		void DiscardMasterVoice();
 	};
 }
 

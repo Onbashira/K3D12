@@ -11,11 +11,20 @@ namespace K3D12 {
 	class ManagerComponentBase
 	{
 	private:
+
 		std::map<std::string, std::shared_ptr<T>> _resourceMap;
+
 	protected:
+	
 	public:
+	
 	private:
+	
 	public:
+
+		ManagerComponentBase() {};
+
+		virtual ~ManagerComponentBase() { DiscardMap(); };
 		//要素の追加。第三引き数をTrueで強制上書き
 		void Set(std::string name, std::shared_ptr<T> resource, bool forceOverride = false);
 		//要素の追加。第三引き数をTrueで強制上書き
@@ -32,17 +41,6 @@ namespace K3D12 {
 		std::map<std::string, std::shared_ptr<T>>& GetMap();
 
 
-		ManagerComponentBase()  {};
-		//ManagerComponentBase(const ManagerComponentBase<T>& other) {};
-		//ManagerComponentBase(ManagerComponentBase<T>&& other) {};
-		//ManagerComponentBase<T>& (const ManagerComponentBase<T>& other) {
-		//	return this*; 
-		//};
-		//ManagerComponentBase<T>& (ManagerComponentBase<T>&& other) {
-		//	return this*; 
-		//};
-
-		virtual ~ManagerComponentBase() { DiscardMap(); };
 	};
 
 
@@ -50,11 +48,20 @@ namespace K3D12 {
 	class NonRaiiManagerComponentBase
 	{
 	private:
+
 	protected:
+
 		std::map<std::string, T> _resourceMap;
+
 	public:
+
 	private:
+
 	public:
+
+		NonRaiiManagerComponentBase() {};
+
+		virtual ~NonRaiiManagerComponentBase() { DiscardMap(); };
 		//要素の追加。第三引き数をTrueで強制上書き
 		void Set(std::string name,const T& resource, bool forceOverride = false);
 		//要素の取得
@@ -68,19 +75,27 @@ namespace K3D12 {
 		//マップ自体の参照を取得する
 		std::map<std::string, T>& GetMap();
 
-		NonRaiiManagerComponentBase() {};
-		virtual ~NonRaiiManagerComponentBase() { DiscardMap(); };
+
 	};
 
 	template <class T>
 	class UnorderedManagerComponentBase
 	{
 	private:
+
 	protected:
+
 		std::unordered_map<std::string, std::shared_ptr<T>> _resourceMap;
+
 	public:
+
 	private:
-	public:
+
+	public:	
+		
+		UnorderedManagerComponentBase() {};
+
+		virtual ~UnorderedManagerComponentBase() { DiscardMap(); };
 		//要素の追加。第三引き数をTrueで強制上書き
 		void Set(std::string name, std::shared_ptr<T> resource, bool forceOverride = false);
 		//要素の追加。第三引き数をTrueで強制上書き
@@ -95,9 +110,6 @@ namespace K3D12 {
 		bool IsLooded(std::string name);
 		//マップ自体の参照を取得する
 		std::unordered_map<std::string, std::shared_ptr<T>>& GetMap();
-
-		UnorderedManagerComponentBase() {};
-		virtual ~UnorderedManagerComponentBase() { DiscardMap(); };
 	};
 }
 

@@ -18,7 +18,9 @@ namespace K3D12::TaskSystem {
 		std::vector<std::function<void()>> _tasks;
 		
 	public:
+
 	private:
+
 	public:
 		
 		TaskList();

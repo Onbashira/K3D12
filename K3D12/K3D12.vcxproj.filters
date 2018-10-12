@@ -450,6 +450,18 @@
     <ClCompile Include="Engine\Rendering\RenderingManager.cpp">
       <Filter>Engine\Rendering\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Audio\AudioCallBack.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\IAudioSource.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\AudioSourceManager.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioRawResource.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Animator\Animator.h">
@@ -739,6 +751,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Rendering\RenderingManager.h">
       <Filter>Engine\Rendering\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\AudioCallBack.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\IAudioSource.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\AudioSourceManager.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioRawResource.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
