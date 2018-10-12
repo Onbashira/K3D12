@@ -33,6 +33,7 @@ struct SpriteVSInput
 struct SpriteVSInstacingInput
 {
     float3 pos : POSITION;
+    float3 normal : NORMAL;
     float2 texCoord : TEXCOORD;
     uint instancingIndex : Sv_InstanceID;
     

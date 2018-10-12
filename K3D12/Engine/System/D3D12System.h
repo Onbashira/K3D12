@@ -31,24 +31,42 @@ namespace K3D12 {
 	{
 
 	private:
+		
 		inline static D3D12System*		_instance = nullptr;
+		
 		D3D12Device						_device;
+		
 		Factory							_factory;
+		
 		Fence							_fence;
+		
 		Window							_window;
+		
 		UINT							_windowWidth;
+		
 		UINT							_windowHeight;
+		
 		std::wstring					_appClassName;
+		
 		CommandQueue					_commandQueue;
+		
 		SwapChain						_renderTarget;
+		
 		InputManager					_inputManager;
+		
 		Camera							_mainCamera;
+		
 		ModelPool						_modelPool;
+		
 		PrimitiveCreater				_primitiveCreater;
+		
 		GBufferSprite					_geometryBufferSprite;
+	
 	public:
 
 	private:
+
+		D3D12System();
 
 		HRESULT InitializeWindow();
 
@@ -102,9 +120,10 @@ namespace K3D12 {
 
 		friend  void Drawing3DStep();
 
-		D3D12System();
-
 	public:
+
+		~D3D12System();
+
 		friend  void Create();
 
 		static D3D12System& GetInstance();
@@ -159,10 +178,9 @@ namespace K3D12 {
 
 		friend  InputManager&  Input();
 
-		~D3D12System();
 	};
 
-	//static global function
+	//global function
 
 	 void Create();
 

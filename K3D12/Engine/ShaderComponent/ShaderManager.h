@@ -16,16 +16,25 @@ namespace K3D12 {
 
 	public:
 	private:
+
 		ShaderManager();
-	public:
+
+	public:	
+		
+		~ShaderManager();
 
 		static ShaderManager& GetInstance();
+		
 		bool IsLoaded(std::string name);
+		
 		Microsoft::WRL::ComPtr<ID3DBlob> Get(std::string name);
+		
 		void Set(std::string name, Microsoft::WRL::ComPtr<ID3DBlob> shader);
+		
 		void Erase(std::string name);
+		
 		void Discard();
-		~ShaderManager();
+		
 	};
 
 }
