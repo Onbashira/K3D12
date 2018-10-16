@@ -3,34 +3,44 @@
 #include <xaudio2.h>
 #include <memory>
 #include <ks.h>
-#include <ksarm64.h>
 #include "AudioCallBack.h"
-#include "AudioRawResource.h"
 
 namespace K3D12 {
 
-	class IAudioSource
+	class SubMixVoice;
+	class IWaveResource;
+	class NormalAudioWav;
+	class AudioCallBack;
+
+
+	class Audio
 	{
 		friend class AudioManager;
 	private:
 		//サウンドごとのデータ
+		XAUDIO2_BUFFER _audioBuffer;
+
 		std::unique_ptr<IXAudio2SourceVoice> _sourceVoice;
 		
-		AudioRawResource _rawData;
+		std::weak_ptr<IWaveResource> _rawData;
 
-		std::unique_ptr<AudioCallBack> _callBack;
+		AudioCallBack _callBack;
 
 	public:
 
 	private:
 
 	protected:
-		
+
 	public:
 		
-		IAudioSource();
+		Audio();
 
-		virtual ~IAudioSource();
+		Audio(const Audio& other);
+
+		virtual ~Audio();
+
+		Audio& operator=(const Audio& other);
 
 		virtual void Play();
 

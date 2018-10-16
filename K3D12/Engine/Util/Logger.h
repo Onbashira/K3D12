@@ -77,12 +77,12 @@ namespace K3D12 {
 		static SystemLogger& GetInstance();
 	};
 
-#define HRESULT_LOG(hr)		SystemLogger::GetInstance().Log(K3D12::LogLevel::Details,"[File: %s, Line: %d] { %s }\n", __FILE__, __LINE__, reinterpret_cast<const char*>(_com_error(hr).ErrorMessage()))
-#define	DEBUG_LOG(str)		SystemLogger::GetInstance().Log(K3D12::LogLevel::Debug,		"[File: %s, Line: %d] { %s }\n", __FILE__, __LINE__, str.c_str())
-#define INFO_LOG(str)		SystemLogger::GetInstance().Log(K3D12::LogLevel::Info ,		"[File: %s, Line: %d] { %s }\n", __FILE__, __LINE__, str.c_str())
-#define DETAILS_LOG(str)	SystemLogger::GetInstance().Log(K3D12::LogLevel::Details ,	"[File: %s, Line: %d] { %s }\n", __FILE__, __LINE__, str.c_str())
-#define WARNING_LOG(str)	SystemLogger::GetInstance().Log(K3D12::LogLevel::Warning ,	"[File: %s, Line: %d] { %s }\n", __FILE__, __LINE__, str.c_str())
-#define ERROR_LOG(str)		SystemLogger::GetInstance().Log(K3D12::LogLevel::Error ,	"[File: %s, Line: %d] { %s }\n", __FILE__, __LINE__, str.c_str())
+#define HRESULT_LOG(hr)		SystemLogger::GetInstance().Log(K3D12::LogLevel::Details,	"[ FILE : %s, LINE : %d] { %s }\n", __FILE__, __LINE__, reinterpret_cast<const char*>(_com_error(hr).ErrorMessage()))
+#define	DEBUG_LOG(str)		SystemLogger::GetInstance().Log(K3D12::LogLevel::Debug,		"[ FILE : %s, LINE : %d] { %s }\n", __FILE__, __LINE__, str.c_str())
+#define INFO_LOG(str)		SystemLogger::GetInstance().Log(K3D12::LogLevel::Info ,		"[ FILE : %s, LINE : %d] { %s }\n", __FILE__, __LINE__, str.c_str())
+#define DETAILS_LOG(str)	SystemLogger::GetInstance().Log(K3D12::LogLevel::Details ,	"[ FILE : %s, LINE : %d] { %s }\n", __FILE__, __LINE__, str.c_str())
+#define WARNING_LOG(str)	SystemLogger::GetInstance().Log(K3D12::LogLevel::Warning ,	"[ FILE : %s, LINE : %d] { %s }\n", __FILE__, __LINE__, str.c_str())
+#define ERROR_LOG(str)		SystemLogger::GetInstance().Log(K3D12::LogLevel::Error ,	"[ FILE : %s, LINE : %d] { %s }\n", __FILE__, __LINE__, str.c_str())
 
 
 #if defined(UNICODE) || defined(_UNICODE)

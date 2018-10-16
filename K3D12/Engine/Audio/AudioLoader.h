@@ -2,9 +2,11 @@
 #include <xaudio2.h>
 #include <string>
 #include "../Util/NonCopyable.h"
-#include "AudioRawResource.h"
+#include "Audio.h"
 
 namespace K3D12{
+
+	class IWaveResource;
 	class AudioLoader : public NonCopyable
 	{
 	private:
@@ -25,7 +27,12 @@ namespace K3D12{
 
 		~AudioLoader();
 
-		std::shared_ptr<AudioRawResource> LoadAudio(std::string audioFilePath);
+		static AudioLoader& GetInstance() {
+			static AudioLoader instance;
+			return instance;
+		}
+
+		std::shared_ptr<IWaveResource> LoadAudio(std::string audioFilePath);
 
 	};
 }

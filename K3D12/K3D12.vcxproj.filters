@@ -423,9 +423,6 @@
     <ClCompile Include="Engine\Mesh\ModelMesh.cpp">
       <Filter>Engine\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Audio\IAudio.cpp">
-      <Filter>Engine\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Mesh\MeshHeap.cpp">
       <Filter>Engine\Mesh</Filter>
     </ClCompile>
@@ -453,17 +450,23 @@
     <ClCompile Include="Engine\Audio\AudioCallBack.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Audio\IAudioSource.cpp">
-      <Filter>Engine\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Audio\AudioSourceManager.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="AudioRawResource.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\Audio\SubMixVoice.cpp">
+      <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="SubMixVoice.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\Audio\AudioNormalWav.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\IWaveResource.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\SubMixVoiceManager.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\Audio.cpp">
+      <Filter>Engine\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -728,9 +731,6 @@
     <ClInclude Include="Engine\Mesh\ModelMesh.h">
       <Filter>Engine\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Audio\IAudio.h">
-      <Filter>Engine\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Mesh\MeshHeap.h">
       <Filter>Engine\Mesh</Filter>
     </ClInclude>
@@ -758,17 +758,26 @@
     <ClInclude Include="Engine\Audio\AudioCallBack.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Audio\IAudioSource.h">
-      <Filter>Engine\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Audio\AudioSourceManager.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="AudioRawResource.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\Audio\SubMixVoice.h">
+      <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="SubMixVoice.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\Audio\AudioNormalWav.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\IWaveResource.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\SubMixVoiceManager.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\Audio.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="K3D12.h">
+      <Filter>Engine\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

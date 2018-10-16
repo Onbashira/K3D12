@@ -124,7 +124,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AudioRawResource.cpp" />
     <ClCompile Include="Engine\Animator\Animator.cpp" />
     <ClCompile Include="Engine\Animator\MotionAssetPool.cpp" />
     <ClCompile Include="Engine\Animator\MotionManager.cpp" />
@@ -137,9 +136,12 @@
     <ClCompile Include="Engine\Audio\AudioCallBack.cpp" />
     <ClCompile Include="Engine\Audio\AudioLoader.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
+    <ClCompile Include="Engine\Audio\AudioNormalWav.cpp" />
     <ClCompile Include="Engine\Audio\AudioSourceManager.cpp" />
-    <ClCompile Include="Engine\Audio\IAudio.cpp" />
-    <ClCompile Include="Engine\Audio\IAudioSource.cpp" />
+    <ClCompile Include="Engine\Audio\IWaveResource.cpp" />
+    <ClCompile Include="Engine\Audio\Audio.cpp" />
+    <ClCompile Include="Engine\Audio\SubMixVoice.cpp" />
+    <ClCompile Include="Engine\Audio\SubMixVoiceManager.cpp" />
     <ClCompile Include="Engine\CommandContext\CommandAllocator.cpp" />
     <ClCompile Include="Engine\CommandContext\CommandListLibrary.cpp" />
     <ClCompile Include="Engine\CommandContext\CommandQueue.cpp" />
@@ -221,10 +223,8 @@
     <ClCompile Include="Engine\Window\Window.cpp" />
     <ClCompile Include="Engine\Window\WindowManager.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="SubMixVoice.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioRawResource.h" />
     <ClInclude Include="Engine\Animator\Animator.h" />
     <ClInclude Include="Engine\Animator\MotionAssetPool.h" />
     <ClInclude Include="Engine\Animator\MotionManager.h" />
@@ -238,9 +238,12 @@
     <ClInclude Include="Engine\Audio\AudioCallBack.h" />
     <ClInclude Include="Engine\Audio\AudioLoader.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
+    <ClInclude Include="Engine\Audio\AudioNormalWav.h" />
     <ClInclude Include="Engine\Audio\AudioSourceManager.h" />
-    <ClInclude Include="Engine\Audio\IAudio.h" />
-    <ClInclude Include="Engine\Audio\IAudioSource.h" />
+    <ClInclude Include="Engine\Audio\IWaveResource.h" />
+    <ClInclude Include="Engine\Audio\Audio.h" />
+    <ClInclude Include="Engine\Audio\SubMixVoice.h" />
+    <ClInclude Include="Engine\Audio\SubMixVoiceManager.h" />
     <ClInclude Include="Engine\CommandContext\CommandAllocator.h" />
     <ClInclude Include="Engine\CommandContext\CommandListLibrary.h" />
     <ClInclude Include="Engine\CommandContext\CommandQueue.h" />
@@ -324,7 +327,7 @@
     <ClInclude Include="Engine\Util\WICTextureLoader12.h" />
     <ClInclude Include="Engine\Window\Window.h" />
     <ClInclude Include="Engine\Window\WindowManager.h" />
-    <ClInclude Include="SubMixVoice.h" />
+    <ClInclude Include="K3D12.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">

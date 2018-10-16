@@ -5,8 +5,9 @@
 namespace K3D12 {
 	class SubMixVoice
 	{
+		friend class SubMicVoiceManager;
 	private:
-		std::unique_ptr<IXAudio2SourceVoice> _sourceVoice;
+		std::unique_ptr<IXAudio2SubmixVoice> _subMixVoice;
 	public:
 	private:
 	public:

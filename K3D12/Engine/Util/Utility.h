@@ -38,8 +38,8 @@ namespace K3D12::Util{
 	//ˆø”‚Ì•¶š—ñ‚©‚çŠg’£q’Šo
 	inline std::string ExtensionExtruction(std::string str)
 	{
-		size_t  dotPos = str.rfind('.');
-		size_t cutNum = str.length() - dotPos;
+		size_t dotPos = str.rfind('.');
+		size_t cutNum =  str.length() - dotPos;
 		std::string ext = str.substr(dotPos + 1, cutNum);
 		return ext;
 	}
