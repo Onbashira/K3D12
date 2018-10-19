@@ -31,12 +31,6 @@ void K3D12::AudioManager::InitializeXAudio2()
 
 }
 
-K3D12::Audio K3D12::AudioManager::CreateSourceVoice(AudioWaveSource & waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
-{
-
-	return Audio();
-}
-
 K3D12::Audio K3D12::AudioManager::CreateSourceVoice(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
 {
 	Audio audio;
@@ -79,7 +73,7 @@ void K3D12::AudioManager::StopSoundEngine()
 K3D12::Audio K3D12::AudioManager::LoadAudio(std::string audioPath)
 {
 
-	auto audioResource = AudioLoader::GetInstance().LoadAudio(audioPath);
+	auto audioResource = AudioLoader::GetInstance().LoadAudioEx(audioPath);
 
 
 	Audio audio = this->CreateSourceVoice(audioResource);;

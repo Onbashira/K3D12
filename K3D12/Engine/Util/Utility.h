@@ -35,10 +35,16 @@ namespace K3D12::Util{
 
 	};
 
-	template<typename T>inline unsigned int ConvertBitCount()
+	template<typename T>inline unsigned int ConvertByteToBit()
 	{
 		return (sizeof(T) * 8);
 	}
+
+	unsigned int ConvertBitToByte(unsigned int bitCount)
+	{
+		return (bitCount / 8);
+	}
+
 
 	//ˆø”‚Ì•¶š—ñ‚©‚çŠg’£q’Šo
 	inline std::string ExtensionExtruction(std::string str)

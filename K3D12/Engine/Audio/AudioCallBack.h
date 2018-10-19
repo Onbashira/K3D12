@@ -9,6 +9,9 @@ namespace K3D12 {
 	private:
 
 	protected:
+		
+		HANDLE _handle;
+		
 		//std::function<void(UINT32)> _onVoiceProcessingPassStart;
 		//std::function<void()> _onVoiceProcessingPassEnd;
 		//std::function<void()> _onStreamEnd;

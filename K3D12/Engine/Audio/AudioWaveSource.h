@@ -38,7 +38,7 @@ namespace K3D12 {
 
 		virtual ~AudioWaveSource();
 
-		virtual WAVE_RESOLUTION_TYPE GetResolutionType() = 0;
+		WAVE_RESOLUTION_TYPE GetResolutionType();
 
 		WAVEFORMATEX& GetWaveFormat();
 
