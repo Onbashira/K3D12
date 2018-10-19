@@ -54,7 +54,7 @@ SamplerState textureSampler : register(s0);
 //RCPFrameQualityで扱うNの値を決定するコンパイルフラグ
 
 #ifndef FXAA_SHARPNESS_VALUE
-#define FXAA_SHARPNESS_VALUE 0.75f
+#define FXAA_SHARPNESS_VALUE 1.0f
 #endif
 
 //--------------------------------------------------------------------------//
@@ -97,7 +97,7 @@ SamplerState textureSampler : register(s0);
     // 20 to 29 - 高品質　20が最速で29が最高品質
     // 39       - すげえ高コスト。キレイ
     //
-#define FXAA_QUALITY__PRESET 25
+#define FXAA_QUALITY__PRESET 29
 #endif
 /*---------------------------------------------------------------------------*/
 /*============================================================================
@@ -315,6 +315,8 @@ SamplerState textureSampler : register(s0);
 #endif
 //--------------------------------------------------------------------------//
 
+//rgb入力からルミナンスの推定値を返却する
+//FxaaGetLuma（）の範囲は0.0から2.963210702です。
 #if (FXAA_GREEN_AS_LUMA == 1)
 float FxaaLuma(float4 rgba) {
     return rgba.y;
@@ -323,27 +325,9 @@ float FxaaLuma(float4 rgba) {
 #else
 float FxaaLuma(float4 rgba)
 {
-    return rgba.w;
-
+    return 0.299f * rgba.x + rgba.y * 0.587f + rgba.z * 0.114f;
 }
 #endif  
-
-//rgb入力からルミナンスの推定値を返却する
-//FxaaGetLuma（）の範囲は0.0から2.963210702です。
-float FxaaGetLuma(float3 rgb)
-{
-#if FXAA_GREEN_AS_LUMA == 1
-    return rgb.y;
-#else
-    return rgb.y * (0.587f / 0.299f) + rgb.x;
-#endif
-}
-
-float FxaaLuminance(float4 rgba)
-{
-    //この場合、ルミナンス値をｙ値とする
-    return rgba.y;
-}
 
 //補間
 float3 FxaaLeapFloat3(float3 a, float3 b, float amount)
@@ -438,7 +422,7 @@ PSOutput FxaaPSMain(VSOutput input)
         float4 rgbyM = FxaaTexTop(posM);
         #if (FXAA_GREEN_AS_LUMA == 0)
 
-            #define lumaM rgbyM.w
+            #define lumaM FxaaLuma(rgbyM)
 
         #else
 
@@ -467,7 +451,7 @@ PSOutput FxaaPSMain(VSOutput input)
 #else
     float4 rgbyM = FxaaTexTop(posM);
     #if (FXAA_GREEN_AS_LUMA == 0)
-        #define lumaM rgbyM.w
+        #define lumaM FxaaLuma(rgbyM)
     #else
         #define lumaM rgbyM.y
     #endif
