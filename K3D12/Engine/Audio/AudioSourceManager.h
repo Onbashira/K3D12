@@ -2,11 +2,11 @@
 #include "../Util/NonCopyable.h"
 #include "../Util/ManagerComponentBase.h"
 namespace K3D12 {
-	class IWaveResource;
+	class AudioWaveSource;
 	class AudioSourceManager : private NonCopyable
 	{
 	private:
-		UnorderedManagerComponentBase<IWaveResource> _resourceMap;
+		UnorderedManagerComponentBase<AudioWaveSource> _resourceMap;
 
 	public:
 
@@ -28,9 +28,9 @@ namespace K3D12 {
 
 		static AudioSourceManager& GetInstance() { static AudioSourceManager instance; return instance; };
 
-		void SetResource(std::string resourceName, std::shared_ptr<IWaveResource> source);
+		void SetResource(std::string resourceName, std::shared_ptr<AudioWaveSource> source);
 
-		std::weak_ptr<K3D12::IWaveResource> GetResource(std::string resourceName);
+		std::weak_ptr<K3D12::AudioWaveSource> GetResource(std::string resourceName);
 
 		void EraseResource(std::string name);
 

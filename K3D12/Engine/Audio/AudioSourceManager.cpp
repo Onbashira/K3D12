@@ -1,12 +1,12 @@
 #include "AudioSourceManager.h"
 
 
-void K3D12::AudioSourceManager::SetResource(std::string resourceName,std::shared_ptr<IWaveResource> source)
+void K3D12::AudioSourceManager::SetResource(std::string resourceName,std::shared_ptr<AudioWaveSource> source)
 {
 	this->_resourceMap.Set(resourceName,source);
 }
 
-std::weak_ptr<K3D12::IWaveResource> K3D12::AudioSourceManager::GetResource(std::string resourceName)
+std::weak_ptr<K3D12::AudioWaveSource> K3D12::AudioSourceManager::GetResource(std::string resourceName)
 {
 	return this->_resourceMap.Get(resourceName);
 }

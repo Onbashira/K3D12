@@ -2,6 +2,7 @@
 #include "../Util/Logger.h"
 #include "AudioLoader.h"
 #include "AudioCallBack.h"
+#include "AudioWaveSource.h"
 
 K3D12::AudioManager::AudioManager()
 {
@@ -30,41 +31,24 @@ void K3D12::AudioManager::InitializeXAudio2()
 
 }
 
-K3D12::Audio K3D12::AudioManager::CreateSourceVoice(AudioNormalWav & waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
+K3D12::Audio K3D12::AudioManager::CreateSourceVoice(AudioWaveSource & waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
 {
 
 	return Audio();
 }
 
-K3D12::Audio K3D12::AudioManager::CreateSourceVoice(std::weak_ptr<IWaveResource> waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
+K3D12::Audio K3D12::AudioManager::CreateSourceVoice(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
 {
 	Audio audio;
-	switch (waveResource.lock()->GetResolutionType())
-	{
-	case K3D12::WAVE_RESOLUTION_TYPE::AUDIO_RESOURCE_TYPE_NORMAL_RESOLUTION:
-	{
-		auto wav = std::dynamic_pointer_cast<AudioNormalWav>(waveResource.lock());
-		auto sourceVoicePtr = audio._sourceVoice.get();
-		_xAudio2->CreateSourceVoice(&(sourceVoicePtr),&wav->GetWaveFormat(),0,2.0f,callback,sendList,effectChain);
-		audio._callBack = *callback;
-		audio._audioBuffer.AudioBytes = wav->GetWave().size();
-		audio._audioBuffer.pAudioData = reinterpret_cast<BYTE*>( &wav->GetWave()[0]);
 
-	}
-	break;
-	case K3D12::WAVE_RESOLUTION_TYPE::AUDIO_RESOURCE_TYPE_HIGH_RESOLUTION:
-	{
-		assert(0);
-		auto wav = std::dynamic_pointer_cast<AudioNormalWav>(waveResource.lock());
-		auto sourceVoicePtr = audio._sourceVoice.get();
-		_xAudio2->CreateSourceVoice(&(sourceVoicePtr), &wav->GetWaveFormat(), 0, 2.0f, callback, sendList, effectChain);
-		audio._callBack = *callback;
+	auto sourceVoicePtr = audio._sourceVoice.get();
+	_xAudio2->CreateSourceVoice(&(sourceVoicePtr), &waveResource.lock()->GetWaveFormat(), 0, 2.0f, callback, sendList, effectChain);
 
-	}
-		break;
-	default:
-		break;
-	}
+
+	audio._callBack = *callback;
+	audio._audioBuffer.AudioBytes = waveResource.lock()->GetWave().size();
+	audio._audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&waveResource.lock()->GetWave()[0]);
+
 	return audio;
 }
 
@@ -97,7 +81,7 @@ K3D12::Audio K3D12::AudioManager::LoadAudio(std::string audioPath)
 
 	auto audioResource = AudioLoader::GetInstance().LoadAudio(audioPath);
 
-	
+
 	Audio audio = this->CreateSourceVoice(audioResource);;
 
 	return Audio();

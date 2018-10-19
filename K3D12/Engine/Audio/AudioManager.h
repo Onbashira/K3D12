@@ -9,7 +9,7 @@
 #include <wrl.h>
 #include "../Util/NonCopyable.h"
 #include "Audio.h"
-#include "AudioNormalWav.h"
+#include "AudioWaveSource.h"
 
 
 
@@ -37,10 +37,10 @@ namespace K3D12 {
 		void operator = (AudioManager&&value) {};
 		
 
-		Audio CreateSourceVoice(AudioNormalWav& waveResource, AudioCallBack *callback = nullptr,
+		Audio CreateSourceVoice(AudioWaveSource& waveResource, AudioCallBack *callback = nullptr,
 			const XAUDIO2_VOICE_SENDS *sendList = nullptr,const XAUDIO2_EFFECT_CHAIN *effectChain = nullptr);
 
-		Audio CreateSourceVoice(std::weak_ptr<IWaveResource> waveResource, AudioCallBack *callback = nullptr,
+		Audio CreateSourceVoice(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack *callback = nullptr,
 			const XAUDIO2_VOICE_SENDS *sendList = nullptr, const XAUDIO2_EFFECT_CHAIN *effectChain = nullptr);
 
 	public:	

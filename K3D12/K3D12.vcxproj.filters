@@ -456,16 +456,13 @@
     <ClCompile Include="Engine\Audio\SubMixVoice.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Audio\AudioNormalWav.cpp">
-      <Filter>Engine\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Audio\IWaveResource.cpp">
-      <Filter>Engine\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Audio\SubMixVoiceManager.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Audio\Audio.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\AudioWaveSource.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
   </ItemGroup>
@@ -764,19 +761,13 @@
     <ClInclude Include="Engine\Audio\SubMixVoice.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Audio\AudioNormalWav.h">
-      <Filter>Engine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Audio\IWaveResource.h">
-      <Filter>Engine\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Audio\SubMixVoiceManager.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Audio\Audio.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="K3D12.h">
+    <ClInclude Include="Engine\Audio\AudioWaveSource.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
   </ItemGroup>

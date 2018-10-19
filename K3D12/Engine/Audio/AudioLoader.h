@@ -3,13 +3,15 @@
 #include <string>
 #include "../Util/NonCopyable.h"
 #include "Audio.h"
+#include "../AsyncComponent/ThreadPool.h"
 
 namespace K3D12{
 
-	class IWaveResource;
+	class AudioWaveSource;
 	class AudioLoader : public NonCopyable
 	{
 	private:
+		static inline unsigned int _THREAD_NUM = 12;
 	public:
 	private:
 
@@ -32,7 +34,8 @@ namespace K3D12{
 			return instance;
 		}
 
-		std::shared_ptr<IWaveResource> LoadAudio(std::string audioFilePath);
+		std::shared_ptr<AudioWaveSource> LoadAudio(std::string audioFilePath);
+		std::shared_ptr<AudioWaveSource> LoadAudioEx(std::string audioFilePath);
 
 	};
 }

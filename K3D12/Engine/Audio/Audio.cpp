@@ -1,5 +1,5 @@
 #include "Audio.h"
-
+#include "AudioWaveSource.h"
 
 
 K3D12::Audio::Audio()

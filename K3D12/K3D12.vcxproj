@@ -136,9 +136,8 @@
     <ClCompile Include="Engine\Audio\AudioCallBack.cpp" />
     <ClCompile Include="Engine\Audio\AudioLoader.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
-    <ClCompile Include="Engine\Audio\AudioNormalWav.cpp" />
+    <ClCompile Include="Engine\Audio\AudioWaveSource.cpp" />
     <ClCompile Include="Engine\Audio\AudioSourceManager.cpp" />
-    <ClCompile Include="Engine\Audio\IWaveResource.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\SubMixVoice.cpp" />
     <ClCompile Include="Engine\Audio\SubMixVoiceManager.cpp" />
@@ -238,9 +237,8 @@
     <ClInclude Include="Engine\Audio\AudioCallBack.h" />
     <ClInclude Include="Engine\Audio\AudioLoader.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
-    <ClInclude Include="Engine\Audio\AudioNormalWav.h" />
+    <ClInclude Include="Engine\Audio\AudioWaveSource.h" />
     <ClInclude Include="Engine\Audio\AudioSourceManager.h" />
-    <ClInclude Include="Engine\Audio\IWaveResource.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\Audio\SubMixVoice.h" />
     <ClInclude Include="Engine\Audio\SubMixVoiceManager.h" />
@@ -327,7 +325,6 @@
     <ClInclude Include="Engine\Util\WICTextureLoader12.h" />
     <ClInclude Include="Engine\Window\Window.h" />
     <ClInclude Include="Engine\Window\WindowManager.h" />
-    <ClInclude Include="K3D12.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">
