@@ -40,7 +40,7 @@ namespace K3D12::Util{
 		return (sizeof(T) * 8);
 	}
 
-	unsigned int ConvertBitToByte(unsigned int bitCount)
+	inline unsigned int ConvertBitToByte(unsigned int bitCount)
 	{
 		return (bitCount / 8);
 	}
@@ -88,7 +88,7 @@ namespace K3D12::Util{
 	}
 
 	//現在モデルパスからTextureパスまでの相対パスを取得
-	static std::string GetRelativeTexturePath(std::string & modelPath, std::string texturePath)
+	inline std::string GetRelativeTexturePath(std::string & modelPath, std::string texturePath)
 	{
 		size_t pathIndex1 = modelPath.rfind('/');
 

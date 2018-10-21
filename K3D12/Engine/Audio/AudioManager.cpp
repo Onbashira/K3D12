@@ -35,14 +35,16 @@ K3D12::Audio K3D12::AudioManager::CreateSourceVoice(std::weak_ptr<AudioWaveSourc
 {
 	Audio audio;
 
-	auto sourceVoicePtr = audio._sourceVoice.get();
-	_xAudio2->CreateSourceVoice(&(sourceVoicePtr), &waveResource.lock()->GetWaveFormat(), 0, 2.0f, callback, sendList, effectChain);
+	if (callback != nullptr) {
+		audio._callBack = *callback;
+	}
+
+	_xAudio2->CreateSourceVoice(&audio._sourceVoice, &waveResource.lock()->GetWaveFormat(), 0, 2.0f, &audio._callBack, sendList, effectChain);
 
 
-	audio._callBack = *callback;
 	audio._audioBuffer.AudioBytes = waveResource.lock()->GetWave().size();
 	audio._audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&waveResource.lock()->GetWave()[0]);
-
+	audio.SubmitBuffer();
 	return audio;
 }
 
@@ -73,7 +75,7 @@ void K3D12::AudioManager::StopSoundEngine()
 K3D12::Audio K3D12::AudioManager::LoadAudio(std::string audioPath)
 {
 
-	auto audioResource = AudioLoader::GetInstance().LoadAudioEx(audioPath);
+	auto audioResource = AudioLoader::GetInstance().LoadAudio(audioPath);
 
 
 	Audio audio = this->CreateSourceVoice(audioResource);;

@@ -1,3 +1,4 @@
+
 #include "Audio.h"
 #include "AudioWaveSource.h"
 
@@ -6,23 +7,11 @@ K3D12::Audio::Audio()
 {
 }
 
-K3D12::Audio::Audio(const Audio & other)
-{
-	*this = other;
-}
-
 K3D12::Audio::~Audio()
 {
+	Discard();
 }
 
-K3D12::Audio & K3D12::Audio::operator=(const Audio & other)
-{
-	this->_audioBuffer = other._audioBuffer;
-	this->_callBack = other._callBack;
-	this->_rawData.reset();
-	this->_sourceVoice.reset(other._sourceVoice.get());
-	return  *this;
-}
 
 void K3D12::Audio::Play()
 {
@@ -57,6 +46,13 @@ void K3D12::Audio::Discard()
 		_sourceVoice->DestroyVoice();
 	}
 	this->_callBack;
-	this->_sourceVoice.reset();
+	if (this->_sourceVoice != nullptr) {
+		delete _sourceVoice;
+	}
 	this->_rawData;
+}
+
+void K3D12::Audio::SubmitBuffer()
+{
+	this->_sourceVoice->SubmitSourceBuffer(&this->_audioBuffer);
 }

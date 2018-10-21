@@ -3,8 +3,6 @@
 #include <xaudio2.h>
 #include <memory>
 #include <deque>
-#include <ks.h>
-#include <future>
 #include "AudioCallBack.h"
 
 namespace K3D12 {
@@ -22,7 +20,7 @@ namespace K3D12 {
 		//サウンドごとのデータ
 		XAUDIO2_BUFFER _audioBuffer;
 
-		std::unique_ptr<IXAudio2SourceVoice> _sourceVoice;
+		IXAudio2SourceVoice* _sourceVoice;
 		
 		std::weak_ptr<AudioWaveResource> _rawData;
 
@@ -46,11 +44,15 @@ namespace K3D12 {
 		
 		Audio();
 
-		Audio(const Audio& other);
+		//Audio(const Audio& other);
+
+		//Audio(Audio&& other);
 
 		virtual ~Audio();
 
-		Audio& operator=(const Audio& other);
+		//Audio& operator=(const Audio& other);
+
+		//Audio& operator=(Audio&& other);
 
 		virtual void Play();
 
@@ -62,13 +64,14 @@ namespace K3D12 {
 
 		void SetLoopPoint();
 
-
-
 		virtual void Pause(bool pause);
 
 		virtual bool CheckPlaying();
 
 		virtual void Discard();
+
+		//再生キューにデータを追加
+		void SubmitBuffer();
 
 	};
 }

@@ -1,6 +1,7 @@
 #include "AudioWaveSource.h"
 
-K3D12::AudioWaveSource::AudioWaveSource()
+K3D12::AudioWaveSource::AudioWaveSource() :
+	_loadedSize(0), _isWaveLoaded(false), _format({})
 {
 }
 
