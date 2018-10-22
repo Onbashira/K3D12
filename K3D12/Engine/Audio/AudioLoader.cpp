@@ -28,6 +28,7 @@ namespace K3D12 {
 		AUDIO_BITS_PER_SAMPLE_8, //128を無音とする0～255の値を使用する
 		AUDIO_BITS_PER_SAMPLE_16, //0を無音とする-32768～32767の値を使用する
 		AUDIO_BITS_PER_SAMPLE_24,
+		AUDIO_BITS_PER_SAMPLE_32,
 	};
 
 	const DWORD SPEAKER_SETTINGS[] = {
@@ -41,17 +42,17 @@ namespace K3D12 {
 		KSAUDIO_SPEAKER_7POINT1_SURROUND
 	};
 
-	void LoadStereo(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int firstReadIndex);
-	void LoadMonaural(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int firstReadIndex);
+	void LoadStereo(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex);
+	void LoadMonaural(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex);
 
-	void LoadStereo8bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int firstReadIndex = 0);
-	void LoadStereo16bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int firstReadIndex = 0);
-	void LoadStereo24bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int firstReadIndex = 0);
-	void LoadStereo32bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int firstReadIndex = 0);
-	void LoadMonaural8bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int firstReadIndex = 0);
-	void LoadMonaural16bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int firstReadIndex = 0);
-	void LoadMonaural24bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int firstReadIndex = 0);
-	void LoadMonaural32bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int firstReadIndex = 0);
+	void LoadStereo8bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex = 0);
+	void LoadStereo16bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex = 0);
+	void LoadStereo24bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex = 0);
+	void LoadStereo32bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex = 0);
+	void LoadMonaural8bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex = 0);
+	void LoadMonaural16bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex = 0);
+	void LoadMonaural24bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex = 0);
+	void LoadMonaural32bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex = 0);
 }
 
 
@@ -167,7 +168,7 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudio(std::strin
 		res->_format.Samples.wValidBitsPerSample = res->_format.Format.wBitsPerSample;
 		res->_format.dwChannelMask = SPEAKER_SETTINGS[format.nChannels - 1];	//スピーカー配置
 		res->_format.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
-		
+
 		//バイト数 / (チャンネル数 * フォーマットのサンプルバイト数）
 		res->GetWave().resize(dataChunk.cksize / (res->GetWaveFormat().nChannels * Util::ConvertBitToByte(16)));
 	}
@@ -188,7 +189,7 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudio(std::strin
 			start = std::chrono::system_clock::now();
 
 			do {
-				
+
 				res->_loadedSize += mmioRead(mmio, (HPSTR)&waveInfo, sizeof(Stereo16Bit));
 				if (res->_loadedSize != sizeof(Stereo16Bit)*(++cycleNum)) {
 					ERROR_LOG(std::string("mmioReadが失敗しました。(WaveLoad)"));
@@ -196,7 +197,7 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudio(std::strin
 					return nullptr;
 				}
 				//波形　正規化vおよび代入
-				{			
+				{
 					res->GetWave()[waveIndex] = (static_cast<float>(waveInfo.left) / AUDIO_16BIT_NORMALIZE_FACTOR);
 					res->GetWave()[waveIndex + 1] = (static_cast<float>(waveInfo.right) / AUDIO_16BIT_NORMALIZE_FACTOR);
 				}
@@ -204,7 +205,7 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudio(std::strin
 				{
 					waveIndex += static_cast<unsigned int>(res->GetWaveFormat().nChannels);
 				}
-			
+
 			} while (cycleMax > cycleNum);
 
 			end = std::chrono::system_clock::now();
@@ -340,21 +341,22 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudioEx(std::str
 		res->_format.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
 	}
 
+	res->GetWave().resize(dataChunk.cksize / (res->GetWaveFormat().nChannels * Util::ConvertBitToByte(format.wBitsPerSample)));
 	//波形データ抽出
 	{
 		switch (format.nChannels)
 		{
 		case 1:
-			this->_loadThreadPool.enqueue([&]() {
+			this->_loadThreadPool.enqueue([=]() {
 				auto chunk = dataChunk;
-				LoadMonaural(mmio, *res, chunk, 0);
+				LoadMonaural(mmio, *res, chunk,format.wBitsPerSample, 0);
 			}
 			);
 			break;
 		case 2:
-			this->_loadThreadPool.enqueue([&]() {
+			this->_loadThreadPool.enqueue([=]() {
 				auto chunk = dataChunk;
-				LoadStereo(mmio, *res, chunk, 0);
+				LoadStereo(mmio, *res, chunk, format.wBitsPerSample, 0);
 			}
 			);
 			break;
@@ -367,29 +369,29 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudioEx(std::str
 	return res;
 }
 
-void K3D12::LoadStereo(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int firstReadIndex)
+void K3D12::LoadStereo(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
-	switch (wave.GetWaveFormat().wBitsPerSample)
+	switch (rawFormatSampleBit)
 	{
 	case 8:
-		wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(8)));
-		LoadStereo8bitSound(mmio, wave, dataChunk, firstReadIndex);
+		//wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(rawFormatSampleBit)));
+		LoadStereo8bitSound(mmio, wave, dataChunk, rawFormatSampleBit, firstReadIndex);
 		break;
 	case 16:
-		wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(16)));
-		LoadStereo16bitSound(mmio, wave, dataChunk, firstReadIndex);
+		//wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(rawFormatSampleBit)));
+		LoadStereo16bitSound(mmio, wave, dataChunk, rawFormatSampleBit, firstReadIndex);
 		break;
 	case 24:
-		wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(24)));
+		//wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(rawFormatSampleBit)));
 		DEBUG_LOG(std::string("未実装"));
 		assert(0);
-		LoadStereo24bitSound(mmio, wave, dataChunk, firstReadIndex);
+		LoadStereo24bitSound(mmio, wave, dataChunk, rawFormatSampleBit, firstReadIndex);
 		break;
 	case 32:
-		wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(32)));
+		//wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(rawFormatSampleBit)));
 		DEBUG_LOG(std::string("未実装"));
 		assert(0);
-		LoadStereo32bitSound(mmio, wave, dataChunk, firstReadIndex);
+		LoadStereo32bitSound(mmio, wave, dataChunk, rawFormatSampleBit, firstReadIndex);
 		break;
 	default:
 		assert(0);
@@ -397,29 +399,29 @@ void K3D12::LoadStereo(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk,
 	}
 }
 
-void K3D12::LoadMonaural(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int firstReadIndex)
+void K3D12::LoadMonaural(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
-	switch (wave.GetWaveFormat().wBitsPerSample)
+	switch (rawFormatSampleBit)
 	{
 	case 8:
-		wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(8)));
-		LoadMonaural8bitSound(mmio, wave, dataChunk, firstReadIndex);
+		//wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(rawFormatSampleBit)));
+		LoadMonaural8bitSound(mmio, wave, dataChunk, rawFormatSampleBit, firstReadIndex);
 		break;
 	case 16:
-		wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(16)));
-		LoadMonaural16bitSound(mmio, wave, dataChunk, firstReadIndex);
+		//wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(rawFormatSampleBit)));
+		LoadMonaural16bitSound(mmio, wave, dataChunk, rawFormatSampleBit, firstReadIndex);
 		break;
 	case 24:
-		wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(24)));
+		//wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(rawFormatSampleBit)));
 		DEBUG_LOG(std::string("未実装"));
 		assert(0);
-		LoadMonaural24bitSound(mmio, wave, dataChunk, firstReadIndex);
+		LoadMonaural24bitSound(mmio, wave, dataChunk, rawFormatSampleBit, firstReadIndex);
 		break;
 	case 32:
-		wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(32)));
+		//wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(rawFormatSampleBit)));
 		DEBUG_LOG(std::string("未実装"));
 		assert(0);
-		LoadMonaural32bitSound(mmio, wave, dataChunk, firstReadIndex);
+		LoadMonaural32bitSound(mmio, wave, dataChunk, rawFormatSampleBit, firstReadIndex);
 		break;
 	default:
 		assert(0);
@@ -427,7 +429,7 @@ void K3D12::LoadMonaural(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChun
 	}
 }
 
-void K3D12::LoadStereo8bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int firstReadIndex)
+void K3D12::LoadStereo8bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
 
 	//波形データ抽出
@@ -478,55 +480,46 @@ void K3D12::LoadStereo8bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & d
 	mmioClose(mmio, 0);
 }
 
-void K3D12::LoadStereo16bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int firstReadIndex)
+void K3D12::LoadStereo16bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
 	//波形データ抽出
 	{
-		std::chrono::system_clock::time_point start, end;
 
 		Stereo16Bit waveInfo{}; //読み込んだ波形の情報
-
+		unsigned int loadSize = 0;
 		unsigned int waveIndex = 0;
-
-		unsigned int size = 0;
+		unsigned int cycleNum = 0;
+		unsigned int cycleMax = wave.GetWave().size() / 2;
+		std::chrono::system_clock::time_point start, end;
 
 		start = std::chrono::system_clock::now();
 
-		while (size <= dataChunk.cksize) {
-			//本当はチャンネル数で変えるべき。しかし、今のところゲームに２ｃｈ以上の対応はさせないので現段階での実装は控えておく
-			size += mmioRead(mmio, (HPSTR)&waveInfo, sizeof(Stereo16Bit));
+		do {
 
-			if (size != sizeof(Stereo16Bit)) {
+			loadSize += mmioRead(mmio, (HPSTR)&waveInfo, sizeof(Stereo16Bit));
+			if (loadSize != sizeof(Stereo16Bit)*(++cycleNum)) {
 				ERROR_LOG(std::string("mmioReadが失敗しました。(WaveLoad)"));
 				mmioClose(mmio, 0);
-				return;
+				return ;
 			}
-
-			//デバッグログ
-			{
-				end = std::chrono::system_clock::now();
-				auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-				std::stringstream ss;
-				ss << "Read time [ " << elapsed << " ] ms.";
-				INFO_LOG(std::string(ss.str()));
-			}
-
 			//波形　正規化vおよび代入
 			{
 				wave.GetWave()[waveIndex] = (static_cast<float>(waveInfo.left) / AUDIO_16BIT_NORMALIZE_FACTOR);
-				wave.GetWave()[waveIndex + 1] = (static_cast<float>(waveInfo.right) / AUDIO_8BIT_NORMALIZE_FACTOR);
-
+				wave.GetWave()[waveIndex + 1] = (static_cast<float>(waveInfo.right) / AUDIO_16BIT_NORMALIZE_FACTOR);
 			}
 			//インクリメント
 			{
 				waveIndex += static_cast<unsigned int>(wave.GetWaveFormat().nChannels);
 			}
-		}
 
+		} while (cycleMax > cycleNum);
+
+		//ハンドルクローズ
+		mmioClose(mmio, 0);
 	}
 }
 
-void K3D12::LoadStereo24bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int firstReadIndex)
+void K3D12::LoadStereo24bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
 	std::chrono::system_clock::time_point start, end;
 
@@ -561,7 +554,7 @@ void K3D12::LoadStereo24bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & 
 	}
 }
 
-void K3D12::LoadStereo32bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int firstReadIndex)
+void K3D12::LoadStereo32bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
 	std::chrono::system_clock::time_point start, end;
 
@@ -596,18 +589,18 @@ void K3D12::LoadStereo32bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & 
 	}
 }
 
-void K3D12::LoadMonaural8bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int firstReadIndex)
+void K3D12::LoadMonaural8bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
 }
 
-void K3D12::LoadMonaural16bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int firstReadIndex)
+void K3D12::LoadMonaural16bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
 }
 
-void K3D12::LoadMonaural24bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int firstReadIndex)
+void K3D12::LoadMonaural24bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
 }
 
-void K3D12::LoadMonaural32bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int firstReadIndex)
+void K3D12::LoadMonaural32bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
 }

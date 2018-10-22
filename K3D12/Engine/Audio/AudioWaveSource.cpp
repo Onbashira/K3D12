@@ -12,12 +12,6 @@ K3D12::AudioWaveSource::~AudioWaveSource()
 }
 
 
-K3D12::WAVE_RESOLUTION_TYPE K3D12::AudioWaveSource::GetResolutionType()
-{
-	return _resolutionType;
-}
-
-
 WAVEFORMATEX & K3D12::AudioWaveSource::GetWaveFormat()
 {
 	return _format.Format;

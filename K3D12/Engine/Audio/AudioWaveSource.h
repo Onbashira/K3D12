@@ -4,11 +4,6 @@
 #include <xaudio2.h>
 
 namespace K3D12 {
-	enum class WAVE_RESOLUTION_TYPE
-	{
-		AUDIO_RESOURCE_TYPE_NORMAL_RESOLUTION,
-		AUDIO_RESOURCE_TYPE_HIGH_RESOLUTION,
-	};
 	class AudioWaveSource
 	{
 		friend class AudioLoader;
@@ -21,8 +16,6 @@ namespace K3D12 {
 	public:
 
 	protected:
-
-		WAVE_RESOLUTION_TYPE _resolutionType;
 
 		WAVEFORMATEXTENSIBLE _format;
 
@@ -37,8 +30,6 @@ namespace K3D12 {
 		AudioWaveSource();
 
 		virtual ~AudioWaveSource();
-
-		WAVE_RESOLUTION_TYPE GetResolutionType();
 
 		WAVEFORMATEX& GetWaveFormat();
 

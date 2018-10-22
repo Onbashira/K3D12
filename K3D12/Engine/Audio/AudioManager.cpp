@@ -91,7 +91,7 @@ K3D12::Audio * K3D12::AudioManager::CreateSourceVoiceEx(std::weak_ptr<AudioWaveS
 		audio->_seekPoint += seekValue;
 	}
 
-	audio->_callBack.SetOnBufferEnd([&audio](void* context) {
+	audio->_callBack.SetOnBufferEnd([audio](void* context) {
 		auto state = audio->GetState();
 
 		//もしキュー内のバッファがQ設定数値以下ならバッファに対して新しいデータを供給する
@@ -115,7 +115,7 @@ K3D12::Audio * K3D12::AudioManager::CreateSourceVoiceEx(std::weak_ptr<AudioWaveS
 			else {
 				audio->_audioBuffer.AudioBytes = static_cast<UINT32>(seekValue * sizeof(float));
 				audio->_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&audio->_rawData.lock()->GetWave()[audio->_seekPoint]);
-				audio->_seekPoint += audio->_rawData.lock()->GetWaveFormat().nSamplesPerSec;
+				audio->_seekPoint += seekValue;
 
 				audio->SubmitBuffer();
 			}
@@ -128,6 +128,7 @@ K3D12::Audio * K3D12::AudioManager::CreateSourceVoiceEx(std::weak_ptr<AudioWaveS
 
 void K3D12::AudioManager::Discard()
 {
+
 	if (_masterVoice != nullptr) {
 		_masterVoice->DestroyVoice();
 		_masterVoice = nullptr;
