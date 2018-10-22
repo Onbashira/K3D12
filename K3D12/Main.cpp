@@ -26,9 +26,10 @@ int main() {
 
 	auto audio = K3D12::AudioManager::GetInstance().LoadAudio("./audio/Test.wav");
 
-	audio.Play();
+	audio->Play();
 
 	while (K3D12::MessageLoop() == 0 || K3D12::Input().IsTriggerDown(K3D12::VIRTUAL_KEY_STATE::VKS_ESCAPE)) {
+		K3D12::Input().InputUpdate();
 		K3D12::ClearScreen();
 
 

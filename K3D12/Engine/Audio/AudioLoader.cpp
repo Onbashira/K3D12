@@ -167,7 +167,8 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudio(std::strin
 		res->_format.Samples.wValidBitsPerSample = res->_format.Format.wBitsPerSample;
 		res->_format.dwChannelMask = SPEAKER_SETTINGS[format.nChannels - 1];	//スピーカー配置
 		res->_format.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
-
+		
+		//バイト数 / (チャンネル数 * フォーマットのサンプルバイト数）
 		res->GetWave().resize(dataChunk.cksize / (res->GetWaveFormat().nChannels * Util::ConvertBitToByte(16)));
 	}
 
@@ -376,19 +377,19 @@ void K3D12::LoadStereo(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk,
 		break;
 	case 16:
 		wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(16)));
-		LoadStereo8bitSound(mmio, wave, dataChunk, firstReadIndex);
+		LoadStereo16bitSound(mmio, wave, dataChunk, firstReadIndex);
 		break;
 	case 24:
 		wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(24)));
 		DEBUG_LOG(std::string("未実装"));
 		assert(0);
-		LoadStereo8bitSound(mmio, wave, dataChunk, firstReadIndex);
+		LoadStereo24bitSound(mmio, wave, dataChunk, firstReadIndex);
 		break;
 	case 32:
 		wave.GetWave().resize(dataChunk.cksize / (wave.GetWaveFormat().nChannels * Util::ConvertBitToByte(32)));
 		DEBUG_LOG(std::string("未実装"));
 		assert(0);
-		LoadStereo8bitSound(mmio, wave, dataChunk, firstReadIndex);
+		LoadStereo32bitSound(mmio, wave, dataChunk, firstReadIndex);
 		break;
 	default:
 		assert(0);

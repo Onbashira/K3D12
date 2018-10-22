@@ -3,7 +3,8 @@
 #include "AudioWaveSource.h"
 
 
-K3D12::Audio::Audio()
+K3D12::Audio::Audio() :
+	_seekPoint(0),_isLoop(false)
 {
 }
 
@@ -21,6 +22,28 @@ void K3D12::Audio::Play()
 void K3D12::Audio::Stop()
 {
 	this->_sourceVoice->Stop();
+}
+
+void K3D12::Audio::LoopEnable()
+{
+	_isLoop = true;
+}
+
+void K3D12::Audio::LoopDisable()
+{
+	_isLoop = false;
+}
+
+void K3D12::Audio::SetLoopPoint(unsigned int loopPoint)
+{
+	LoopEnable();
+	
+}
+
+XAUDIO2_VOICE_STATE K3D12::Audio::GetState()
+{
+	_sourceVoice->GetState(&_voiceState);
+	return this->_voiceState;
 }
 
 void K3D12::Audio::Pause(bool pause)

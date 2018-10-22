@@ -21,6 +21,7 @@
 #include "../GameConponent/Light/LightManager.h"
 #include "../GameConponent/Primitive/PrimitiveCreater.h"
 #include "../Signature/RootSignature.h"
+#include "../Audio/AudioManager.h"
 
 #include <random>
 
@@ -830,6 +831,9 @@ void D3D12System::TermD3D12()
 
 	DEBUG_LOG(std::string("Terminate D3D12"));
 
+	AudioManager::GetInstance().Discard();
+	DEBUG_LOG(std::string("Terminate XAudio2"));
+		
 }
 
 void K3D12::Create()

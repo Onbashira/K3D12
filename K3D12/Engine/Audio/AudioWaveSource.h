@@ -44,11 +44,11 @@ namespace K3D12 {
 
 		WAVEFORMATEXTENSIBLE& GetWaveFormatExtensible();
 
-		void CopyWaveAsync(std::vector<float>& wave);
+		//void CopyWaveAsync(std::vector<float>& wave);
 
-		void CopyWaveBulk(std::vector<float>& wave);
+		//void CopyWaveBulk(std::vector<float>& wave);
 
-		void SetWave(std::vector<float>& waveForSwap);
+		//void SetWave(std::vector<float>& waveForSwap);
 
 		std::vector<float>&	GetWave();
 

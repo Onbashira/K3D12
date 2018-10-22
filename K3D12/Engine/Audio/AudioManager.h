@@ -20,7 +20,7 @@ namespace K3D12 {
 
 		Microsoft::WRL::ComPtr<IXAudio2> _xAudio2;
 
-		std::unique_ptr<IXAudio2MasteringVoice> _masterVoice;
+		IXAudio2MasteringVoice* _masterVoice;
 
 	public:
 
@@ -35,12 +35,11 @@ namespace K3D12 {
 		void operator = (const AudioManager& value) {};
 		
 		void operator = (AudioManager&&value) {};
-		
 
-		Audio CreateSourceVoice(AudioWaveSource& waveResource, AudioCallBack *callback = nullptr,
-			const XAUDIO2_VOICE_SENDS *sendList = nullptr,const XAUDIO2_EFFECT_CHAIN *effectChain = nullptr);
+		Audio* CreateSourceVoice(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack *callback = nullptr,
+			const XAUDIO2_VOICE_SENDS *sendList = nullptr, const XAUDIO2_EFFECT_CHAIN *effectChain = nullptr);
 
-		Audio CreateSourceVoice(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack *callback = nullptr,
+		Audio* CreateSourceVoiceEX(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack *callback = nullptr,
 			const XAUDIO2_VOICE_SENDS *sendList = nullptr, const XAUDIO2_EFFECT_CHAIN *effectChain = nullptr);
 
 	public:	
@@ -64,6 +63,6 @@ namespace K3D12 {
 
 		void StopSounds();
 
-		Audio LoadAudio(std::string audioPath);
+		Audio* LoadAudio(std::string audioPath);
 	};
 }

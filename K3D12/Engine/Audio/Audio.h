@@ -2,13 +2,14 @@
 
 #include <xaudio2.h>
 #include <memory>
+#include <array>
 #include <deque>
 #include "AudioCallBack.h"
 
 namespace K3D12 {
 
 	class SubMixVoice;
-	class AudioWaveResource;
+	class AudioWaveSource;
 	class NormalAudioWav;
 	class AudioCallBack;
 
@@ -16,13 +17,14 @@ namespace K3D12 {
 	class Audio
 	{
 		friend class AudioManager;
+
 	private:
 		//サウンドごとのデータ
 		XAUDIO2_BUFFER _audioBuffer;
 
 		IXAudio2SourceVoice* _sourceVoice;
 		
-		std::weak_ptr<AudioWaveResource> _rawData;
+		std::weak_ptr<AudioWaveSource> _rawData;
 
 		AudioCallBack _callBack;
 
@@ -30,9 +32,14 @@ namespace K3D12 {
 
 		WAVEFORMATEXTENSIBLE _format;
 
-		std::deque<float*> _wavePointer;
+		//生データのどの位置から一秒間のサンプリングを行っているかを知らせる要素番号
+		unsigned int _seekPoint;
 
-		unsigned int _currentWaveIndex;
+		//曲の最大ながさ。ループポイントを設定するとこの長さが変わる。デフォルトで結尾部分のポイント
+		unsigned int _audioLength;
+
+		//ループするかしないか。
+		bool _isLoop;
 
 	public:
 
@@ -62,7 +69,9 @@ namespace K3D12 {
 
 		void LoopDisable();
 
-		void SetLoopPoint();
+		void SetLoopPoint(unsigned int loopPoint = 0);
+
+		XAUDIO2_VOICE_STATE GetState();
 
 		virtual void Pause(bool pause);
 

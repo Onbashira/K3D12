@@ -12,17 +12,22 @@ namespace K3D12 {
 		
 		HANDLE _handle;
 		
-		//std::function<void(UINT32)> _onVoiceProcessingPassStart;
-		//std::function<void()> _onVoiceProcessingPassEnd;
-		//std::function<void()> _onStreamEnd;
-		//std::function<void(void*)> _onBufferStart;
-		//std::function<void(void*)> _onBufferEnd;
-		//std::function<void(void*)> _onLoopEnd;
-		//std::function<void(void*, HRESULT)> _onVoiceError;
+		std::function<void(UINT32)> _onVoiceProcessingPassStart;
 
+		std::function<void()> _onVoiceProcessingPassEnd;
+
+		std::function<void()> _onStreamEnd;
+
+		std::function<void(void*)> _onBufferStart;
+
+		std::function<void(void*)> _onBufferEnd;
+
+		std::function<void(void*)> _onLoopEnd;
+
+		std::function<void(void*, HRESULT)> _onVoiceError;
 
 	public:
-
+		static inline unsigned int AUDIO_BUFFER_QUEUE_MAX = 2;
 	private:
 
 	protected:
@@ -55,25 +60,25 @@ namespace K3D12 {
 		virtual void STDMETHODCALLTYPE OnVoiceError(void *pBufferContext, HRESULT Error)override;
 
 		//開始時にコールされる
-		//void  SetOnVoiceProcessingPassStart(std::function<void(UINT32)> func);
+		void  SetOnVoiceProcessingPassStart(std::function<void(UINT32)> func);
 
-		////終了時にコールされる
-		//void  SetOnVoiceProcessingPassEnd(std::function<void()> func);
+		//終了時にコールされる
+		void  SetOnVoiceProcessingPassEnd(std::function<void()> func);
 
-		////ストリームエンドにコール
-		//void  SetOnStreamEnd(std::function<void()> func);
+		//ストリームエンドにコール
+		void  SetOnStreamEnd(std::function<void()> func);
 
-		////バッファスタートの時に呼ばれる
-		//void  SetOnBufferStart(std::function<void(void*)> func);
+		//バッファスタートの時に呼ばれる
+		void  SetOnBufferStart(std::function<void(void*)> func);
 
-		////バッファの終端で呼ばれる
-		//void  SetOnBufferEnd(std::function<void(void*)> func);
+		//バッファの終端で呼ばれる
+		void  SetOnBufferEnd(std::function<void(void*)> func);
 
-		////ループエンド時に呼ばれる
-		//void  SetOnLoopEnd(std::function<void(void*)> func);
+		//ループエンド時に呼ばれる
+		void  SetOnLoopEnd(std::function<void(void*)> func);
 
-		////エラーを起こしたときに呼ばれる
-		//void  SetOnVoiceError(std::function<void(void*,HRESULT)> func);
+		//エラーを起こしたときに呼ばれる
+		void  SetOnVoiceError(std::function<void(void*,HRESULT)> func);
 	};
 }
 

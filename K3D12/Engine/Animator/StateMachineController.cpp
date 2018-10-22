@@ -138,7 +138,6 @@ void K3D12::StateMachineController::PlayAnimation(unsigned int& time)
 			//0div‚ðl—¶
 
 			if (revIt != frames.second.rbegin()) {
-				auto a = revIt.base()->frameNo;
 				t = static_cast<float>((_currentNode.lock()->_animation.lock()->frame - revIt->frameNo)) / static_cast<float>((revIt.base()->frameNo - revIt->frameNo));
 			}
 			else {

@@ -10,10 +10,10 @@ namespace K3D12 {
 	public:
 	private:
 	protected:
-		void operator =(const NonCopyable& src) {};
-		NonCopyable(const NonCopyable& src) {};
-		void operator =(NonCopyable&& src) {};
-		NonCopyable(NonCopyable&& src)  {};
+		void operator =(const NonCopyable& ) {};
+		NonCopyable(const NonCopyable& ) {};
+		void operator =(NonCopyable&& ) {};
+		NonCopyable(NonCopyable&& )  {};
 	public:
 	};
 }
