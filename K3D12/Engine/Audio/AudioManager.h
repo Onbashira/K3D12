@@ -39,7 +39,7 @@ namespace K3D12 {
 		Audio* CreateSourceVoice(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack *callback = nullptr,
 			const XAUDIO2_VOICE_SENDS *sendList = nullptr, const XAUDIO2_EFFECT_CHAIN *effectChain = nullptr);
 
-		Audio* CreateSourceVoiceEX(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack *callback = nullptr,
+		Audio* CreateSourceVoiceEx(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack *callback = nullptr,
 			const XAUDIO2_VOICE_SENDS *sendList = nullptr, const XAUDIO2_EFFECT_CHAIN *effectChain = nullptr);
 
 	public:	

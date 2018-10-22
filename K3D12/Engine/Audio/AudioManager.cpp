@@ -49,7 +49,7 @@ K3D12::Audio* K3D12::AudioManager::CreateSourceVoice(std::weak_ptr<AudioWaveSour
 	return audio;
 }
 
-K3D12::Audio * K3D12::AudioManager::CreateSourceVoiceEX(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
+K3D12::Audio * K3D12::AudioManager::CreateSourceVoiceEx(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
 {
 
 	Audio* audio = new Audio();
@@ -99,7 +99,7 @@ K3D12::Audio * K3D12::AudioManager::CreateSourceVoiceEX(std::weak_ptr<AudioWaveS
 
 			unsigned int seekValue = audio->_rawData.lock()->GetWaveFormat().nSamplesPerSec * audio->_rawData.lock()->GetWaveFormat().nChannels;
 
-			//もしも曲データがシークポイント + 一秒間のデータ量が一秒未満なら(ループポイントなら）
+			//もしも曲データがシークポイント + 一秒間のデータ量が一秒以下もしくはループポイントに到達しているなら
 			if ((audio->_seekPoint + seekValue) >= audio->_audioLength) {
 
 				audio->_audioBuffer.AudioBytes = static_cast<UINT32>((audio->_audioLength - audio->_seekPoint) * sizeof(float));
@@ -115,21 +115,11 @@ K3D12::Audio * K3D12::AudioManager::CreateSourceVoiceEX(std::weak_ptr<AudioWaveS
 			else {
 				audio->_audioBuffer.AudioBytes = static_cast<UINT32>(seekValue * sizeof(float));
 				audio->_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&audio->_rawData.lock()->GetWave()[audio->_seekPoint]);
+				audio->_seekPoint += audio->_rawData.lock()->GetWaveFormat().nSamplesPerSec;
+
 				audio->SubmitBuffer();
 			}
-			if (audio->_isLoop == false) {
-				audio->Stop();
-			}
 
-			//もしシーカーが再生終端位置以上にあるなら
-			if (audio->_seekPoint >= audio->_audioLength) {
-				audio->_seekPoint = 0;
-
-			}
-			else {
-				//もしシーカーが再生終端位置になくて、次に一秒間の音データの送りが可能なら
-				audio->_seekPoint += audio->_rawData.lock()->GetWaveFormat().nSamplesPerSec;
-			}
 		}
 	});
 	//サブミット
@@ -162,10 +152,10 @@ void K3D12::AudioManager::StopSoundEngine()
 K3D12::Audio* K3D12::AudioManager::LoadAudio(std::string audioPath)
 {
 
-	auto audioResource = AudioLoader::GetInstance().LoadAudio(audioPath);
+	auto audioResource = AudioLoader::GetInstance().LoadAudioEx(audioPath);
 
 
-	Audio* audio = this->CreateSourceVoice(audioResource);;
+	Audio* audio = this->CreateSourceVoiceEx(audioResource);;
 
 	return audio;
 }
