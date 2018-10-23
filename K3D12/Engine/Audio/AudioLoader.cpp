@@ -25,9 +25,9 @@ constexpr float AUDIO_24BIT_NORMALIZE_FACTOR = 0xFFFF;
 namespace K3D12 {
 
 	enum AUDIO_BITS_PER_SAMPLE {
-		AUDIO_BITS_PER_SAMPLE_8, //128を無音とする0～255の値を使用する
-		AUDIO_BITS_PER_SAMPLE_16, //0を無音とする-32768～32767の値を使用する
-		AUDIO_BITS_PER_SAMPLE_24,
+		AUDIO_BITS_PER_SAMPLE_8,	//128を無音とする0～255の値を使用する
+		AUDIO_BITS_PER_SAMPLE_16,	//0を無音とする-32768～32767の値を使用する
+		AUDIO_BITS_PER_SAMPLE_24,	
 		AUDIO_BITS_PER_SAMPLE_32,
 	};
 
@@ -55,6 +55,26 @@ namespace K3D12 {
 	void LoadMonaural32bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO& dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex = 0);
 }
 
+
+void K3D12::AudioLoader::StopLoad()
+{
+	_isStop = true;
+}
+
+void K3D12::AudioLoader::ReStartLoad()
+{
+	_isStop = false;
+}
+
+bool K3D12::AudioLoader::IsStopLoad()
+{
+	return _isStop;
+}
+
+void K3D12::AudioLoader::DiscardWorkerThreads()
+{
+	this->_loadThreadPool.DiscardWorkers();
+}
 
 std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudio(std::string audioFilePath)
 {
@@ -150,9 +170,11 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudio(std::strin
 	}
 
 	std::shared_ptr<K3D12::AudioWaveSource> res = std::make_shared<K3D12::AudioWaveSource>();
+
+	//ソースセット
+	AudioSourceManager::GetInstance().SetResource(audioFilePath, res);
 	//フォーマットセット
 	{
-		AudioSourceManager::GetInstance().SetResource(audioFilePath, res);
 
 		res->_format.Format = format;
 
@@ -168,45 +190,41 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudio(std::strin
 		res->_format.Samples.wValidBitsPerSample = res->_format.Format.wBitsPerSample;
 		res->_format.dwChannelMask = SPEAKER_SETTINGS[format.nChannels - 1];	//スピーカー配置
 		res->_format.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
+	}
 
-		//バイト数 / (チャンネル数 * フォーマットのサンプルバイト数）
-		res->GetWave().resize(dataChunk.cksize / (res->GetWaveFormat().nChannels * Util::ConvertBitToByte(16)));
+	//配列数と読み込み回数の設定
+	{
+		res->GetWave().resize(dataChunk.cksize / (res->GetWaveFormat().nChannels * Util::ConvertBitToByte(format.wBitsPerSample)));
+		res->_loadingInfo._cycleMax = res->GetWave().size() / res->GetWaveFormat().nChannels;
 	}
 
 	//子の波形データ抽出部分をマルチスレッド化したい
 	{
 		//波形データ抽出
 		{
-
-			unsigned int loadSize = 0;
-			unsigned int waveIndex = 0;
-			unsigned int cycleNum = 0;
-			unsigned int cycleMax = res->GetWave().size() / 2;
 			Stereo16Bit waveInfo = {};
-
 			std::chrono::system_clock::time_point start, end;
-
 			start = std::chrono::system_clock::now();
 
 			do {
 
-				res->_loadedSize += mmioRead(mmio, (HPSTR)&waveInfo, sizeof(Stereo16Bit));
-				if (res->_loadedSize != sizeof(Stereo16Bit)*(++cycleNum)) {
+				res->_loadingInfo._loadedSize += mmioRead(mmio, (HPSTR)&waveInfo, sizeof(Stereo16Bit));
+				if (res->_loadingInfo._loadedSize != sizeof(Stereo16Bit)*(++res->_loadingInfo._cycleNum)) {
 					ERROR_LOG(std::string("mmioReadが失敗しました。(WaveLoad)"));
 					mmioClose(mmio, 0);
 					return nullptr;
 				}
 				//波形　正規化vおよび代入
 				{
-					res->GetWave()[waveIndex] = (static_cast<float>(waveInfo.left) / AUDIO_16BIT_NORMALIZE_FACTOR);
-					res->GetWave()[waveIndex + 1] = (static_cast<float>(waveInfo.right) / AUDIO_16BIT_NORMALIZE_FACTOR);
+					res->GetWave()[res->_loadingInfo._loadedIndex] = (static_cast<float>(waveInfo.left) / AUDIO_16BIT_NORMALIZE_FACTOR);
+					res->GetWave()[res->_loadingInfo._loadedIndex + 1] = (static_cast<float>(waveInfo.right) / AUDIO_16BIT_NORMALIZE_FACTOR);
 				}
 				//インクリメント
 				{
-					waveIndex += static_cast<unsigned int>(res->GetWaveFormat().nChannels);
+					res->_loadingInfo._loadedIndex += static_cast<unsigned int>(res->GetWaveFormat().nChannels);
 				}
 
-			} while (cycleMax > cycleNum);
+			} while (res->_loadingInfo._cycleMax > res->_loadingInfo._cycleNum);
 
 			end = std::chrono::system_clock::now();
 			auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
@@ -320,9 +338,12 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudioEx(std::str
 	}
 
 	std::shared_ptr<K3D12::AudioWaveSource> res = std::make_shared<K3D12::AudioWaveSource>();
+	
+	//ソースセット
+	AudioSourceManager::GetInstance().SetResource(audioFilePath, res);
+	
 	//フォーマットセット
 	{
-		AudioSourceManager::GetInstance().SetResource(audioFilePath, res);
 
 		res->_format.Format = format;
 
@@ -341,7 +362,12 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudioEx(std::str
 		res->_format.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
 	}
 
+	//配列数と読み込み回数の設定
+	{
 	res->GetWave().resize(dataChunk.cksize / (res->GetWaveFormat().nChannels * Util::ConvertBitToByte(format.wBitsPerSample)));
+	res->_loadingInfo._cycleMax = res->GetWave().size() / res->GetWaveFormat().nChannels;
+	}
+	
 	//波形データ抽出
 	{
 		switch (format.nChannels)
@@ -349,7 +375,7 @@ std::shared_ptr<K3D12::AudioWaveSource> K3D12::AudioLoader::LoadAudioEx(std::str
 		case 1:
 			this->_loadThreadPool.enqueue([=]() {
 				auto chunk = dataChunk;
-				LoadMonaural(mmio, *res, chunk,format.wBitsPerSample, 0);
+				LoadMonaural(mmio, *res, chunk, format.wBitsPerSample, 0);
 			}
 			);
 			break;
@@ -432,88 +458,65 @@ void K3D12::LoadMonaural(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChun
 void K3D12::LoadStereo8bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
 
-	//波形データ抽出
-	{
-		std::chrono::system_clock::time_point start, end;
+	Stereo8Bit waveInfo{}; //読み込んだ波形の情報		
 
-		Stereo8Bit waveInfo = {}; //読み込んだ波形の情報
+	do {
 
-		unsigned int waveIndex = firstReadIndex;
-
-		unsigned int size = 0;
-
-		start = std::chrono::system_clock::now();
-
-		while (size <= dataChunk.cksize) {
-			//本当はチャンネル数で変えるべき。しかし、今のところゲームに２ｃｈ以上の対応はさせないので現段階での実装は控えておく
-			size += mmioRead(mmio, (HPSTR)&waveInfo, sizeof(Stereo8Bit));
-
-			if (size != sizeof(Stereo8Bit)) {
-				ERROR_LOG(std::string("mmioReadが失敗しました。(WaveLoad)"));
-				mmioClose(mmio, 0);
-				return;
-			}
-
-			//デバッグログ
-			{
-				end = std::chrono::system_clock::now();
-				auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-				std::stringstream ss;
-				ss << "Read time [ " << elapsed << " ] ms.";
-				INFO_LOG(std::string(ss.str()));
-			}
-
-			//波形　正規化vおよび代入
-			{
-				wave.GetWave()[waveIndex] = (static_cast<float>(waveInfo.left) / AUDIO_8BIT_NORMALIZE_FACTOR) - 1.0f;
-				wave.GetWave()[waveIndex + 1] = (static_cast<float>(waveInfo.right) / AUDIO_8BIT_NORMALIZE_FACTOR) - 1.0f;
-
-			}
-			//インクリメント
-			{
-				waveIndex += static_cast<unsigned int>(wave.GetWaveFormat().nChannels);
-			}
+		wave._loadingInfo._loadedSize += mmioRead(mmio, (HPSTR)&waveInfo, sizeof(Stereo16Bit));
+		if (wave._loadingInfo._loadedSize != sizeof(Stereo8Bit)*(++wave._loadingInfo._cycleNum)) {
+			ERROR_LOG(std::string("mmioReadが失敗しました。(WaveLoad)"));
+			mmioClose(mmio, 0);
+			return;
 		}
-	}
+		//波形　正規化vおよび代入
+		{
+			wave.GetWave()[wave._loadingInfo._loadedIndex] = (static_cast<float>(waveInfo.left) / AUDIO_8BIT_NORMALIZE_FACTOR) - 1.0f;
+			wave.GetWave()[wave._loadingInfo._loadedIndex + 1] = (static_cast<float>(waveInfo.right) / AUDIO_8BIT_NORMALIZE_FACTOR) - 1.0f;
+		}
+		//インクリメント
+		{
+			wave._loadingInfo._loadedIndex += static_cast<unsigned int>(wave.GetWaveFormat().nChannels);
+		}
 
+	} while (wave._loadingInfo._cycleMax > wave._loadingInfo._cycleNum);
+
+	wave._loadingInfo._isWaveLoaded = true;
+	//ハンドルクローズ
+	mmioClose(mmio, 0);
 	//ハンドルクローズ
 	mmioClose(mmio, 0);
 }
 
 void K3D12::LoadStereo16bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
+
+	//外部データへの参照をいじっているので何らかの対策が必要
 	//波形データ抽出
 	{
-
-		Stereo16Bit waveInfo{}; //読み込んだ波形の情報
-		unsigned int loadSize = 0;
-		unsigned int waveIndex = 0;
-		unsigned int cycleNum = 0;
-		unsigned int cycleMax = wave.GetWave().size() / 2;
-		std::chrono::system_clock::time_point start, end;
-
-		start = std::chrono::system_clock::now();
-
+		Stereo16Bit waveInfo{}; //読み込んだ波形の情報		
 		do {
-
-			loadSize += mmioRead(mmio, (HPSTR)&waveInfo, sizeof(Stereo16Bit));
-			if (loadSize != sizeof(Stereo16Bit)*(++cycleNum)) {
-				ERROR_LOG(std::string("mmioReadが失敗しました。(WaveLoad)"));
+			if(AudioLoader::GetInstance().IsStopLoad()){
+				ERROR_LOG(std::string("波形データの読み込みを中断します。(WaveLoad)"));
 				mmioClose(mmio, 0);
-				return ;
+				return;
+			}
+			wave._loadingInfo._loadedSize += mmioRead(mmio, (HPSTR)&waveInfo, sizeof(Stereo16Bit));
+			if (wave._loadingInfo._loadedSize != sizeof(Stereo16Bit)*(++wave._loadingInfo._cycleNum)) {
+
 			}
 			//波形　正規化vおよび代入
 			{
-				wave.GetWave()[waveIndex] = (static_cast<float>(waveInfo.left) / AUDIO_16BIT_NORMALIZE_FACTOR);
-				wave.GetWave()[waveIndex + 1] = (static_cast<float>(waveInfo.right) / AUDIO_16BIT_NORMALIZE_FACTOR);
+				wave.GetWave()[wave._loadingInfo._loadedIndex] = (static_cast<float>(waveInfo.left) / AUDIO_16BIT_NORMALIZE_FACTOR);
+				wave.GetWave()[wave._loadingInfo._loadedIndex + 1] = (static_cast<float>(waveInfo.right) / AUDIO_16BIT_NORMALIZE_FACTOR);
 			}
 			//インクリメント
 			{
-				waveIndex += static_cast<unsigned int>(wave.GetWaveFormat().nChannels);
+				wave._loadingInfo._loadedIndex += static_cast<unsigned int>(wave.GetWaveFormat().nChannels);
 			}
 
-		} while (cycleMax > cycleNum);
+		} while (wave._loadingInfo._cycleMax > wave._loadingInfo._cycleNum);
 
+		wave._loadingInfo._isWaveLoaded = true;
 		//ハンドルクローズ
 		mmioClose(mmio, 0);
 	}
@@ -521,71 +524,63 @@ void K3D12::LoadStereo16bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & 
 
 void K3D12::LoadStereo24bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
-	std::chrono::system_clock::time_point start, end;
+	//外部データへの参照をいじっているので何らかの対策が必要
+	//波形データ抽出
+	{
+		Stereo16Bit waveInfo{}; //読み込んだ波形の情報		
+		do {
+			wave._loadingInfo._loadedSize += mmioRead(mmio, (HPSTR)&waveInfo, sizeof(Stereo16Bit));
+			if (wave._loadingInfo._loadedSize != sizeof(Stereo16Bit)*(++wave._loadingInfo._cycleNum)) {
+				ERROR_LOG(std::string("mmioReadが失敗しました。(WaveLoad)"));
+				mmioClose(mmio, 0);
+				return;
+			}
+			//波形　正規化vおよび代入
+			{
+				wave.GetWave()[wave._loadingInfo._loadedIndex] = (static_cast<float>(waveInfo.left) / AUDIO_16BIT_NORMALIZE_FACTOR);
+				wave.GetWave()[wave._loadingInfo._loadedIndex + 1] = (static_cast<float>(waveInfo.right) / AUDIO_16BIT_NORMALIZE_FACTOR);
+			}
+			//インクリメント
+			{
+				wave._loadingInfo._loadedIndex += static_cast<unsigned int>(wave.GetWaveFormat().nChannels);
+			}
 
-	unsigned short waveInfo = 0; //読み込んだ波形の情報
+		} while (wave._loadingInfo._cycleMax > wave._loadingInfo._cycleNum);
 
-	unsigned int waveIndex = 0;
-
-	unsigned int size = 0;
-
-	start = std::chrono::system_clock::now();
-
-	size = mmioRead(mmio, (HPSTR)&waveInfo, sizeof(unsigned short));
-
-	if (size != sizeof(unsigned short)) {
-		ERROR_LOG(std::string("mmioReadが失敗しました。(WaveLoad)"));
+		wave._loadingInfo._isWaveLoaded = true;
+		//ハンドルクローズ
 		mmioClose(mmio, 0);
-		return;
-	}
-
-	//デバッグログ
-	{
-		end = std::chrono::system_clock::now();
-		auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		std::stringstream ss;
-		ss << "Read time [ " << elapsed << " ] ms.";
-		INFO_LOG(std::string(ss.str()));
-	}
-
-	//波形　正規化vおよび代入
-	{
-		wave.GetWave()[waveIndex] = ::Clamp<float>((static_cast<float>(waveInfo) / AUDIO_16BIT_NORMALIZE_FACTOR), -1.0f, 1.0f);
 	}
 }
 
 void K3D12::LoadStereo32bitSound(HMMIO mmio, AudioWaveSource & wave, MMCKINFO & dataChunk, unsigned int rawFormatSampleBit, unsigned int firstReadIndex)
 {
-	std::chrono::system_clock::time_point start, end;
+	//外部データへの参照をいじっているので何らかの対策が必要
+	//波形データ抽出
+	{
+		Stereo16Bit waveInfo{}; //読み込んだ波形の情報		
+		do {
+			wave._loadingInfo._loadedSize += mmioRead(mmio, (HPSTR)&waveInfo, sizeof(Stereo16Bit));
+			if (wave._loadingInfo._loadedSize != sizeof(Stereo16Bit)*(++wave._loadingInfo._cycleNum)) {
+				ERROR_LOG(std::string("mmioReadが失敗しました。(WaveLoad)"));
+				mmioClose(mmio, 0);
+				return;
+			}
+			//波形　正規化vおよび代入
+			{
+				wave.GetWave()[wave._loadingInfo._loadedIndex] = (static_cast<float>(waveInfo.left) / AUDIO_16BIT_NORMALIZE_FACTOR);
+				wave.GetWave()[wave._loadingInfo._loadedIndex + 1] = (static_cast<float>(waveInfo.right) / AUDIO_16BIT_NORMALIZE_FACTOR);
+			}
+			//インクリメント
+			{
+				wave._loadingInfo._loadedIndex += static_cast<unsigned int>(wave.GetWaveFormat().nChannels);
+			}
 
-	unsigned short waveInfo = 0; //読み込んだ波形の情報
+		} while (wave._loadingInfo._cycleMax > wave._loadingInfo._cycleNum);
 
-	unsigned int waveIndex = 0;
-
-	unsigned int size = 0;
-
-	start = std::chrono::system_clock::now();
-
-	size = mmioRead(mmio, (HPSTR)&waveInfo, sizeof(unsigned short));
-
-	if (size != sizeof(unsigned short)) {
-		ERROR_LOG(std::string("mmioReadが失敗しました。(WaveLoad)"));
+		wave._loadingInfo._isWaveLoaded = true;
+		//ハンドルクローズ
 		mmioClose(mmio, 0);
-		return;
-	}
-
-	//デバッグログ
-	{
-		end = std::chrono::system_clock::now();
-		auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		std::stringstream ss;
-		ss << "Read time [ " << elapsed << " ] ms.";
-		INFO_LOG(std::string(ss.str()));
-	}
-
-	//波形　正規化vおよび代入
-	{
-		wave.GetWave()[waveIndex] = ::Clamp<float>((static_cast<float>(waveInfo) / AUDIO_16BIT_NORMALIZE_FACTOR), -1.0f, 1.0f);
 	}
 }
 

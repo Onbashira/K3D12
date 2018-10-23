@@ -41,6 +41,8 @@ namespace K3D12 {
 		//ƒ‹[ƒv‚·‚é‚©‚µ‚È‚¢‚©B
 		bool _isLoop;
 
+		bool isDiscarded;
+
 	public:
 
 	private:

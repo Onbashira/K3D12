@@ -11,8 +11,12 @@ namespace K3D12{
 	class AudioLoader : public NonCopyable
 	{
 	private:
-		static inline unsigned int _THREAD_NUM = 12;
+		static inline unsigned int _THREAD_NUM = 8;
+		
 		ThreadPool _loadThreadPool;
+
+		bool _isStop;
+
 	public:
 	private:
 
@@ -34,6 +38,14 @@ namespace K3D12{
 			static AudioLoader instance;
 			return instance;
 		}
+
+		void StopLoad();
+
+		void ReStartLoad();
+
+		bool IsStopLoad();
+
+		void DiscardWorkerThreads();
 
 		std::shared_ptr<AudioWaveSource> LoadAudio(std::string audioFilePath);
 

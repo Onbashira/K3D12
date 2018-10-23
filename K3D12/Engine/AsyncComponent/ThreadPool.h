@@ -44,6 +44,8 @@ namespace K3D12 {
 		auto enqueue(F&& f, Args&&... args)
 			->std::future<typename std::result_of<F(Args...)>::type>;
 
+		void DiscardWorkers();
+
 	};
 }
 
@@ -73,6 +75,11 @@ inline K3D12::ThreadPool::ThreadPool(size_t threads)
 	);
 }
 
+inline K3D12::ThreadPool::~ThreadPool()
+{
+	DiscardWorkers();
+}
+
 template<class F, class... Args>
 auto K3D12::ThreadPool::enqueue(F&& f, Args&&... args) -> std::future<typename std::result_of<F(Args...)>::type>
 {
@@ -95,15 +102,20 @@ auto K3D12::ThreadPool::enqueue(F&& f, Args&&... args) -> std::future<typename s
 	return res;
 }
 
-inline K3D12::ThreadPool::~ThreadPool()
-{
+inline void K3D12::ThreadPool::DiscardWorkers()
+{	
 	{
 		std::unique_lock<std::mutex> lock(_queueMutex);
 		_stop = true;
 	}
 	_condition.notify_all();
 	for (std::thread &worker : _workers) {
-		worker.join();
+		if (worker.joinable()) {
+			worker.join();
+		}
 	}
 }
+
+
+
 

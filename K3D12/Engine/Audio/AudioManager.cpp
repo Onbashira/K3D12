@@ -3,6 +3,7 @@
 #include "AudioLoader.h"
 #include "AudioCallBack.h"
 #include "AudioWaveSource.h"
+#include "Audio.h"
 
 K3D12::AudioManager::AudioManager()
 {
@@ -31,9 +32,9 @@ void K3D12::AudioManager::InitializeXAudio2()
 
 }
 
-K3D12::Audio* K3D12::AudioManager::CreateSourceVoice(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
+std::unique_ptr<K3D12::Audio> K3D12::AudioManager::CreateSourceVoice(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
 {
-	Audio* audio = new Audio();
+	std::unique_ptr<Audio> audio = std::make_unique<Audio>();
 
 	if (callback != nullptr) {
 		audio->_callBack = *callback;
@@ -49,10 +50,10 @@ K3D12::Audio* K3D12::AudioManager::CreateSourceVoice(std::weak_ptr<AudioWaveSour
 	return audio;
 }
 
-K3D12::Audio * K3D12::AudioManager::CreateSourceVoiceEx(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
+std::unique_ptr<K3D12::Audio> K3D12::AudioManager::CreateSourceVoiceEx(std::weak_ptr<AudioWaveSource> waveResource, AudioCallBack * callback, const XAUDIO2_VOICE_SENDS * sendList, const XAUDIO2_EFFECT_CHAIN * effectChain)
 {
 
-	Audio* audio = new Audio();
+	std::unique_ptr<Audio> audio = std::make_unique<Audio>();
 
 	if (callback != nullptr) {
 		audio->_callBack = *callback;
@@ -68,7 +69,7 @@ K3D12::Audio * K3D12::AudioManager::CreateSourceVoiceEx(std::weak_ptr<AudioWaveS
 	unsigned int seekValue = waveResource.lock()->GetWaveFormat().nSamplesPerSec * audio->_rawData.lock()->GetWaveFormat().nChannels;
 
 	//一秒分のデータを二本キューに送る
-	for (int i = 0; i < audio->_callBack.AUDIO_BUFFER_QUEUE_MAX; i++) {
+	for (unsigned int i = 0; i < audio->_callBack.AUDIO_BUFFER_QUEUE_MAX; i++) {
 
 		//もしも曲データがシークポイント + 1秒間のデータ量が一秒未満なら
 		if (audio->_seekPoint + seekValue >= audio->_audioLength) {
@@ -90,52 +91,58 @@ K3D12::Audio * K3D12::AudioManager::CreateSourceVoiceEx(std::weak_ptr<AudioWaveS
 		}
 		audio->_seekPoint += seekValue;
 	}
+	auto ptr = audio.get();
+	audio->_callBack.SetOnBufferEnd([ptr](void* context) {
 
-	audio->_callBack.SetOnBufferEnd([audio](void* context) {
-		auto state = audio->GetState();
+		if (ptr->isDiscarded) {
+			return;
+		}		
+		auto state = ptr->GetState();
 
 		//もしキュー内のバッファがQ設定数値以下ならバッファに対して新しいデータを供給する
-		if (state.BuffersQueued < audio->_callBack.AUDIO_BUFFER_QUEUE_MAX) {
+		if (state.BuffersQueued < ptr->_callBack.AUDIO_BUFFER_QUEUE_MAX) {
 
-			unsigned int seekValue = audio->_rawData.lock()->GetWaveFormat().nSamplesPerSec * audio->_rawData.lock()->GetWaveFormat().nChannels;
+			unsigned int seekValue = ptr->_rawData.lock()->GetWaveFormat().nSamplesPerSec * ptr->_rawData.lock()->GetWaveFormat().nChannels;
 
 			//もしも曲データがシークポイント + 一秒間のデータ量が一秒以下もしくはループポイントに到達しているなら
-			if ((audio->_seekPoint + seekValue) >= audio->_audioLength) {
+			if ((ptr->_seekPoint + seekValue) >= ptr->_audioLength) {
 
-				audio->_audioBuffer.AudioBytes = static_cast<UINT32>((audio->_audioLength - audio->_seekPoint) * sizeof(float));
-				audio->_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&audio->_rawData.lock()->GetWave()[audio->_seekPoint]);
-				audio->SubmitBuffer();
-				if (audio->_isLoop == false) {
-					audio->Stop();
+				ptr->_audioBuffer.AudioBytes = static_cast<UINT32>((ptr->_audioLength - ptr->_seekPoint) * sizeof(float));
+				ptr->_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&ptr->_rawData.lock()->GetWave()[ptr->_seekPoint]);
+				ptr->SubmitBuffer();
+				if (ptr->_isLoop == false) {
+					ptr->Stop();
 				}
-				audio->_seekPoint = 0;
-
+				ptr->_seekPoint = 0;
 				return;
 			}
 			else {
-				audio->_audioBuffer.AudioBytes = static_cast<UINT32>(seekValue * sizeof(float));
-				audio->_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&audio->_rawData.lock()->GetWave()[audio->_seekPoint]);
-				audio->_seekPoint += seekValue;
+				ptr->_audioBuffer.AudioBytes = static_cast<UINT32>(seekValue * sizeof(float));
+				ptr->_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&ptr->_rawData.lock()->GetWave()[ptr->_seekPoint]);
+				ptr->_seekPoint += seekValue;
 
-				audio->SubmitBuffer();
+				ptr->SubmitBuffer();
 			}
 
 		}
 	});
 	//サブミット
-	return audio;
+	return std::move(audio);
 }
 
 void K3D12::AudioManager::Discard()
 {
+	AudioLoader::GetInstance().StopLoad();
+	AudioLoader::GetInstance().DiscardWorkerThreads();
 
 	if (_masterVoice != nullptr) {
 		_masterVoice->DestroyVoice();
 		_masterVoice = nullptr;
 		INFO_LOG(std::string("MasteringVoiceを削除しました"));
 	}
-	if (_xAudio2.Get() != nullptr) {
+	if (_xAudio2 != nullptr) {
 		_xAudio2->Release();
+		_xAudio2 = nullptr;
 		INFO_LOG(std::string("XAudio2を削除しました"));
 	}
 }
@@ -150,13 +157,13 @@ void K3D12::AudioManager::StopSoundEngine()
 	_xAudio2->StopEngine();
 }
 
-K3D12::Audio* K3D12::AudioManager::LoadAudio(std::string audioPath)
+std::unique_ptr<K3D12::Audio> K3D12::AudioManager::LoadAudio(std::string audioPath)
 {
 
 	auto audioResource = AudioLoader::GetInstance().LoadAudioEx(audioPath);
 
 
-	Audio* audio = this->CreateSourceVoiceEx(audioResource);;
+	auto audio = std::move(this->CreateSourceVoiceEx(audioResource));
 
-	return audio;
+	return std::move(audio);;
 }

@@ -109,10 +109,14 @@ SpriteVSOutput VsMain(SpriteVSInput input)
 
 SpritePSOutput PsMain(SpriteVSOutput input)
 {
-    SpritePSOutput output = (SpritePSOutput) 0;
 
+    SpritePSOutput output = (SpritePSOutput) 0;
     output.color = spriteTexture.Sample(spriteSampler, input.texCoord);
     output.color.a *= info.alpha;
+    if (output.color.a <= 0.0f)
+    {
+        discard;
+    }
     return output;
 
 }

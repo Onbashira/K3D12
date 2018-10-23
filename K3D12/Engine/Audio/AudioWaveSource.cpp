@@ -1,7 +1,7 @@
 #include "AudioWaveSource.h"
 
 K3D12::AudioWaveSource::AudioWaveSource() :
-	_loadedSize(0), _isWaveLoaded(false), _format({})
+	_loadingInfo({}), _format({})
 {
 }
 
@@ -29,5 +29,5 @@ std::vector<float>& K3D12::AudioWaveSource::GetWave()
 
 bool K3D12::AudioWaveSource::IsWaveLoaded()
 {
-	return _isWaveLoaded;
+	return _loadingInfo._isWaveLoaded;
 }

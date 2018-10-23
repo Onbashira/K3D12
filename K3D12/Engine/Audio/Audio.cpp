@@ -4,7 +4,7 @@
 
 
 K3D12::Audio::Audio() :
-	_seekPoint(0),_isLoop(false)
+	_seekPoint(0), _isLoop(false), isDiscarded(false)
 {
 }
 
@@ -37,7 +37,6 @@ void K3D12::Audio::LoopDisable()
 void K3D12::Audio::SetLoopPoint(unsigned int loopPoint)
 {
 	LoopEnable();
-	
 }
 
 XAUDIO2_VOICE_STATE K3D12::Audio::GetState()
@@ -65,14 +64,18 @@ bool K3D12::Audio::CheckPlaying()
 
 void K3D12::Audio::Discard()
 {
-	if (_sourceVoice) {
-		_sourceVoice->DestroyVoice();
-	}
-	this->_callBack;
 	if (this->_sourceVoice != nullptr) {
-		delete _sourceVoice;
+		Stop();
+		_sourceVoice->FlushSourceBuffers();
+		_sourceVoice->Discontinuity();
+		_sourceVoice->DestroyVoice();
+		//ヌルポインタの代入
+		_sourceVoice = nullptr;
+		//ソースボイスは消していけない・・・？
+		//delete _sourceVoice;
 	}
-	this->_rawData;
+	isDiscarded = true;
+	this->_rawData.reset();
 }
 
 void K3D12::Audio::SubmitBuffer()

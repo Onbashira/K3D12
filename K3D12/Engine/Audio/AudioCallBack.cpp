@@ -3,7 +3,7 @@
 
 
 K3D12::AudioCallBack::AudioCallBack() :
-	_handle(CreateEvent(nullptr, false, false, nullptr)), _onVoiceProcessingPassStart([](UINT32) {})
+	 _onVoiceProcessingPassStart([](UINT32) {})
 	, _onVoiceProcessingPassEnd([]() {}), _onStreamEnd([]() {}), _onBufferStart([](void*) {})
 	, _onBufferEnd([](void*) {}), _onLoopEnd([](void*) {}), _onVoiceError([](void*,HRESULT) {})
 
@@ -14,7 +14,6 @@ K3D12::AudioCallBack::AudioCallBack() :
 
 K3D12::AudioCallBack::~AudioCallBack()
 {
-	CloseHandle(_handle);
 }
 
 
@@ -41,7 +40,6 @@ void K3D12::AudioCallBack::OnBufferStart(void * pBufferContext)
 void K3D12::AudioCallBack::OnBufferEnd(void * pBufferContext)
 {
 	_onBufferEnd(pBufferContext);
-	SetEvent(_handle);
 }
 
 void K3D12::AudioCallBack::OnLoopEnd(void * pBufferContext)
