@@ -113,14 +113,14 @@ void K3D12::Resource::Update(const void * pSrc, ULONG64 size, const UINT dstOffs
 {
 	assert(pSrc != nullptr);
 	assert(size != 0);
-	memcpy(_pDst + dstOffset, pSrc, size_t(size));
+	std::memcpy(_pDst + dstOffset, pSrc, size_t(size));
 }
 
 void K3D12::Resource::Read(void * pDstBuffer, ULONG64 readSize, const unsigned int dstOffsest)
 {
 	assert(pDstBuffer != nullptr);
 	assert(readSize != 0);
-	memcpy(pDstBuffer, _pDst + dstOffsest, size_t(readSize));
+	std::memcpy(pDstBuffer, _pDst + dstOffsest, size_t(readSize));
 }
 
 void K3D12::Resource::Update(const void * pSrc, ULONG64 size, const UINT dstOffset, UINT subResource, D3D12_RANGE * readRange, D3D12_RANGE * writtenRange)
