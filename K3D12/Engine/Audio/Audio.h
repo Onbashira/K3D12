@@ -41,7 +41,7 @@ namespace K3D12 {
 		//ÉãÅ[ÉvÇ∑ÇÈÇ©ÇµÇ»Ç¢Ç©ÅB
 		bool _isLoop;
 
-		bool isDiscarded;
+		bool _isDiscarded;
 
 	public:
 
@@ -49,19 +49,15 @@ namespace K3D12 {
 
 	protected:
 
+		void BulkSubmit();
+
+		void StreamSubmit();
+
 	public:
 		
 		Audio();
 
-		//Audio(const Audio& other);
-
-		//Audio(Audio&& other);
-
 		virtual ~Audio();
-
-		//Audio& operator=(const Audio& other);
-
-		//Audio& operator=(Audio&& other);
 
 		virtual void Play();
 

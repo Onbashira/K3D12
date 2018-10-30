@@ -29,11 +29,11 @@ namespace K3D12{
 		switch (level)
 		{
 		case LogLevel::Details:
-			attribute = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY;
+			attribute = FOREGROUND_BLUE | FOREGROUND_INTENSITY;
 			break;
 
 		case LogLevel::Info:
-			attribute = FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+			attribute = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY;
 			break;
 		case LogLevel::Debug:
 			attribute = FOREGROUND_GREEN | FOREGROUND_INTENSITY;
@@ -138,7 +138,7 @@ void K3D12::SystemLogger::Log(LogLevel level, const char * format, ...)
 	
 #ifdef _DEBUG
 
-	if (level >= _LogFilter)
+	if (level >= _LogFilter) 
 	{
 		ConsoleScreen screen;
 		// ƒƒOo—Í.

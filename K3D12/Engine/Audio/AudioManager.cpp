@@ -44,9 +44,9 @@ std::unique_ptr<K3D12::Audio> K3D12::AudioManager::CreateSourceVoice(std::weak_p
 
 	//一括送り
 	audio->_rawData = waveResource;
-	audio->_audioBuffer.AudioBytes = static_cast<UINT32>(waveResource.lock()->GetWave().size() * sizeof(float));
-	audio->_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&waveResource.lock()->GetWave()[0]);
-	audio->SubmitBuffer();
+	audio->_audioLength = static_cast<unsigned int>(waveResource.lock()->GetWave().size());
+
+	audio->BulkSubmit();
 	return audio;
 }
 
@@ -63,11 +63,12 @@ std::unique_ptr<K3D12::Audio> K3D12::AudioManager::CreateSourceVoiceEx(std::weak
 
 	//生のデータの参照を持たせる
 	audio->_rawData = waveResource;
-	//終端位置(最終要素番号+1)を代入
-	audio->_audioLength = waveResource.lock()->GetWave().size();
-	//１秒分のデータの情報を持つデータ分のバッファを指定させる 
-	unsigned int seekValue = waveResource.lock()->GetWaveFormat().nSamplesPerSec * audio->_rawData.lock()->GetWaveFormat().nChannels;
+	//終端位置(最終要素番号+1)を代入 
+	audio->_audioLength = static_cast<unsigned int>(waveResource.lock()->GetWave().size());
 
+	//１秒分のデータの情報を持つデータ分のバッファを指定させる 一秒間に必要なサンプリング数*チャンネル数
+	unsigned int seekValue = waveResource.lock()->GetWaveFormat().nSamplesPerSec * waveResource.lock()->GetWaveFormat().nChannels;
+	unsigned int audioBytePerSec = waveResource.lock()->GetWaveFormat().nAvgBytesPerSec;
 	//一秒分のデータを二本キューに送る
 	for (unsigned int i = 0; i < audio->_callBack.AUDIO_BUFFER_QUEUE_MAX; i++) {
 
@@ -77,55 +78,29 @@ std::unique_ptr<K3D12::Audio> K3D12::AudioManager::CreateSourceVoiceEx(std::weak
 			audio->_audioBuffer.AudioBytes = static_cast<UINT32>((audio->_audioLength - audio->_seekPoint) * sizeof(float));
 			audio->_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&waveResource.lock()->GetWave()[audio->_seekPoint]);
 
+			//std::stringstream ss;
+			//ss << static_cast<float>((float)audio->_seekPoint / (float)audio->_audioLength) * 100.0f << " % ";
+			//DETAILS_LOG(ss.str());
+
 			audio->SubmitBuffer();
 			audio->_seekPoint = 0;
 			break;
 		}
 		else {
 			//一秒間の再生に必要なバイト数
-			audio->_audioBuffer.AudioBytes = static_cast<UINT32>(seekValue * sizeof(float));
+			audio->_audioBuffer.AudioBytes = static_cast<UINT32>(audioBytePerSec);
 			//一秒間の再生いに必要な波形データへのポインタ
 			audio->_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&waveResource.lock()->GetWave()[audio->_seekPoint]);
+
+			//std::stringstream ss;
+			//ss << static_cast<float>((float)audio->_seekPoint / (float)audio->_audioLength) * 100.0f << " % ";
+			//DETAILS_LOG(ss.str());
 
 			audio->SubmitBuffer();
 		}
 		audio->_seekPoint += seekValue;
 	}
-	auto ptr = audio.get();
-	audio->_callBack.SetOnBufferEnd([ptr](void* context) {
-
-		if (ptr->isDiscarded) {
-			return;
-		}		
-		auto state = ptr->GetState();
-
-		//もしキュー内のバッファがQ設定数値以下ならバッファに対して新しいデータを供給する
-		if (state.BuffersQueued < ptr->_callBack.AUDIO_BUFFER_QUEUE_MAX) {
-
-			unsigned int seekValue = ptr->_rawData.lock()->GetWaveFormat().nSamplesPerSec * ptr->_rawData.lock()->GetWaveFormat().nChannels;
-
-			//もしも曲データがシークポイント + 一秒間のデータ量が一秒以下もしくはループポイントに到達しているなら
-			if ((ptr->_seekPoint + seekValue) >= ptr->_audioLength) {
-
-				ptr->_audioBuffer.AudioBytes = static_cast<UINT32>((ptr->_audioLength - ptr->_seekPoint) * sizeof(float));
-				ptr->_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&ptr->_rawData.lock()->GetWave()[ptr->_seekPoint]);
-				ptr->SubmitBuffer();
-				if (ptr->_isLoop == false) {
-					ptr->Stop();
-				}
-				ptr->_seekPoint = 0;
-				return;
-			}
-			else {
-				ptr->_audioBuffer.AudioBytes = static_cast<UINT32>(seekValue * sizeof(float));
-				ptr->_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&ptr->_rawData.lock()->GetWave()[ptr->_seekPoint]);
-				ptr->_seekPoint += seekValue;
-
-				ptr->SubmitBuffer();
-			}
-
-		}
-	});
+	audio->StreamSubmit();
 	//サブミット
 	return std::move(audio);
 }
@@ -159,9 +134,7 @@ void K3D12::AudioManager::StopSoundEngine()
 
 std::unique_ptr<K3D12::Audio> K3D12::AudioManager::LoadAudio(std::string audioPath)
 {
-
 	auto audioResource = AudioLoader::GetInstance().LoadAudioEx(audioPath);
-
 
 	auto audio = std::move(this->CreateSourceVoiceEx(audioResource));
 

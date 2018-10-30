@@ -6,12 +6,10 @@
 #include "./Engine/Input/InputManager.h"
 #include "./Engine/GameConponent/Primitive/Cube.h"
 #include "./Engine/Util/Math.h"
-#include "Engine/CommandContext/GraphicsCommandList.h"
-#include "Engine/Signature/RootSignature.h"
-
-
-#include "Engine/Audio/Audio.h"
-#include "Engine/Audio/AudioManager.h"
+#include "./Engine/CommandContext/GraphicsCommandList.h"
+#include "./Engine/Signature/RootSignature.h"
+#include "./Engine/Audio/Audio.h"
+#include "./Engine/Audio/AudioManager.h"
 
 int main() {
 
@@ -22,15 +20,25 @@ int main() {
 	K3D12::D3D12System::InitializeController();
 
 	K3D12::AudioManager::InitializeXAudio2();
+	bool trig = false;
 
-
-	auto audio = K3D12::AudioManager::GetInstance().LoadAudio("./audio/Test.wav");
+	auto audio = K3D12::AudioManager::GetInstance().LoadAudio("./audio/An Ordeal From God.wav");
 
 	audio->Play();
 
 	while (K3D12::MessageLoop() == 0 && !K3D12::Input().IsDown(K3D12::VIRTUAL_KEY_STATE::VKS_ESCAPE)) {
 		K3D12::Input().InputUpdate();
 		K3D12::ClearScreen();
+
+		if (K3D12::Input().IsTriggerDown(K3D12::VIRTUAL_KEY_STATE::VKS_SPACE) && !trig) {
+			audio->Stop();
+			trig = true;
+		}
+		else if (K3D12::Input().IsTriggerDown(K3D12::VIRTUAL_KEY_STATE::VKS_SPACE) && trig) {
+			audio->Play();
+			trig = false;
+		}
+
 
 
 		K3D12::ScreenFlip();
