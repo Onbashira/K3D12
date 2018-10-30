@@ -55,18 +55,22 @@ void K3D12::Audio::StreamSubmit()
 
 		//もしキュー内のバッファがQ設定数値以下ならバッファに対して新しいデータを供給する
 		if (state.BuffersQueued < _callBack.AUDIO_BUFFER_QUEUE_MAX) {
-
-			if (_seekPoint >= _audioLength) {
-
-				if (_isLoop == false) {
-					Stop();
-				}
-				_seekPoint = 0;
-			}
-
 			// 44.1k * byte * channel
 			unsigned int seekValue = _rawData.lock()->GetWaveFormat().nSamplesPerSec * _rawData.lock()->GetWaveFormat().nChannels;
 			unsigned int audioBytePerSec = _rawData.lock()->GetWaveFormat().nAvgBytesPerSec;
+			if (_seekPoint >= _audioLength) {
+				_seekPoint = 0;
+				_audioBuffer.AudioBytes = static_cast<UINT32>(audioBytePerSec);
+				_audioBuffer.pAudioData = reinterpret_cast<BYTE*>(&_rawData.lock()->GetWave()[_seekPoint]);
+				SubmitBuffer();
+				_seekPoint += seekValue;
+				if (_isLoop == false) {
+					Stop();
+				}
+				return;
+			}
+
+
 			//もしも曲データがシークポイント + 一秒間のデータ量が一秒以下もしくはループポイントに到達しているなら
 			if ((_seekPoint + seekValue) >= _audioLength) {
 				unsigned int  byte = _audioLength - _seekPoint;
