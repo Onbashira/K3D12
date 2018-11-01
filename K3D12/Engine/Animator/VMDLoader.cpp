@@ -31,15 +31,14 @@ std::shared_ptr<K3D12::MotionData> K3D12::VMDLoader::LoadMotion(std::string path
 	unsigned long count = {};
 	fread(&count, sizeof(count), 1, fp);
 
-	std::vector<VMDMotion> vmdMotion;
-	vmdMotion.resize(count);
+	motion->vmdMotion.resize(count);
 	//“Ç‚Ýž‚Ýˆ—
-	for (auto& motion : vmdMotion) {
+	for (auto& motion : motion->vmdMotion) {
 		fread(&motion, sizeof(VMDMotion), 1, fp);
 	}
 	fclose(fp);
 
-	for (auto& data : vmdMotion) {
+	for (auto& data : motion->vmdMotion) {
 
 		//DirectX::XMVECTOR quaternion = DirectX::XMLoadFloat4(&data.rotation);
 		Quaternion quaternion = Quaternion(data.rotation.x, data.rotation.y, -data.rotation.z, -data.rotation.w);

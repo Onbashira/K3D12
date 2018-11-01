@@ -477,9 +477,7 @@ std::shared_ptr<K3D12::MMDModel> K3D12::ModelConverter::ExtructMMDModel(std::wea
 
 void CreatePMXBoneTree(K3D12::MMDBoneTree* skelton, std::vector<K3D12::PMXBone>& bonesInfo, K3D12::MMDBoneNode * node, std::vector<K3D12::MMDIKData>& ikDataMap)
 {
-
 	Matrix rotMat = Matrix::CreateRotationY(DegToRad(180.0f));
-
 
 	for (auto info = bonesInfo.begin(); info != bonesInfo.end(); info++) {
 		if (node->index == info->parentBoneIndex) {
@@ -496,9 +494,10 @@ void CreatePMXBoneTree(K3D12::MMDBoneTree* skelton, std::vector<K3D12::PMXBone>&
 			newNode.boneOption.localAxis = info->boneAxis;
 
 			newNode.boneOptionFlags = info->boneFlags;
-			node->childrenBone.push_back(std::move(newNode));
-			skelton->boneAccessor[K3D12::Util::WStringToString(info->boneNameLocal)] = &node->childrenBone.back();
+
+			node->childrenBone.push_back(newNode);
 			skelton->boneNameAccessor[newNode.index] = K3D12::Util::WStringToString(info->boneNameLocal);
+
 			//ボーンがIK成分を持っているなら
 			if ((static_cast<int>(info->boneFlags) & 0x0020) == 0x0020) {
 				K3D12::MMDIKData ikData;
@@ -516,6 +515,13 @@ void CreatePMXBoneTree(K3D12::MMDBoneTree* skelton, std::vector<K3D12::PMXBone>&
 			}
 		}
 	}
+
+	for (unsigned int i = 0; i < node->childrenBone.size(); i++)
+	{
+		skelton->boneAccessor[skelton->boneNameAccessor[node->childrenBone[i].index]] = &node->childrenBone[i];
+
+	}
+
 	for (unsigned int i = 0; i < node->childrenBone.size(); i++)
 	{
 		//再帰
@@ -527,7 +533,6 @@ void CreatePMDBoneTree(K3D12::MMDBoneTree* skelton, std::vector<K3D12::PMDBone>&
 {
 
 	Matrix rotMat = Matrix::CreateRotationY(DegToRad(180.0f));
-
 
 	for (auto info = bonesInfo.begin(); info != bonesInfo.end(); info++) {
 		if (node->index == info->parentIndex) {
@@ -543,9 +548,15 @@ void CreatePMDBoneTree(K3D12::MMDBoneTree* skelton, std::vector<K3D12::PMDBone>&
 			newNode.boneOptionFlags = 0x0002;
 			node->childrenBone.push_back(std::move(newNode));
 			skelton->boneAccessor[info->boneName] = &node->childrenBone.back();
-			skelton->boneNameAccessor[newNode.index] = info->boneName;
 		}
 	}
+
+	for (unsigned int i = 0; i < node->childrenBone.size(); i++)
+	{
+		skelton->boneAccessor[skelton->boneNameAccessor[node->childrenBone[i].index]] = &node->childrenBone[i];
+
+	}
+
 	for (auto& child : node->childrenBone)
 	{
 		//再帰rekure
