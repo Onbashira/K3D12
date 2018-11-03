@@ -4623,93 +4623,117 @@ void  Quaternion::CreateFromRotationMatrix(const Matrix & value, Quaternion & re
 
 Quaternion  Quaternion::Slerp(const Quaternion & a, const Quaternion & b, float amount)
 {
-	if (amount <= 0.0f)
-	{
+
+	//範囲外パラメータのチェック
+	//このコード自体まだ短くかけて近似値を出せる可能性がある
+
+	if (amount <= 0.0f) {
 		return a;
 	}
-
-	if (amount >= 1.0f)
-	{
+	if (amount >= 1.0f) {
 		return b;
 	}
 
-	auto cosOmega = Quaternion::Dot(a, b);
+	float cosOmega = Dot(a, b);
+
+
+	float bW = b.w;
+	float bX = b.x;
+	float bY = b.y;
+	float bZ = b.z;
+
 	bool flag = false;
 
 	if (cosOmega < 0.0f)
 	{
 		flag = true;
-		cosOmega -= cosOmega;
+		bW = -b.w;
+		bX = -b.x;
+		bY = -b.y;
+		bZ = -b.z;
+		cosOmega = -cosOmega;
 	}
+	assert(cosOmega < 1.1f);
 
-	float k1, k2;
+	float k0 = 0.0f;
+	float k1 = 0.0f;
+
+	//非常に近い　0Div回避のため線形補間
 	if (cosOmega > 0.9999f)
 	{
-		k1 = 1.0f - amount;
-		k2 = (flag) ? -amount : amount;
+		k0 = 1.0f - amount;
+		k1 = amount;
 	}
-	else
-	{
-		auto q5 = acosf(cosOmega);
-		auto q6 = 1.0f / sinf(q5);
-		k1 = sinf((1.0f - amount) * q5) * q6;
-		k2 = (flag) ? -sinf(amount * q5) * q6 : sinf(amount * q5) * q6;
+	else {
+		float sinOmega = std::sqrtf(1.0f - cosOmega * cosOmega);
+		float omega = atan2f(sinOmega, cosOmega);
+		float oneOverSinOmega = 1.0f / sinOmega;
+		k0 = sinf((1.0f - amount)*omega) * oneOverSinOmega;
+		k1 = sinf(amount * omega) * oneOverSinOmega;
+
 	}
-	return Quaternion(
-		(k1 * a.x) + (k2 * a.x),
-		(k1 * a.y) + (k2 * a.y),
-		(k1 * a.z) + (k2 * a.z),
-		(k1 * a.w) + (k2 * a.w)
-	);
+	return
+		Quaternion(
+		(k0 * a.x) + (k1 * bX),
+			(k0 * a.y) + (k1 * bY),
+			(k0 * a.z) + (k1 * bZ),
+			(k0 * a.w) + (k1 * bW)
+		);
+
 }
 
 void  Quaternion::Slerp(const Quaternion & a, const Quaternion & b, float amount, Quaternion & result)
 {
-	if (amount <= 0.0f)
-	{
-		result.x = a.x;
-		result.y = a.y;
-		result.z = a.z;
-		result.w = a.w;
-		return;
+	if (amount <= 0.0f) {
+		result = a;
+	}
+	if (amount >= 1.0f) {
+		result = b;
 	}
 
-	if (amount >= 1.0f)
-	{
-		result.x = b.x;
-		result.y = b.y;
-		result.z = b.z;
-		result.w = b.w;
-		return;
-	}
+	float cosOmega = Dot(a, b);
 
-	auto cosOmega = Quaternion::Dot(a, b);
+
+	float bW = b.w;
+	float bX = b.x;
+	float bY = b.y;
+	float bZ = b.z;
+
 	bool flag = false;
 
 	if (cosOmega < 0.0f)
 	{
 		flag = true;
-		cosOmega -= cosOmega;
+		bW = -b.w;
+		bX = -b.x;
+		bY = -b.y;
+		bZ = -b.z;
+		cosOmega = -cosOmega;
 	}
+	assert(cosOmega < 1.1f);
 
-	float k1, k2;
+	float k0 = 0.0f;
+	float k1 = 0.0f;
+
+	//非常に近い　0Div回避のため線形補間
 	if (cosOmega > 0.9999f)
 	{
-		k1 = 1.0f - amount;
-		k2 = (flag) ? -amount : amount;
+		k0 = 1.0f - amount;
+		k1 = amount;
 	}
-	else
-	{
-		auto q5 = acosf(cosOmega);
-		auto q6 = 1.0f / sinf(q5);
-		k1 = sinf((1.0f - amount) * q5) * q6;
-		k2 = (flag) ? -sinf(amount * q5) * q6 : sinf(amount * q5) * q6;
+	else {
+		float sinOmega = std::sqrtf(1.0f - cosOmega * cosOmega);
+		float omega = atan2f(sinOmega, cosOmega);
+		float oneOverSinOmega = 1.0f / sinOmega;
+		k0 = sinf((1.0f - amount)*omega) * oneOverSinOmega;
+		k1 = sinf(amount * omega) * oneOverSinOmega;
+
 	}
 
-	result.x = (k1 * a.x) + (k2 * a.x);
-	result.y = (k1 * a.y) + (k2 * a.y);
-	result.z = (k1 * a.z) + (k2 * a.z);
-	result.w = (k1 * a.w) + (k2 * a.w);
+	result.x = (k0 * a.x) + (k1 * bX);
+	result.y = (k0 * a.y) + (k1 * bY);
+	result.z = (k0 * a.z) + (k1 * bZ);
+	result.w = (k0 * a.w) + (k1 * bW);
 }
 
 Quaternion Quaternion::Squad(const Quaternion & value, const Quaternion & a, const Quaternion & b, const Quaternion & c, float amount)
