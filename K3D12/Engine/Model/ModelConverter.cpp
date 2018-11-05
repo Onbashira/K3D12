@@ -353,7 +353,7 @@ std::shared_ptr<K3D12::MMDModelResourceData> K3D12::ModelConverter::ConvertPMXMo
 		//スケルトンのIKをコンバート
 		{
 			convertModel->_boneTree->modelIKdata.reserve(ikDataMap.size());
-			for (std::vector<MMDIKData>::iterator itr = convertModel->_boneTree->modelIKdata.begin(); convertModel->_boneTree->modelIKdata.size(); itr++) {
+			for (std::vector<MMDIKData>::iterator itr = ikDataMap.begin(); itr != ikDataMap.end(); itr++) {
 				convertModel->_boneTree->modelIKdata.push_back(*itr);
 			}
 		}
