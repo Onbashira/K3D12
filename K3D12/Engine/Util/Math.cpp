@@ -550,8 +550,8 @@ Vector2 Vector2::Hermite(const Vector2 & a, const Vector2 & t1, const Vector2 & 
 	}
 	else
 	{
-		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c3 + t1.x * amount + a.x;
-		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c3 + t1.y * amount + a.y;
+		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c2 + t1.x * amount + a.x;
+		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c2 + t1.y * amount + a.y;
 	}
 	return result;
 }
@@ -573,8 +573,8 @@ void Vector2::Hermite(const Vector2 & a, const Vector2 & t1, const Vector2 & b, 
 	}
 	else
 	{
-		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c3 + t1.x * amount + a.x;
-		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c3 + t1.y * amount + a.y;
+		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c2 + t1.x * amount + a.x;
+		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c2 + t1.y * amount + a.y;
 	}
 }
 
@@ -1321,9 +1321,9 @@ Vector3  Vector3::Hermite(const Vector3 & a, const Vector3 & t1, const Vector3 &
 	}
 	else
 	{
-		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c3 + t1.x * amount + a.x;
-		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c3 + t1.y * amount + a.y;
-		result.z = (2.0f * a.z - 2.0f * b.z + t2.z + t1.z) * c3 + (3.0f * b.z - 3.0f * a.z - 2.0f * t1.z - t2.z) * c3 + t1.y * amount + a.z;
+		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c2 + t1.x * amount + a.x;
+		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c2 + t1.y * amount + a.y;
+		result.z = (2.0f * a.z - 2.0f * b.z + t2.z + t1.z) * c3 + (3.0f * b.z - 3.0f * a.z - 2.0f * t1.z - t2.z) * c2 + t1.y * amount + a.z;
 	}
 	return result;
 }
@@ -1347,9 +1347,9 @@ void  Vector3::Hermite(const Vector3 & a, const Vector3 & t1, const Vector3 & b,
 	}
 	else
 	{
-		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c3 + t1.x * amount + a.x;
-		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c3 + t1.y * amount + a.y;
-		result.z = (2.0f * a.z - 2.0f * b.z + t2.z + t1.z) * c3 + (3.0f * b.z - 3.0f * a.z - 2.0f * t1.z - t2.z) * c3 + t1.z * amount + a.z;
+		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c2 + t1.x * amount + a.x;
+		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c2 + t1.y * amount + a.y;
+		result.z = (2.0f * a.z - 2.0f * b.z + t2.z + t1.z) * c3 + (3.0f * b.z - 3.0f * a.z - 2.0f * t1.z - t2.z) * c2 + t1.z * amount + a.z;
 	}
 }
 
@@ -2135,10 +2135,10 @@ Vector4  Vector4::Hermite(const Vector4 & a, const Vector4 & t1, const Vector4 &
 	}
 	else
 	{
-		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c3 + t1.x * amount + a.x;
-		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c3 + t1.y * amount + a.y;
-		result.z = (2.0f * a.z - 2.0f * b.z + t2.z + t1.z) * c3 + (3.0f * b.z - 3.0f * a.z - 2.0f * t1.z - t2.z) * c3 + t1.y * amount + a.z;
-		result.w = (2.0f * a.w - 2.0f * b.w + t2.w + t1.w) * c3 + (3.0f * b.w - 3.0f * a.w - 2.0f * t1.w - t2.w) * c3 + t1.w * amount + a.w;
+		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c2 + t1.x * amount + a.x;
+		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c2 + t1.y * amount + a.y;
+		result.z = (2.0f * a.z - 2.0f * b.z + t2.z + t1.z) * c3 + (3.0f * b.z - 3.0f * a.z - 2.0f * t1.z - t2.z) * c2 + t1.y * amount + a.z;
+		result.w = (2.0f * a.w - 2.0f * b.w + t2.w + t1.w) * c3 + (3.0f * b.w - 3.0f * a.w - 2.0f * t1.w - t2.w) * c2 + t1.w * amount + a.w;
 	}
 	return result;
 }
@@ -2164,10 +2164,10 @@ void  Vector4::Hermite(const Vector4 & a, const Vector4 & t1, const Vector4 & b,
 	}
 	else
 	{
-		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c3 + t1.x * amount + a.x;
-		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c3 + t1.y * amount + a.y;
-		result.z = (2.0f * a.z - 2.0f * b.z + t2.z + t1.z) * c3 + (3.0f * b.z - 3.0f * a.z - 2.0f * t1.z - t2.z) * c3 + t1.z * amount + a.z;
-		result.w = (2.0f * a.w - 2.0f * b.w + t2.w + t1.w) * c3 + (3.0f * b.w - 3.0f * a.w - 2.0f * t1.w - t2.w) * c3 + t1.w * amount + a.w;
+		result.x = (2.0f * a.x - 2.0f * b.x + t2.x + t1.x) * c3 + (3.0f * b.x - 3.0f * a.x - 2.0f * t1.x - t2.x) * c2 + t1.x * amount + a.x;
+		result.y = (2.0f * a.y - 2.0f * b.y + t2.y + t1.y) * c3 + (3.0f * b.y - 3.0f * a.y - 2.0f * t1.y - t2.y) * c2 + t1.y * amount + a.y;
+		result.z = (2.0f * a.z - 2.0f * b.z + t2.z + t1.z) * c3 + (3.0f * b.z - 3.0f * a.z - 2.0f * t1.z - t2.z) * c2 + t1.z * amount + a.z;
+		result.w = (2.0f * a.w - 2.0f * b.w + t2.w + t1.w) * c3 + (3.0f * b.w - 3.0f * a.w - 2.0f * t1.w - t2.w) * c2 + t1.w * amount + a.w;
 	}
 }
 
