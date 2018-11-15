@@ -134,9 +134,29 @@ std::shared_ptr<K3D12::GraphicsCommandList> K3D12::D3D12System::GetMasterCommand
 	return GraphicsContextLibrary::GetInstance().GetGraphicsCommandList("CommandList");
 }
 
+std::shared_ptr<GraphicsCommandList> K3D12::D3D12System::GetComputeCommandList()
+{
+	return GraphicsContextLibrary::GetInstance().GetGraphicsCommandList("ComputeList");
+}
+
+std::shared_ptr<GraphicsCommandList> K3D12::D3D12System::GetCopyCommandList()
+{
+	return GraphicsContextLibrary::GetInstance().GetGraphicsCommandList("CopyList");
+}
+
 K3D12::CommandQueue& K3D12::D3D12System::GetMasterCommandQueue()
 {
 	return GetInstance()._commandQueue;
+}
+
+CommandQueue & K3D12::D3D12System::GetMasterComputeQueu()
+{
+	return GetInstance()._computeQueue;
+}
+
+CommandQueue & K3D12::D3D12System::GetMasterCopyQueu()
+{
+	return GetInstance()._copyQueue;
 }
 
 HRESULT D3D12System::InitializeDevice(bool useWarpDevice)
@@ -173,11 +193,52 @@ HRESULT D3D12System::InitializeCommandQueue()
 	return hr;
 }
 
-HRESULT D3D12System::InitializeCommandList()
+HRESULT K3D12::D3D12System::InitializeComputeQueue()
 {
-	auto hr = GraphicsContextLibrary::GetInstance().CreateCommandList("CommandList", 0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT);
+	D3D12_COMMAND_QUEUE_DESC desc;
+	desc.NodeMask = 0;
+	desc.Flags = D3D12_COMMAND_QUEUE_FLAGS::D3D12_COMMAND_QUEUE_FLAG_NONE;
+	desc.Priority = D3D12_COMMAND_QUEUE_PRIORITY::D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
+	desc.Type = D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COMPUTE;
+
+	auto hr = this->_computeQueue.Create(desc);
 	CHECK_RESULT(hr);
 	return hr;
+}
+
+HRESULT K3D12::D3D12System::InitializeCopyQueue()
+{
+	D3D12_COMMAND_QUEUE_DESC desc;
+	desc.NodeMask = 0;
+	desc.Flags = D3D12_COMMAND_QUEUE_FLAGS::D3D12_COMMAND_QUEUE_FLAG_NONE;
+	desc.Priority = D3D12_COMMAND_QUEUE_PRIORITY::D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
+	desc.Type = D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COPY;
+
+	auto hr = this->_computeQueue.Create(desc);
+	CHECK_RESULT(hr);
+	return hr;
+}
+
+HRESULT D3D12System::InitializeCommandList()
+{
+	//マスターのコマンドリスト
+	{
+		auto hr = GraphicsContextLibrary::GetInstance().CreateCommandList("CommandList", 0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT);
+		CHECK_RESULT(hr);
+		return hr;
+	}
+	//マスターのコンピュートリスト
+	{
+		auto hr = GraphicsContextLibrary::GetInstance().CreateCommandList("ComputeList", 0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COMPUTE);
+		CHECK_RESULT(hr);
+		return hr;
+	}
+	//マスターのコピーリスト
+	{
+		auto hr = GraphicsContextLibrary::GetInstance().CreateCommandList("CopyList", 0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COPY);
+		CHECK_RESULT(hr);
+		return hr;
+	}
 }
 
 HRESULT D3D12System::InitializeFence()
@@ -780,6 +841,10 @@ HRESULT D3D12System::InitializeD3D12(unsigned int bufferCount, bool useWarpDevic
 	CHECK_RESULT(hr);
 	hr = InitializeCommandQueue();
 	CHECK_RESULT(hr);
+	hr = InitializeComputeQueue();
+	CHECK_RESULT(hr);
+	hr = InitializeCopyQueue();
+	CHECK_RESULT(hr);
 	hr = InitializeRenderTargets(bufferCount);
 	CHECK_RESULT(hr);
 	hr = InitializeCommandList();
@@ -812,6 +877,8 @@ void D3D12System::TermD3D12()
 	_modelPool.Discard();
 	GraphicsContextLibrary::GetInstance().Discard();
 	_commandQueue.Discard();
+	_copyQueue.Discard();
+	_computeQueue.Discard();
 	_factory.Discard();
 	_fence.Discard();
 	LightManager::Destroy();

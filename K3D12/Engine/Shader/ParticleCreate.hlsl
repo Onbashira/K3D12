@@ -59,24 +59,28 @@ void CreateParticleMain
     vertex.pos;
     vertex.color;
     vertex.texcoord = float2(0, 0);
+    //追加
     output.Append(vertex);
 
     //第二頂点
     vertex.pos;
     vertex.color;
     vertex.texcoord = float2(1, 0);
+    //追加
     output.Append(vertex);
 
     //第三頂点
     vertex.pos;
     vertex.color;
     vertex.texcoord = float2(0, 1);
+    //追加
     output.Append(vertex);
-
+    
     //第四頂点
     vertex.pos;
     vertex.color;
     vertex.texcoord = float2(1, 1);
+    //追加
     output.Append(vertex);
 
     //ストリップ破棄

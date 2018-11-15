@@ -13,6 +13,7 @@ namespace K3D12 {
 
 	protected:
 		std::vector<Vertex3D> _vertexes;
+
 		std::vector<unsigned int> _indexList;
 	private:
 

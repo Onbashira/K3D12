@@ -169,6 +169,9 @@
     <Filter Include="Engine\Scene">
       <UniqueIdentifier>{d487c1da-91a9-442b-b2f5-b437c08ffeaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Particle">
+      <UniqueIdentifier>{d73ae277-9feb-4261-aa95-0fd0c10727d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -470,6 +473,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Resource\UnorderedAccessValue.cpp">
       <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Particle\ParticleCluster.cpp">
+      <Filter>Engine\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Particle\ParticleInstanceData.cpp">
+      <Filter>Engine\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Particle\ParticleQuad.cpp">
+      <Filter>Engine\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -781,6 +793,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Resource\UnorderedAccessValue.h">
       <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Particle\ParticleCluster.h">
+      <Filter>Engine\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Particle\ParticleInstanceData.h">
+      <Filter>Engine\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Particle\ParticleQuad.h">
+      <Filter>Engine\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

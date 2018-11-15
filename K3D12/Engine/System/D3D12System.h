@@ -49,6 +49,10 @@ namespace K3D12 {
 		std::wstring					_appClassName;
 		
 		CommandQueue					_commandQueue;
+
+		CommandQueue					_computeQueue;
+
+		CommandQueue					_copyQueue;
 		
 		SwapChain						_renderTarget;
 		
@@ -79,6 +83,10 @@ namespace K3D12 {
 		HRESULT InitializeRenderTargets(unsigned int bufferCount = 2);
 
 		HRESULT InitializeCommandQueue();
+
+		HRESULT InitializeComputeQueue();
+
+		HRESULT InitializeCopyQueue();
 
 		HRESULT InitializeCommandList();
 
@@ -166,7 +174,15 @@ namespace K3D12 {
 
 		static std::shared_ptr<GraphicsCommandList>	GetMasterCommandList();
 
-		static  CommandQueue&		GetMasterCommandQueue();
+		static std::shared_ptr<GraphicsCommandList>	GetComputeCommandList();
+
+		static std::shared_ptr<GraphicsCommandList>	GetCopyCommandList();
+
+		static  CommandQueue& GetMasterCommandQueue();
+
+		static  CommandQueue& GetMasterComputeQueu();
+
+		static  CommandQueue& GetMasterCopyQueu();
 
 		friend  Camera& GetCamera();
 

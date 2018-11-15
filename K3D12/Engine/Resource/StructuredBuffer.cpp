@@ -178,11 +178,6 @@ HRESULT K3D12::StructuredBuffer::CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC * sr
 	return S_OK;
 }
 
-void K3D12::StructuredBuffer::WriteToBuffer(unsigned int numElements, unsigned int elementSize, void* pBufferData)
-{
-
-}
-
 void K3D12::StructuredBuffer::ReadBack()
 {
 	ResourceTransition(D3D12System::GetCommandList("CommandList")->GetCommandList().Get(), D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COPY_SOURCE);

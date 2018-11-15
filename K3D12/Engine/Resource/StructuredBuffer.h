@@ -55,8 +55,6 @@ namespace K3D12 {
 		HRESULT									Create(unsigned int elementSize, unsigned int numElements, void* pBufferData);
 		//デスクリプタの作成
 		HRESULT									CreateDescriptors(unsigned int elementSize, unsigned int numElements);
-		//リソースをアップロードバッファに配置
-		void									WriteToBuffer(unsigned int numElements, unsigned int elementSize, void* pBufferData);
 		//GPU上の情報をリードバックする
 		void									ReadBack();
 		//

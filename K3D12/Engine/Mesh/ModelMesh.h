@@ -20,6 +20,7 @@ namespace K3D12 {
 	{
 	private:
 		MeshHeap _meshHeap;
+
 		MeshBuffer _meshBuffer;
 	protected:
 

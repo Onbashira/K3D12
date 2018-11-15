@@ -46,17 +46,17 @@ namespace K3D12 {
 		
 		virtual HRESULT														Create(D3D12_HEAP_PROPERTIES heapProps, D3D12_HEAP_FLAGS flags, D3D12_RESOURCE_DESC resourceDesc, D3D12_RESOURCE_STATES state, D3D12_CLEAR_VALUE* clearValue = nullptr);
 		
-		HRESULT																Map(UINT subResource, D3D12_RANGE* readRange);
+		virtual HRESULT														Map(UINT subResource, D3D12_RANGE* readRange);
 		
-		void																Unmap(UINT subResource, D3D12_RANGE* writtenRange);
+		virtual void														Unmap(UINT subResource, D3D12_RANGE* writtenRange);
 		
 		UCHAR*																GetMappedPointer();
 	
 		void																Discard();
 		
-		void																Update(const void* pSrc, ULONG64 size, const UINT dstOffset);
+		virtual void														Update(const void* pSrc, ULONG64 size, const UINT dstOffset);
 		
-		void																Read(void* pDstBuffer,ULONG64 readSize, const unsigned int dstOffsest = 0);
+		virtual void														Read(void* pDstBuffer,ULONG64 readSize, const unsigned int dstOffsest = 0);
 		
 		void																Update(const void* pSrc, ULONG64 size, const UINT dstOffset, UINT subResource, D3D12_RANGE* readRange = nullptr, D3D12_RANGE* writtenRange = nullptr);
 		
