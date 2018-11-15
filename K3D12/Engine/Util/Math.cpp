@@ -7,44 +7,44 @@
 #include "Utility.h"
 
 
-float   DegToRad(float deg)
+float DegToRad(float deg)
 {
 	return deg * (F_PI / 180.f);
 }
 
-float   RadToDeg(float rad)
+float RadToDeg(float rad)
 {
 	return rad * (180.f / F_PI);
 }
 
-bool   IsZero(float value)
+bool IsZero(float value)
 {
 	return fabs(value) <= F_EPSILON;
 }
 
-bool   IsZero(double value)
+bool IsZero(double value)
 {
 	return abs(value) <= D_EPSILON;
 }
 
-bool   IsEqual(float a, float b)
+bool IsEqual(float a, float b)
 {
 	return fabs(a - b) <= F_EPSILON;
 }
 
-bool   IsEqual(double a, double b)
+bool IsEqual(double a, double b)
 {
 	return abs(a - b) <= D_EPSILON;
 }
 
-bool   IsNan(float value)
+bool IsNan(float value)
 {
 	return (value != value);
 }
 
-bool   IsInf(float value)
+bool IsInf(float value)
 {
-	UINT f = *reinterpret_cast<UINT*>(&value);
+	unsigned int f = *reinterpret_cast<unsigned int*>(&value);
 	if (((f & 0x7e000000) == 0x7e000000) && (value == value))
 	{
 		return true;
@@ -52,44 +52,44 @@ bool   IsInf(float value)
 	return false;
 }
 
-UINT   Fact(UINT value)
+unsigned int Fact(unsigned int value)
 {
-	UINT result = 1;
-	for (UINT i = 1; i <= value; ++i)
+	unsigned int result = 1;
+	for (unsigned int i = 1; i <= value; ++i)
 	{
 		result *= i;
 	}
 	return result;
 }
 
-UINT   DoubleFact(UINT value)
+unsigned int DoubleFact(unsigned int value)
 {
-	UINT result = 1;
-	UINT start = ((value % 2) == 0) ? 2 : 1;
-	for (UINT i = start; i <= value; i += 2)
+	unsigned int result = 1;
+	unsigned int start = ((value % 2) == 0) ? 2 : 1;
+	for (unsigned int i = start; i <= value; i += 2)
 	{
 		result *= i;
 	}
 	return result;
 }
 
-float   Bernstein(UINT n, UINT i, float t)
+float   Bernstein(unsigned int n, unsigned int i, float t)
 {
 	return static_cast<float>(Binormal(n, i)*std::powf(t, static_cast<float>(i))*std::powf(1.0f - t, static_cast<float>(n - i)));
 }
 
-float   Binormal(UINT n, UINT k)
+float   Binormal(unsigned int n, unsigned int k)
 {
 	return static_cast<float>(Fact(n) / (Fact(k)*(Fact(n - k))));
 }
 
-UINT   Perm(UINT n, UINT r)
+unsigned int Perm(unsigned int n, unsigned int r)
 {
 	assert(n >= r);
 	return Fact(n) / Fact(n - r);
 }
 
-UINT   Comb(UINT n, UINT r)
+unsigned int Comb(unsigned int n, unsigned int r)
 {
 	assert(n >= r);
 	return Fact(n) / (Fact(n - r) * Fact(r));
@@ -140,6 +140,19 @@ double   Lerp(double a, double b, double amount)
 	return a - amount * (a - b);
 }
 
+///////////////////////////////////////////////
+//
+//
+//
+//
+///////////////////////////////////////////////
+
+const Vector2 Vector2::up(0.0f,1.0f);
+const Vector2 Vector2::left(-1.0f,0.0f);
+const Vector2 Vector2::down(0.0f,-1.0f);
+const Vector2 Vector2::right(1.0f,0.0f);
+const Vector2 Vector2::zero(0.0f,0.0f);
+const Vector2 Vector2::one(1.0f,1.0f);
 
 Vector2::Vector2() :x(), y()
 {

@@ -39,7 +39,6 @@ namespace K3D12 {
 		DEPTH_MAP,
 		LIGHT_BUFFER,
 		RESULT,
-
 		SPECULAR_MAP,
 		DIFFUSE_MAP,
 
@@ -63,7 +62,7 @@ namespace K3D12 {
 		unsigned int									_windowHeight;
 		Vertex3D										_vertex[4];
 		VertexBuffer									_vertexBuffer;
-		DescriptorHeap									_geometryShaderHeap;		//NORMAL + ALBEDO + SPEC + SunOculusion
+		DescriptorHeap									_geometryShaderHeap;		//NORMAL + ALBEDO + SPEC + Acumration
 		DescriptorHeap									_rtvHeap;					//上記と同じ
 		DescriptorHeap									_uavHeap;					//SpecularMap , DiffuseMap
 		DepthStencil*									_bindedDepthStencil;		//このクラスにバインドされているデプスステンシル

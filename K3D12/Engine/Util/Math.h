@@ -89,21 +89,21 @@ bool		IsNan(float value);
 bool		IsInf(float value);
 
 //階乗
-UINT		Fact(UINT value);
+unsigned int Fact(unsigned int value);
 
 //二重階乗
-UINT		DoubleFact(UINT value);
+unsigned int DoubleFact(unsigned int value);
 
 //バーンスタイン
-float		Bernstein(UINT n, UINT i, float t);
+float		Bernstein(unsigned int n, unsigned int i, float t);
 
 //二項係数
-float		Binormal(UINT n, UINT k);
+float		Binormal(unsigned int n, unsigned int k);
 
 //順列
-UINT		Perm(UINT n, UINT r);
+unsigned int Perm(unsigned int n, unsigned int r);
 //組み合わせ
-UINT		Comb(UINT n, UINT r);
+unsigned int Comb(unsigned int n, unsigned int r);
 
 //ちょっと早いSQRT
 float		QuickSqrt(float value);
@@ -130,6 +130,14 @@ public:
 	//==================================
 	float x;
 	float y;
+
+	static const Vector2 up;
+	static const Vector2 left;
+	static const Vector2 down;
+	static const Vector2 right;
+	static const Vector2 zero;
+	static const Vector2 one;
+
 private:
 	//==================================
 	//メソッド
@@ -346,8 +354,8 @@ public:
 	static void					Clamp(const Vector3& value, const Vector3& min, const Vector3& max, Vector3& result);
 
 	//与えられた空間ベクトルを長さでクランプ
-	static Vector3				ClampLength(const Vector3& value,float min,float max);
-	static Vector3				ClampLength(const Vector3& value, float min, float max,Vector3& result);
+	static Vector3				ClampLength(const Vector3& value, float min, float max);
+	static Vector3				ClampLength(const Vector3& value, float min, float max, Vector3& result);
 
 	//与えられた値を0～1で制限する
 	static Vector3				Saturate(const Vector3& value);
@@ -640,7 +648,7 @@ private:
 	//==============================
 	//メソッド
 	//==============================
-	
+
 
 public:
 	Matrix();

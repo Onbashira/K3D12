@@ -11,9 +11,9 @@ namespace K3D12 {
 	{
 		friend class Animator;
 	private:
-		std::shared_ptr<K3D12::StateNode>		_startNode;
+		std::shared_ptr<K3D12::StateNode>	_startNode;
 
-		std::shared_ptr<K3D12::StateNode>		_exitNode;
+		std::shared_ptr<K3D12::StateNode>	_exitNode;
 
 		std::weak_ptr<K3D12::StateNode>		_currentNode;
 
@@ -31,6 +31,8 @@ namespace K3D12 {
 		void CCDIKSolver(MMDIKData& IkData, Vector3& skeltonCenterPos, unsigned int iterationNum, unsigned int numBones, unsigned  int numMaxBones);
 
 		void ApplyRecursionMatirixBone(MMDBoneNode* node);
+
+		void Bezeir3(Vector3& sp, Vector3& cp1, Vector3& cp2, Vector3& ep);
 
 	public:
 		StateMachineController();

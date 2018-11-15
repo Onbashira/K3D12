@@ -30,13 +30,19 @@ void K3D12::GamePadManager::Initialize(int maxConectionCount)
 	AllSetUp();
 }
 
+void K3D12::GamePadManager::Discard()
+{
+	for (int i = 0; i < _maxConectionCount; i++) {
+		this->_gamePads[i].reset();
+	}
+	
+}
+
 K3D12::GamePadManager::GamePadManager() : _maxConectionCount(0)
 {
 }
 
 K3D12::GamePadManager::~GamePadManager()
 {
-	for (int i = 0; i < _maxConectionCount; i++) {
-		this->_gamePads[i].reset();
-	}
+	Discard();
 }

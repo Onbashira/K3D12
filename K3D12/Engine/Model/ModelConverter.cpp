@@ -19,6 +19,7 @@
 #include "../Mesh/ModelMesh.h"
 
 constexpr UINT ToonMapTextureNum = 11;
+constexpr float MODEL_INIT_ROTATION = 0.0f;
 //固定値
 const std::string ToonMapPath[ToonMapTextureNum] =
 {
@@ -56,7 +57,7 @@ std::shared_ptr<K3D12::MMDModelResourceData> K3D12::ModelConverter::ConvertPMDMo
 	std::shared_ptr<K3D12::MMDModelResourceData> convertModel = std::make_shared<MMDModelResourceData>();
 	convertModel->_modelPath = model->modelPath;
 
-	Matrix rotMat = Matrix::CreateRotationY(DegToRad(180.0f));
+	Matrix rotMat = Matrix::CreateRotationY(DegToRad(MODEL_INIT_ROTATION));
 
 	//頂点コンバート
 	{
@@ -215,7 +216,7 @@ std::shared_ptr<K3D12::MMDModelResourceData> K3D12::ModelConverter::ConvertPMXMo
 
 	//頂点コンバート
 	{
-		Matrix rotMat = Matrix::CreateRotationY(DegToRad(180.0f));
+		Matrix rotMat = Matrix::CreateRotationY(DegToRad(MODEL_INIT_ROTATION));
 
 		convertModel->_vertexes.resize(model->vertcies.size());
 		convertModel->_deformationData.resize(model->vertcies.size());
@@ -477,7 +478,7 @@ std::shared_ptr<K3D12::MMDModel> K3D12::ModelConverter::ExtructMMDModel(std::wea
 
 void CreatePMXBoneTree(K3D12::MMDBoneTree* skelton, std::vector<K3D12::PMXBone>& bonesInfo, K3D12::MMDBoneNode * node, std::vector<K3D12::MMDIKData>& ikDataMap)
 {
-	Matrix rotMat = Matrix::CreateRotationY(DegToRad(180.0f));
+	Matrix rotMat = Matrix::CreateRotationY(DegToRad(MODEL_INIT_ROTATION));
 
 	for (auto info = bonesInfo.begin(); info != bonesInfo.end(); info++) {
 		if (node->index == info->parentBoneIndex) {
@@ -532,7 +533,7 @@ void CreatePMXBoneTree(K3D12::MMDBoneTree* skelton, std::vector<K3D12::PMXBone>&
 void CreatePMDBoneTree(K3D12::MMDBoneTree* skelton, std::vector<K3D12::PMDBone>& bonesInfo, K3D12::MMDBoneNode * node)
 {
 
-	Matrix rotMat = Matrix::CreateRotationY(DegToRad(180.0f));
+	Matrix rotMat = Matrix::CreateRotationY(DegToRad(MODEL_INIT_ROTATION));
 
 	for (auto info = bonesInfo.begin(); info != bonesInfo.end(); info++) {
 		if (node->index == info->parentIndex) {

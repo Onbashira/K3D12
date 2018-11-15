@@ -145,12 +145,15 @@ void K3D12::StateMachineController::PlayAnimation(unsigned int& time)
 			}
 			//回転補間
 			Matrix rotationMat;
-
+			Vector3 location;
 			if (!(revIt != frames.second.rbegin())) {
 				rotationMat = Matrix::CreateFromQuaternion(revIt->quaternion);
+				location = revIt->location;
 			}
 			else {
 				rotationMat = Matrix::CreateFromQuaternion(Quaternion::Slerp(revIt->quaternion, revIt.base()->quaternion, t));
+				location = Vector3::Lerp(revIt->location, revIt.base()->location, t);
+
 			}
 			//原点へのベクトル
 			Vector3 offsetToOrigin = _skelton.lock()->boneAccessor[frames.first]->pos;

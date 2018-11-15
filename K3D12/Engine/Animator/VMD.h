@@ -25,15 +25,20 @@ namespace K3D12 {
 		unsigned int frameNo;
 		Vector3 location; //position
 		Quaternion rotation; //quaternion
-		unsigned char InterPolatiom[64];		//Completion
+		unsigned char InterPolation[64];		//Completion
 	};
 #pragma pack(pop)
 	//ÉÇÅ[ÉVÉáÉìèÓïÒ
 	struct MotionKeyFrameData {
 		unsigned int frameNo;
 		Quaternion quaternion;
-		MotionKeyFrameData(unsigned int _frameNo, Quaternion _quaternion) :
-			frameNo(_frameNo), quaternion(_quaternion) {}
+		Vector3	location;
+
+		Vector4 interpolationA;
+		Vector4 interpolationB;
+
+		MotionKeyFrameData(unsigned int _frameNo, Quaternion _quaternion, Vector3 location) :
+			frameNo(_frameNo), quaternion(_quaternion), location(location) {}
 		MotionKeyFrameData() :frameNo(0), quaternion() {};
 	};
 

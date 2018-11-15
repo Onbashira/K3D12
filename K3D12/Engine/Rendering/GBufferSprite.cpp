@@ -603,8 +603,10 @@ void K3D12::GBufferSprite::SetLightingRenderUAV()
 	ID3D12DescriptorHeap* heaps[] = { _uavHeap.GetPtr() };
 	_list->GetCommandList().Get()->SetDescriptorHeaps(1, heaps);
 
-	/*_list->GetCommandList().Get()->SetComputeRootDescriptorTable(static_cast<unsigned int>(SHADER_PARAMATER_INDEX_LIGHTING::DIFFUSE_MAP), GetUAVGPUHandle(GEOMETRY_TYPE::DIFFUSE_MAP));
-	_list->GetCommandList().Get()->SetComputeRootDescriptorTable(static_cast<unsigned int>(SHADER_PARAMATER_INDEX_LIGHTING::SPECULAR_MAP), GetUAVGPUHandle(GEOMETRY_TYPE::SPECULER_MAP));*/
+	/*
+	_list->GetCommandList().Get()->SetComputeRootDescriptorTable(static_cast<unsigned int>(SHADER_PARAMATER_INDEX_LIGHTING::DIFFUSE_MAP), GetUAVGPUHandle(GEOMETRY_TYPE::DIFFUSE_MAP));
+	_list->GetCommandList().Get()->SetComputeRootDescriptorTable(static_cast<unsigned int>(SHADER_PARAMATER_INDEX_LIGHTING::SPECULAR_MAP), GetUAVGPUHandle(GEOMETRY_TYPE::SPECULER_MAP));
+	*/
 	_list->GetCommandList().Get()->SetComputeRootDescriptorTable(static_cast<unsigned int>(SHADER_PARAMATER_INDEX_LIGHTING::RESULT), GetUAVGPUHandle(GEOMETRY_TYPE::RESULT));
 }
 

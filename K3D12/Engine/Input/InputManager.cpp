@@ -5,7 +5,6 @@
 K3D12::InputManager::InputManager()  :
 	_mousePos({})
 {
-	//_forcusWindowHandle = K3D12::D3D12System::GetWindow().GetWindowHandle();
 }
 
 
@@ -76,7 +75,7 @@ bool K3D12::InputManager::IsDown(K3D12::VIRTUAL_KEY_STATE code)
 
 void K3D12::InputManager::Discard()
 {
-
+	this->_forcusWindowHandle = nullptr;
 }
 
 void K3D12::InputManager::SetFocusWindow(HWND forcusWindow)

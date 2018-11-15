@@ -41,11 +41,15 @@ std::shared_ptr<K3D12::MotionData> K3D12::VMDLoader::LoadMotion(std::string path
 	for (auto& data : motion->vmdMotion) {
 
 		//DirectX::XMVECTOR quaternion = DirectX::XMLoadFloat4(&data.rotation);
-		Quaternion quaternion = Quaternion(data.rotation.x, data.rotation.y, -data.rotation.z, -data.rotation.w);
+		Quaternion quaternion = Quaternion(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w);
 
+		MotionKeyFrameData  motionData(data.frameNo, quaternion, data.location);
 
-		MotionKeyFrameData  motionData(data.frameNo, quaternion);
+		motionData.interpolationA = Vector4(data.InterPolation[3] , data.InterPolation[5],data.InterPolation[11],data.InterPolation[15]);
+		motionData.interpolationB = Vector4(data.InterPolation[3], data.InterPolation[5], data.InterPolation[11], data.InterPolation[15]);
+
 		motion->keyFrame[data.boneName].push_back(motionData);
+
 	}
 	for (auto& keyframe : motion->keyFrame) {
 		std::sort(keyframe.second.begin(), keyframe.second.end(), [](MotionKeyFrameData& lhs, MotionKeyFrameData& rhs) {return rhs.frameNo > lhs.frameNo; });

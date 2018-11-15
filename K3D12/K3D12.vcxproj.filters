@@ -351,9 +351,6 @@
     <ClCompile Include="Engine\CommandContext\GraphicsContextLibrary.cpp">
       <Filter>Engine\CommandContext\GraphicsContextLib</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\UnorderedAccessValue.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Audio\AudioLoader.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
@@ -464,6 +461,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Audio\AudioWaveSource.cpp">
       <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Util\Curve.cpp">
+      <Filter>Engine\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\StructuredBuffer.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\UnorderedAccessValue.cpp">
+      <Filter>Engine\Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -656,9 +662,6 @@
     <ClInclude Include="Engine\CommandContext\GraphicsContextLibrary.h">
       <Filter>Engine\CommandContext\GraphicsContextLib</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Resource\UnorderedAccessValue.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Audio\AudioLoader.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
@@ -770,6 +773,15 @@
     <ClInclude Include="Engine\Audio\AudioWaveSource.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Util\Curve.h">
+      <Filter>Engine\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\StructuredBuffer.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\UnorderedAccessValue.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">
@@ -802,5 +814,9 @@
     <FxCompile Include="Engine\Shader\SpriteDefaultShader.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Engine\Shader\GaussianFilter.hlsl">
+      <Filter>Engine\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shader\ComputeShader.hlsl" />
   </ItemGroup>
 </Project>

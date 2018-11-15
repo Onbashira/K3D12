@@ -199,6 +199,7 @@
     <ClCompile Include="Engine\Resource\Resource.cpp" />
     <ClCompile Include="Engine\Resource\ResourceCreater.cpp" />
     <ClCompile Include="Engine\Resource\ShaderResource.cpp" />
+    <ClCompile Include="Engine\Resource\StructuredBuffer.cpp" />
     <ClCompile Include="Engine\Resource\UnorderedAccessValue.cpp" />
     <ClCompile Include="Engine\Resource\VertexBuffer.cpp" />
     <ClCompile Include="Engine\ShaderComponent\HLSLIncluder.cpp" />
@@ -214,6 +215,7 @@
     <ClCompile Include="Engine\TaskSystem\TaskManager.cpp" />
     <ClCompile Include="Engine\TextureComponent\TextureLoader.cpp" />
     <ClCompile Include="Engine\TextureComponent\TextureManager.cpp" />
+    <ClCompile Include="Engine\Util\Curve.cpp" />
     <ClCompile Include="Engine\Util\Logger.cpp" />
     <ClCompile Include="Engine\Util\ManagerComponentBase.cpp" />
     <ClCompile Include="Engine\Util\Math.cpp" />
@@ -300,6 +302,7 @@
     <ClInclude Include="Engine\Resource\Resource.h" />
     <ClInclude Include="Engine\Resource\ResourceCreater.h" />
     <ClInclude Include="Engine\Resource\ShaderResource.h" />
+    <ClInclude Include="Engine\Resource\StructuredBuffer.h" />
     <ClInclude Include="Engine\Resource\UnorderedAccessValue.h" />
     <ClInclude Include="Engine\Resource\VertexBuffer.h" />
     <ClInclude Include="Engine\ShaderComponent\HLSLIncluder.h" />
@@ -315,6 +318,7 @@
     <ClInclude Include="Engine\TaskSystem\TaskManager.h" />
     <ClInclude Include="Engine\TextureComponent\TextureLoader.h" />
     <ClInclude Include="Engine\TextureComponent\TextureManager.h" />
+    <ClInclude Include="Engine\Util\Curve.h" />
     <ClInclude Include="Engine\Util\D3D12Common.h" />
     <ClInclude Include="Engine\Util\d3dx12.h" />
     <ClInclude Include="Engine\Util\Logger.h" />
@@ -337,10 +341,30 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Engine\Shader\ComputeShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Engine\Shader\FXAATest.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Engine\Shader\GaussianFilter.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Engine\Shader\LightingPassShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

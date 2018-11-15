@@ -24,7 +24,9 @@ namespace K3D12 {
 		std::shared_ptr<GamePad> GetPad(int padID = 0);
 		//パッド全体の初期化
 		void Initialize(int macConectionCount = 4);
-		//最大接続数をシステムで決めてイニシャライズする
+
+		void Discard();
+
 		GamePadManager();
 		~GamePadManager();
 	};

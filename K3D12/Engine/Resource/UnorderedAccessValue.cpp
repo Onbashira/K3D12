@@ -39,11 +39,18 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 		Resource uploadResource;
 
 		{
-			defaultHeapProp.Type = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_DEFAULT;
-			defaultHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+			defaultHeapProp.Type = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_CUSTOM;
+			defaultHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
 			defaultHeapProp.VisibleNodeMask = 1;
 			defaultHeapProp.CreationNodeMask = 1;
-			defaultHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_UNKNOWN;
+			defaultHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_L0;
+			{
+			//	defaultHeapProp.Type = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_DEFAULT;
+			//	defaultHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+			//	defaultHeapProp.VisibleNodeMask = 1;
+			//	defaultHeapProp.CreationNodeMask = 1;
+			//	defaultHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_UNKNOWN;
+			}
 		}
 
 		{
@@ -56,7 +63,17 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 		}
 
 		{
-			defaultResourceDesc = CD3DX12_RESOURCE_DESC::Buffer(numElements * elementSize, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+			//defaultResourceDesc = CD3DX12_RESOURCE_DESC::Buffer(numElements * elementSize, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+			defaultResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
+			defaultResourceDesc.Width = numElements * elementSize;
+			defaultResourceDesc.Height = 1;
+			defaultResourceDesc.DepthOrArraySize = 1;
+			defaultResourceDesc.MipLevels = 0;
+			defaultResourceDesc.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+			defaultResourceDesc.Layout = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_UNKNOWN;
+			defaultResourceDesc.SampleDesc.Count = 1;
+			defaultResourceDesc.SampleDesc.Quality = 0;
+			defaultResourceDesc.Flags = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
 
 		}
 		{
@@ -79,7 +96,11 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 		}
 	}
 #pragma endregion
-
+	//ReadRangeSetUp
+	{
+		_readRange.Begin = 0;
+		_readRange.End = numElements;
+	}
 	this->WriteToBuffer(numElements, elementSize, pBufferData);
 
 	CHECK_RESULT(CreateHeap(HEAP_OFFSET::HEAP_OFFSET_MAX));
@@ -167,8 +188,6 @@ void K3D12::UnorderedAccessValue::WriteToBuffer(unsigned int numElements, unsign
 
 
 	{
-
-
 		uploadHeapProp.Type = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_UPLOAD;
 		uploadHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 		uploadHeapProp.VisibleNodeMask = 1;

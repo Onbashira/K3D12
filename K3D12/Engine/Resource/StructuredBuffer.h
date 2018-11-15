@@ -9,7 +9,7 @@ namespace K3D12 {
 	class CommandQueue;
 
 	//UAVはDXGI_FORMATはUNKNWON固定
-	class UnorderedAccessValue : public K3D12::Resource
+	class StructuredBuffer : public K3D12::Resource
 	{
 	public :
 		enum BUFFER_MODE {
@@ -28,10 +28,9 @@ namespace K3D12 {
 		};
 		//CounterReosurce
 		Microsoft::WRL::ComPtr<ID3D12Resource>	_counterResource;
-		//ステージング用のメモリ
-		Resource								_stagingResource;
+
 		//GPUMemにアップロードするためのメモリ　（リードバック用のメモリは継承元のリソース
-		Resource								_uploadResource;
+		Resource								_readBackResource;
 
 		D3D12_RANGE								_readRange;
 
@@ -49,21 +48,17 @@ namespace K3D12 {
 		HRESULT									CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC* srvDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
 	public:	
 
-		UnorderedAccessValue();
+		StructuredBuffer();
 
-		virtual~UnorderedAccessValue();
+		virtual~StructuredBuffer();
 		//リードバックバッファとアップロードバッファを作成。ついでにGPUに配置
 		HRESULT									Create(unsigned int elementSize, unsigned int numElements, void* pBufferData);
 		//デスクリプタの作成
 		HRESULT									CreateDescriptors(unsigned int elementSize, unsigned int numElements);
 		//リソースをアップロードバッファに配置
 		void									WriteToBuffer(unsigned int numElements, unsigned int elementSize, void* pBufferData);
-		//コマンドリストを指定してやること。非同期即時復帰でリソースのGPU配置操作を実行
-		void									AsyncWriteToBuffer(std::weak_ptr<K3D12::GraphicsCommandList> list,unsigned int numElements, unsigned int elementSize, void* pBufferData , K3D12::CommandQueue* queue = nullptr);
 		//GPU上の情報をリードバックする
 		void									ReadBack();
-		//コマンドリストを指定してやること。非同期即時復帰でGPU上の情報をリードバック操作を実行
-		void									AsyncReadBack(std::weak_ptr<K3D12::GraphicsCommandList> list, K3D12::CommandQueue* queue = nullptr);
 		//
 		D3D12_CPU_DESCRIPTOR_HANDLE				GetSRVCPUHandle();
 		//
@@ -72,6 +67,7 @@ namespace K3D12 {
 		D3D12_GPU_DESCRIPTOR_HANDLE				GetSRVGPUHandle();
 		//
 		D3D12_GPU_DESCRIPTOR_HANDLE				GetUAVGPUHandle();
+
 		void									Discard();
 		
 		Microsoft::WRL::ComPtr<ID3D12Resource>	GetCounterResource()const;

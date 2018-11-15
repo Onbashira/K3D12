@@ -224,7 +224,13 @@ void K3D12::GamePad::SetControllerID(int id)
 
 void K3D12::GamePad::SetUp(int id)
 {
-	this->_gamePadID = XInputGetState(id, &this->_nowState);
+	auto ret = XInputGetState(id, &this->_nowState);
+	if (ret == ERROR_DEVICE_NOT_CONNECTED) {
+#ifdef _DEBUG
+		std::cout <<"Player ID [ "<< id +1 << " ] "<< "Is Not Connected" << std::endl;
+#endif // _DEBUG
+	}
+	_gamePadID = id;
 }
 
 void K3D12::GamePad::ButtonDebug()
