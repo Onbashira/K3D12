@@ -63,7 +63,7 @@ HRESULT K3D12::SwapChain::CreateRenderTargets(unsigned int bufferNum)
 	//レンダーターゲットの作成
 	{
 		for (UINT i = 0; i < bufferNum; i++) {
-			//バッファの取得
+			//ディスプレイバッファの取得
 			if (FAILED(_swapChain->GetBuffer(i, IID_PPV_ARGS(this->_rtResource[i].GetAddressOf()))))
 				return FALSE;
 			//レンダーターゲットビューの取得
@@ -127,6 +127,12 @@ HRESULT K3D12::SwapChain::CopyToRenderTarget(std::shared_ptr<GraphicsCommandList
 {
 	list->GetCommandList()->CopyResource(this->_rtResource[_currentIndex].GetResource(),pSrc->GetResource());
 	return S_OK;
+}
+
+void K3D12::SwapChain::SetRenderTarget(std::shared_ptr<GraphicsCommandList> list , D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle)
+{
+	list->GetCommandList()->OMSetRenderTargets(1, &this->_rtHeap.GetCPUHandle(_currentIndex),FALSE, depthHandle);
+
 }
 
 void K3D12::SwapChain::ClearScreen(std::shared_ptr<GraphicsCommandList> list)

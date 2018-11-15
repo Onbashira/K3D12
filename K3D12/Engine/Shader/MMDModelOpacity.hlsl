@@ -34,6 +34,7 @@ cbuffer CameraInfo : register(b0)
 {
     Camera camera;
 };
+
 cbuffer Tranform : register(b1)
 {
     matrix transform;

@@ -194,6 +194,8 @@ namespace K3D12 {
 
 		friend  InputManager&  Input();
 
+		friend void SetMainRenderTarget();
+
 	};
 
 	//global function
@@ -223,6 +225,8 @@ namespace K3D12 {
 	 void SetWindowSize(UINT widths, UINT height);
 
 	 void SetWindowName(std::wstring name);
+
+	 void SetMainRenderTarget();
 
 	 int MessageLoop();
 

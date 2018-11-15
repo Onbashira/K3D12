@@ -19,27 +19,43 @@
 
 #define MaxVertexCount 4
 
-//ここでは、いったんSOで頂点書き出し処理をするためPOSITION,NORMAL,TEXCOORDでセマンティクスを定義する
+#include "CommonStruct.hlsl"
+
+//カメラの情報
+cbuffer CameraInfo : register(b0)
+{
+    Camera camera;
+};
+
+Texture2D<float4> ParticleTex : register(t0);
+
+SamplerState Sampler : register(s0);
+
 struct VSOutput
 {
-    float3 pos : POSITION; //位置
-    float3 velocity : NORMAL; //初速度
-    float time : TEXCOORD; //生存時間
+    float2 pos : POSITION; //位置
+    float2 texcoord : TEXCOORD; //初速度
+    float2 velocity : VELOCITY; //初速度
+    float angle : ANGLE; //角度
+    float liveTime : LIVETIME; //生存時間
 };
 
 typedef VSOutput VSInput;
 
-
 struct GSOutput
 {
-    float4 pos : SV_POSITION; //位置
-    float3 color : NORMAL; //初速度
-    float2 texcoord : TEXCOORD; //生存時間
+    float2 pos : SV_POSITION; //位置
+    float2 texcoord : TEXCOORD; //初速度
 };
 
 typedef GSOutput GSInput;
 
-//そのまま戻す
+struct PSOutput
+{
+    float4 color : Sv_Target;
+};
+
+
 VSOutput VSMain(VSInput input)
 {
     return input;
@@ -57,28 +73,24 @@ void CreateParticleMain
 
     //第一頂点
     vertex.pos;
-    vertex.color;
     vertex.texcoord = float2(0, 0);
     //追加
     output.Append(vertex);
 
     //第二頂点
     vertex.pos;
-    vertex.color;
     vertex.texcoord = float2(1, 0);
     //追加
     output.Append(vertex);
 
     //第三頂点
     vertex.pos;
-    vertex.color;
     vertex.texcoord = float2(0, 1);
     //追加
     output.Append(vertex);
     
     //第四頂点
     vertex.pos;
-    vertex.color;
     vertex.texcoord = float2(1, 1);
     //追加
     output.Append(vertex);
@@ -88,4 +100,9 @@ void CreateParticleMain
 
 }
 
-
+PSOutput PSMain(GSOutput input)
+{
+    PSOutput output = (PSOutput)0;
+    output.color = ParticleTex.Sample(Sampler, input.texcoord);
+    return output;
+}

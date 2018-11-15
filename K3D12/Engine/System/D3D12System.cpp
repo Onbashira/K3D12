@@ -1032,6 +1032,11 @@ void K3D12::SetWindowName(std::wstring name)
 	D3D12System::GetInstance()._appClassName = name;
 }
 
+void K3D12::SetMainRenderTarget()
+{
+	D3D12System::GetInstance()._renderTarget.SetRenderTarget(D3D12System::GetMasterCommandList());
+}
+
 int K3D12::MessageLoop()
 {
 	MSG msg = {};

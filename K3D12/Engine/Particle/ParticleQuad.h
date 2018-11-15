@@ -22,6 +22,10 @@ namespace K3D12 {
 		
 		~ParticleQuad();
 
+		void Update();
+
+		void Draw();
+
 		void InstanceDraw();
 
 		void IndirectDraw();

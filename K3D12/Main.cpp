@@ -14,6 +14,8 @@
 #include "Engine/CommandContext/GraphicsContextLibrary.h"
 
 void TestInit();
+void ParticleInit();
+
 
 struct TestVertex {
 	unsigned int vertexIndex = 0;
@@ -61,9 +63,10 @@ int main() {
 		uav.Read(&ibuffer[0], sizeof(TestVertex) * 10);
 		uav.Unmap(0,&range);
 
+
+		K3D12::D3D12System::GetInstance();
+
 		K3D12::ScreenFlip();
-
-
 	}
 	//audio->Discard();
 		
@@ -104,4 +107,9 @@ void TestInit() {
 	}
 	computeShader.Reset();
 	error.Reset();
+}
+
+void ParticleInit() 
+{
+
 }
