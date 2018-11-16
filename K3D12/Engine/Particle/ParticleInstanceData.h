@@ -3,34 +3,40 @@
 #include "../DescriptorHeap/DescriptorHeap.h"
 #include "../Resource/UnorderedAccessValue.h"
 #include "../Util/Math.h"
+#include "../DescriptorHeap/DescriptorHeap.h"
 #include "ParticleQuad.h"
 namespace K3D12{
 
 	//まず２Dから？
 	struct ParticleData {
-		//ポジs田
+		//ポジション
 		Vector2 pos;
-		//UV座標
-		Vector2 texcorrd;
 		//ベロシティ
 		Vector2 velocity;
+		//サイズ
+		float size;
 		//角度
 		float angle;
 		//生存時間
 		float liveTime;
 	};
 
+
+
 	class ParticleInstanceData
 	{
 	private:
-		//パーティクルのポリゴンデータ
-		ParticleQuad			_quad;
+		
+		//パーティクル用のディスクリプタヒープ
+		DescriptorHeap			_particleHeap;
 		//パーティクルの生データ
 		UnorderedAccessValue	_particleRawData;
 		//空きデータ(解放されたデータ）の管理
 		UnorderedAccessValue	_particleReleasedIndexData;
-		//死んだパーティクルのインデックス用バッファ
+		//パーティクルのインデックス用バッファ
 		UnorderedAccessValue	_particle;
+		//コマンドリストに投げるように作る描画データ
+		UnorderedAccessValue	_particleKickData;
 
 	public:
 

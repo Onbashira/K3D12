@@ -57,6 +57,7 @@ int main() {
 		K3D12::D3D12System::GetMasterCommandList()->GetCommandList()->SetDescriptorHeaps(1, heap);
 		K3D12::D3D12System::GetMasterCommandList()->GetCommandList()->SetComputeRootDescriptorTable(0, uav.GetUAVGPUHandle());
 		K3D12::D3D12System::GetMasterCommandList()->GetCommandList()->Dispatch(1, 1, 1);
+		
 		uav.ReadBack();
 		D3D12_RANGE range = { 0,1 };
 		uav.Map(0, &range);

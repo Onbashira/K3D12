@@ -105,7 +105,6 @@ void K3D12::VertexBuffer::Discard()
 	_view.BufferLocation = 0;
 	_view.SizeInBytes = 0;
 	_view.StrideInBytes = 0;
-	Resource::Discard();
 
 }
 

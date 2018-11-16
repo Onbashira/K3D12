@@ -88,7 +88,7 @@ HRESULT K3D12::StructuredBuffer::Create(unsigned int elementSize, unsigned int n
 			Resource::Create(defaultHeapProp, D3D12_HEAP_FLAG_NONE, defaultResourceDesc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 #ifdef _DEBUG
 			SetName("UAVResource");
-			//_stagingResource.SetName("UAVStagingResource");
+			_readBackResource.SetName("ReadBackBuffer");
 #endif // _DEBUG
 
 		}

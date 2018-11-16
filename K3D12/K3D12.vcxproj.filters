@@ -483,6 +483,12 @@
     <ClCompile Include="Engine\Particle\ParticleQuad.cpp">
       <Filter>Engine\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Resource\AppendConsumeBuffer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\ByteAddressBuffer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Animator\Animator.h">
@@ -803,6 +809,12 @@
     <ClInclude Include="Engine\Particle\ParticleQuad.h">
       <Filter>Engine\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Resource\AppendConsumeBuffer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\ByteAddressBuffer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">
@@ -841,5 +853,6 @@
     <FxCompile Include="Engine\Shader\ComputeShader.hlsl" />
     <FxCompile Include="Engine\Shader\ShaderMath.hlsl" />
     <FxCompile Include="Engine\Shader\ParticleShader.hlsl" />
+    <FxCompile Include="Engine\Shader\ParticleCalc.hlsl" />
   </ItemGroup>
 </Project>
