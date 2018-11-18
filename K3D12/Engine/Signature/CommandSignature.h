@@ -16,6 +16,7 @@ namespace K3D12 {
 
 		~CommandSignature();
 
+		//コマンドバッファの解釈を記述したDESCとコマンドシグネチャを適用するRootSignatureを引数に取る
 		HRESULT	Create(const D3D12_COMMAND_SIGNATURE_DESC& desc, RootSignature& rs);
 
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> GetSignature();

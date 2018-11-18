@@ -22,6 +22,12 @@ namespace K3D12{
 	};
 
 
+	struct IndirectCommand {
+		D3D12_GPU_VIRTUAL_ADDRESS gpuAddress;
+		D3D12_DRAW_ARGUMENTS drawArguments;
+
+	};
+
 
 	class ParticleInstanceData
 	{
@@ -49,26 +55,5 @@ namespace K3D12{
 		~ParticleInstanceData();
 
 	};
-
-	//class ParticleInstanceDataEx
-	//{
-	//private:
-	//	UnorderedAccessValue	_particleRawData;
-	//	UnorderedAccessValue	_particleDeadIndexData;
-	//	UnorderedAccessValue	_particleAliveIndexData;
-	//	unsigned int			_deadParticleNum;
-	//	unsigned int			_alivedParticleNum;
-
-	//public:
-
-	//private:
-
-	//public:
-
-	//	ParticleInstanceDataEx();
-
-	//	~ParticleInstanceDataEx();
-
-	//};
 
 }

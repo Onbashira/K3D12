@@ -127,7 +127,7 @@ void K3D12::DescriptorHeap::Discard()
 		_heap.Reset();
 
 		_incrementSize = 0;
-		DEBUG_LOG(std::string(_heapName + " is Reset"));
+		DEBUG_LOG(std::string("DescriptorHeap : " + _heapName + " is Reset"));
 
 	}
 }

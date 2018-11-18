@@ -484,10 +484,13 @@
       <Filter>Engine\Particle</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Resource\AppendConsumeBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\CommandBuffer.cpp">
+      <Filter>Engine\Resource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Resource\ByteAddressBuffer.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine\Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -810,10 +813,13 @@
       <Filter>Engine\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Resource\AppendConsumeBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Engine\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Resource\ByteAddressBuffer.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\CommandBuffer.h">
+      <Filter>Engine\Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -841,18 +847,23 @@
     <FxCompile Include="Engine\Shader\QualityFXAA.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\ParticleCreate.hlsl">
-      <Filter>Engine\Shader</Filter>
-    </FxCompile>
     <FxCompile Include="Engine\Shader\SpriteDefaultShader.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
     <FxCompile Include="Engine\Shader\GaussianFilter.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\ComputeShader.hlsl" />
-    <FxCompile Include="Engine\Shader\ShaderMath.hlsl" />
-    <FxCompile Include="Engine\Shader\ParticleShader.hlsl" />
-    <FxCompile Include="Engine\Shader\ParticleCalc.hlsl" />
+    <FxCompile Include="Engine\Shader\ComputeShader.hlsl">
+      <Filter>Engine\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shader\ShaderMath.hlsl">
+      <Filter>Engine\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shader\ParticleShader.hlsl">
+      <Filter>Engine\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shader\ParticleCalc.hlsl">
+      <Filter>Engine\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

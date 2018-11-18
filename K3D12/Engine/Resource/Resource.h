@@ -84,7 +84,5 @@ namespace K3D12 {
 		
 		void																RegisterShaderSlot(unsigned int number);
 		
-		void																BindingResource(std::weak_ptr<GraphicsCommandList> list);
-
 	};
 }

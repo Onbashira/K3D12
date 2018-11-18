@@ -105,7 +105,7 @@ void K3D12::Resource::Discard()
 			Unmap(0, nullptr);
 		}
 		_resource.Reset();
-		DEBUG_LOG(std::string(_name + " is  Reset"));
+		DEBUG_LOG(std::string("Resource : " + _name + " is  Reset"));
 	}
 }
 
@@ -221,9 +221,3 @@ void K3D12::Resource::RegisterShaderSlot(unsigned int number)
 {
 	this->_shaderRegisterNumber = number;
 }
-
-void K3D12::Resource::BindingResource(std::weak_ptr<K3D12::GraphicsCommandList> list)
-{
-}
-
-

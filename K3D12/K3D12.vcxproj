@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Resource\CommandBuffer.cpp" />
     <ClCompile Include="Engine\Resource\ByteAddressBuffer.cpp" />
     <ClCompile Include="Engine\Resource\AppendConsumeBuffer.cpp" />
     <ClCompile Include="Engine\Animator\Animator.cpp" />
@@ -231,6 +232,7 @@
     <ClCompile Include="Engine\Particle\ParticleCluster.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Resource\CommandBuffer.h" />
     <ClInclude Include="Engine\Resource\ByteAddressBuffer.h" />
     <ClInclude Include="Engine\Resource\AppendConsumeBuffer.h" />
     <ClInclude Include="Engine\Animator\Animator.h" />
@@ -402,11 +404,6 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="Engine\Shader\ParticleCreate.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Engine\Shader\PrimitiveShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

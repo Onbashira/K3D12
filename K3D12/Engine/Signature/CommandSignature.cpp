@@ -31,10 +31,18 @@ Microsoft::WRL::ComPtr<ID3D12RootSignature> K3D12::CommandSignature::GetSignatur
 
 void K3D12::CommandSignature::SetName(std::string name)
 {
+	if (_commandSignature.Get() != nullptr) {
+		this->_commandSignature->SetName(Util::StringToWString(name).c_str());
+		_name = name;
+	}
 }
 
 void K3D12::CommandSignature::Discard()
 {
+	if (_commandSignature.Get() != nullptr) {
+		_commandSignature.Reset();
+		DEBUG_LOG(std::string("CommandSignature : " + _name + " is  Reset"));
+	}
 }
 
 
