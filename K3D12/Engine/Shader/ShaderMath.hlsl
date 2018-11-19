@@ -46,6 +46,31 @@ matrix Invert(matrix mat)
     return ret;
 }
 
+matrix CreateLookAt(float3 position, float3 target, float3 upward)
+{
+    float3 zaxis = target - position;
+    normalize(zaxis);
+
+    float3 xaxis = cross(upward, zaxis);
+    normalize(xaxis);
+
+    float3 yaxis = cross(zaxis, xaxis);
+    normalize(yaxis);
+    return Matrix(
+		xaxis.x, yaxis.x, zaxis.x, 0.0f,
+		xaxis.y, yaxis.y, zaxis.y, 0.0f,
+		xaxis.z, yaxis.z, zaxis.z, 0.0f,
+		-dot(xaxis, position),
+		-dot(yaxis, position),
+		-dot(zaxis, position),
+		1.0f);
+}
+
+float3 SafeCross(float3 a, float3 b)
+{
+
+}
+
 matrix Transpose(matrix mat)
 {
     return transpose(mat);
@@ -66,7 +91,7 @@ float Lambert(float3 normal, float3 lightDir)
 
 float HalfLambert(float3 normal, float3 lightDir)
 {
-    return pow(max(0.0f, dot(normalize(normal), normalize(lightDir))) * 0.5f + 0.5f,2.0f);
+    return pow(max(0.0f, dot(normalize(normal), normalize(lightDir))) * 0.5f + 0.5f, 2.0f);
 }
 
 float NormalizeLambert(float3 normal, float3 lightDir)

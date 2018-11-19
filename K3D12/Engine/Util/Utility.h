@@ -35,6 +35,12 @@ namespace K3D12::Util{
 
 	};
 
+	inline unsigned int  AlignForUavCounter(UINT bufferSize)
+	{
+		const UINT alignment = 4096;
+		return (bufferSize + (alignment - 1)) & ~(alignment - 1);
+	}
+
 	template<typename T>inline unsigned int ConvertByteToBit()
 	{
 		return (sizeof(T) * 8);

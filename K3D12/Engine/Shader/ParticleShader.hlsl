@@ -92,7 +92,7 @@ void CreateParticleMain
     baseOffset[1] = float2(1.0f, 1.0f) * size;
     baseOffset[2] = float2(-1.0f, -1.0f) * size;
     baseOffset[3] = float2(1.0f, -1.0f) * size;
-    float2 rotateX = float2(sin, -cos);
+    float2 rotateX = float2(cos, -sin);
     float2 rotateY = float2(sin, cos);
 
     //‰ñ“]‚ğl—¶‚µ‚È‚¢
