@@ -12,6 +12,7 @@
 #include "./Engine/Audio/AudioManager.h"
 #include "Engine/Resource/StructuredBuffer.h"
 #include "Engine/CommandContext/GraphicsContextLibrary.h"
+#include "Engine/Particle/ParticleInstanceData.h"
 
 void TestInit();
 void ParticleInit();
@@ -20,8 +21,10 @@ void ParticleInit();
 struct TestVertex {
 	unsigned int vertexIndex = 0;
 	Vector3 vertex;
-	
+
 };
+
+K3D12::ParticleInstanceData gParticles;
 
 int main() {
 
@@ -41,6 +44,7 @@ int main() {
 	uav.Create(sizeof(TestVertex), 10, &ibuffer[0]);
 
 	TestInit();
+	ParticleInit();
 
 	while (K3D12::MessageLoop() == 0 && !K3D12::Input().IsDown(K3D12::VIRTUAL_KEY_STATE::VKS_ESCAPE)) {
 		K3D12::Input().InputUpdate();
@@ -57,20 +61,21 @@ int main() {
 		K3D12::D3D12System::GetMasterCommandList()->GetCommandList()->SetDescriptorHeaps(1, heap);
 		K3D12::D3D12System::GetMasterCommandList()->GetCommandList()->SetComputeRootDescriptorTable(0, uav.GetUAVGPUHandle());
 		K3D12::D3D12System::GetMasterCommandList()->GetCommandList()->Dispatch(1, 1, 1);
-		
+
 		uav.ReadBack();
 		D3D12_RANGE range = { 0,1 };
 		uav.Map(0, &range);
 		uav.Read(&ibuffer[0], sizeof(TestVertex) * 10);
-		uav.Unmap(0,&range);
-
+		unsigned int  counter = 0;
+		uav.ReadBackCounterResource(&counter);
+		uav.Unmap(0, &range);
 
 		K3D12::D3D12System::GetInstance();
 
 		K3D12::ScreenFlip();
 	}
 	//audio->Discard();
-		
+
 	K3D12::Destroy();
 	return 0;
 };
@@ -110,7 +115,112 @@ void TestInit() {
 	error.Reset();
 }
 
-void ParticleInit() 
+void ParticleInit()
 {
+	gParticles.Create(1024, 1024);
+	//パーティクルイニシャライズ用
+	{
+		D3D12_COMPUTE_PIPELINE_STATE_DESC desc = {};
+		Microsoft::WRL::ComPtr<ID3DBlob> computeShader;
+		Microsoft::WRL::ComPtr<ID3DBlob> error = {};
 
+#if defined(_DEBUG)
+		//グラフィックデバッグツールによるシェーダーのデバッグの有効化処理
+		UINT compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION
+			;
+
+#else
+		UINT compileFlag = 0;
+#endif
+
+		if (FAILED(D3DCompileFromFile(L"./Engine/Shader/ParticleCalc.hlsl", nullptr, nullptr, "InitParticle", "cs_5_0", compileFlag, 0, &computeShader, &error))) {
+			OutputDebugStringA((char*)error->GetBufferPointer());
+		}
+		if (error != nullptr) {
+			OutputDebugStringA((char*)error->GetBufferPointer());
+		}
+
+		desc.CS.BytecodeLength = computeShader.Get()->GetBufferSize();
+		desc.CS.pShaderBytecode = computeShader.Get()->GetBufferPointer();
+		desc.Flags = D3D12_PIPELINE_STATE_FLAGS::D3D12_PIPELINE_STATE_FLAG_NONE;
+		desc.NodeMask = 0;
+		desc.pRootSignature = nullptr;
+
+		auto result = K3D12::GraphicsContextLibrary::GetInstance().CreatePSO("ParticleInitPSO", desc, computeShader.Get());
+
+		if (FAILED(result)) {
+		}
+		computeShader.Reset();
+		error.Reset();
+	}
+	//パーティクル生成
+	{
+		D3D12_COMPUTE_PIPELINE_STATE_DESC desc = {};
+		Microsoft::WRL::ComPtr<ID3DBlob> computeShader;
+		Microsoft::WRL::ComPtr<ID3DBlob> error = {};
+
+#if defined(_DEBUG)
+		//グラフィックデバッグツールによるシェーダーのデバッグの有効化処理
+		UINT compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION
+			;
+
+#else
+		UINT compileFlag = 0;
+#endif
+
+		if (FAILED(D3DCompileFromFile(L"./Engine/Shader/ParticleCalc.hlsl", nullptr, nullptr, "SpawnParticle", "cs_5_0", compileFlag, 0, &computeShader, &error))) {
+			OutputDebugStringA((char*)error->GetBufferPointer());
+		}
+		if (error != nullptr) {
+			OutputDebugStringA((char*)error->GetBufferPointer());
+		}
+
+		desc.CS.BytecodeLength = computeShader.Get()->GetBufferSize();
+		desc.CS.pShaderBytecode = computeShader.Get()->GetBufferPointer();
+		desc.Flags = D3D12_PIPELINE_STATE_FLAGS::D3D12_PIPELINE_STATE_FLAG_NONE;
+		desc.NodeMask = 0;
+		desc.pRootSignature = nullptr;
+
+		auto result = K3D12::GraphicsContextLibrary::GetInstance().CreatePSO("SpawnParticlePSO", desc, computeShader.Get());
+
+		if (FAILED(result)) {
+		}
+		computeShader.Reset();
+		error.Reset();
+	}
+	//パーティクル生成
+	{
+		D3D12_COMPUTE_PIPELINE_STATE_DESC desc = {};
+		Microsoft::WRL::ComPtr<ID3DBlob> computeShader;
+		Microsoft::WRL::ComPtr<ID3DBlob> error = {};
+
+#if defined(_DEBUG)
+		//グラフィックデバッグツールによるシェーダーのデバッグの有効化処理
+		UINT compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION
+			;
+
+#else
+		UINT compileFlag = 0;
+#endif
+
+		if (FAILED(D3DCompileFromFile(L"./Engine/Shader/ParticleCalc.hlsl", nullptr, nullptr, "UpdateParticles", "cs_5_0", compileFlag, 0, &computeShader, &error))) {
+			OutputDebugStringA((char*)error->GetBufferPointer());
+		}
+		if (error != nullptr) {
+			OutputDebugStringA((char*)error->GetBufferPointer());
+		}
+
+		desc.CS.BytecodeLength = computeShader.Get()->GetBufferSize();
+		desc.CS.pShaderBytecode = computeShader.Get()->GetBufferPointer();
+		desc.Flags = D3D12_PIPELINE_STATE_FLAGS::D3D12_PIPELINE_STATE_FLAG_NONE;
+		desc.NodeMask = 0;
+		desc.pRootSignature = nullptr;
+
+		auto result = K3D12::GraphicsContextLibrary::GetInstance().CreatePSO("UpdateParticlesPSO", desc, computeShader.Get());
+
+		if (FAILED(result)) {
+		}
+		computeShader.Reset();
+		error.Reset();
+	}
 }

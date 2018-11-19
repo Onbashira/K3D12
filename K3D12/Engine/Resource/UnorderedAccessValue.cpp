@@ -43,7 +43,7 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 			defaultHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
 			defaultHeapProp.VisibleNodeMask = 1;
 			defaultHeapProp.CreationNodeMask = 1;
-			defaultHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_L0;
+			defaultHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_L1;
 			{
 			//	defaultHeapProp.Type = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_DEFAULT;
 			//	defaultHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
@@ -102,7 +102,7 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 		_readRange.End = numElements;
 	}
 	this->WriteToBuffer(numElements, elementSize, pBufferData);
-
+	_counterResource.Create();
 	CHECK_RESULT(CreateHeap(HEAP_OFFSET::HEAP_OFFSET_MAX));
 	CHECK_RESULT(CreateDescriptors(elementSize, numElements));
 
@@ -166,7 +166,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE K3D12::UnorderedAccessValue::GetUAVGPUHandle()
 
 HRESULT K3D12::UnorderedAccessValue::CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC* uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle)
 {
-	GET_DEVICE->CreateUnorderedAccessView(_stagingResource.GetResource(), _counterResource.Get(), uavDesc, cpuDescriptorHandle);
+	GET_DEVICE->CreateUnorderedAccessView(_stagingResource.GetResource(), _counterResource.GetResource(), uavDesc, cpuDescriptorHandle);
 	return S_OK;
 }
 
@@ -179,13 +179,15 @@ HRESULT K3D12::UnorderedAccessValue::CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC 
 void K3D12::UnorderedAccessValue::WriteToBuffer(unsigned int numElements, unsigned int elementSize, void* pBufferData)
 {
 
+	if (pBufferData == nullptr) {
+		return;
+	}
 	D3D12_SUBRESOURCE_DATA subresourceData = {};
 	subresourceData.pData = pBufferData;
 	subresourceData.RowPitch = numElements * elementSize;
 	subresourceData.SlicePitch = 1;
 	D3D12_RESOURCE_DESC uploadResourceDesc;
 	D3D12_HEAP_PROPERTIES uploadHeapProp = {};
-
 
 	{
 		uploadHeapProp.Type = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_UPLOAD;
@@ -223,6 +225,10 @@ void K3D12::UnorderedAccessValue::WriteToBuffer(unsigned int numElements, unsign
 
 void K3D12::UnorderedAccessValue::AsyncWriteToBuffer(std::weak_ptr<K3D12::GraphicsCommandList> list, unsigned int numElements, unsigned int elementSize, void * pBufferData, K3D12::CommandQueue* queue)
 {
+
+	if (pBufferData == nullptr) {
+		return;
+	}
 
 	assert(!list.expired());
 
@@ -286,12 +292,10 @@ void K3D12::UnorderedAccessValue::Discard()
 {
 	_heap.Discard();
 	_stagingResource.Discard();
-	if (_counterResource.Get() != nullptr) {
-		_counterResource.Reset();
-	}
+	_counterResource.Discard();
 }
 
-Microsoft::WRL::ComPtr<ID3D12Resource> K3D12::UnorderedAccessValue::GetCounterResource() const
+K3D12::ByteAddressBuffer K3D12::UnorderedAccessValue::GetCounterResource() const
 {
 	return _counterResource;
 }

@@ -22,17 +22,17 @@ HRESULT K3D12::ByteAddressBuffer::Create(unsigned int numElements)
 		defaultHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_WRITE_COMBINE;
 		defaultHeapProp.VisibleNodeMask = 1;
 		defaultHeapProp.CreationNodeMask = 1;
-		defaultHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_L1;
+		defaultHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_L0;
 
 	}
 	{
 		defaultResourceDesc.Alignment = 0;
 		defaultResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
-		defaultResourceDesc.Width = numElements;
+		defaultResourceDesc.Width = numElements * sizeof(float);
 		defaultResourceDesc.Height = 1;
 		defaultResourceDesc.DepthOrArraySize = 1;
 		defaultResourceDesc.MipLevels = 1;
-		defaultResourceDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R32_TYPELESS;
+		defaultResourceDesc.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
 		defaultResourceDesc.Layout = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 		defaultResourceDesc.SampleDesc.Count = 1;
 		defaultResourceDesc.SampleDesc.Quality = 0;
@@ -45,7 +45,7 @@ HRESULT K3D12::ByteAddressBuffer::Create(unsigned int numElements)
 #endif // _DEBUG
 
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT K3D12::ByteAddressBuffer::CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC * uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle)
@@ -58,7 +58,7 @@ HRESULT K3D12::ByteAddressBuffer::CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC * 
 		uavBuffer.NumElements = _elementNum;
 		uavBuffer.Flags = D3D12_BUFFER_UAV_FLAGS::D3D12_BUFFER_UAV_FLAG_RAW;
 		uavBuffer.CounterOffsetInBytes = 0;
-		uavBuffer.StructureByteStride = _elementNum * sizeof(unsigned int);
+		uavBuffer.StructureByteStride = _elementNum * sizeof(float);
 
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc;

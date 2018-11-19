@@ -2,6 +2,7 @@
 #include "../Util/D3D12Common.h"
 #include "../DescriptorHeap/DescriptorHeap.h"
 #include "Resource.h"
+#include "ByteAddressBuffer.h"
 
 namespace K3D12 {
 
@@ -27,8 +28,7 @@ namespace K3D12 {
 			HEAP_OFFSET_MAX,
 		};
 		//CounterReosurce
-		Microsoft::WRL::ComPtr<ID3D12Resource>	_counterResource;
-
+		ByteAddressBuffer						_counterResource;		
 		//GPUMemにアップロードするためのメモリ　（リードバック用のメモリは継承元のリソース
 		Resource								_readBackResource;
 
@@ -57,6 +57,8 @@ namespace K3D12 {
 		HRESULT									CreateDescriptors(unsigned int elementSize, unsigned int numElements);
 		//GPU上の情報をリードバックする
 		void									ReadBack();
+		//カウンタリソースの情報をリードバックスする
+		void									ReadBackCounterResource(unsigned int* pDst);
 		//
 		D3D12_CPU_DESCRIPTOR_HANDLE				GetSRVCPUHandle();
 		//
@@ -68,7 +70,7 @@ namespace K3D12 {
 
 		void									Discard();
 		
-		Microsoft::WRL::ComPtr<ID3D12Resource>	GetCounterResource()const;
+		K3D12::ByteAddressBuffer				GetCounterResource()const;
 		
 		DescriptorHeap*							GetHeap();
 

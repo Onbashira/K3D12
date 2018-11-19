@@ -1,6 +1,16 @@
 #define ParticleCalcRootSignature   "RootFlags(0),"\
+                                    "CBV(0),"\
+                                    "DescriptorTable(SRV(t0,numDescriptors = 1,space = 0)," \
+                                                     "visibility = SHADER_VISIBILITY_ALL),"\
                                     "DescriptorTable(UAV(u0,numDescriptors = 1,space = 0)," \
                                                      "visibility = SHADER_VISIBILITY_ALL),"\
+                                    "DescriptorTable(UAV(u1,numDescriptors = 1,space = 0)," \
+                                                     "visibility = SHADER_VISIBILITY_ALL),"\
+                                    "DescriptorTable(UAV(u2,numDescriptors = 1,space = 0)," \
+                                                     "visibility = SHADER_VISIBILITY_ALL),"\
+                                    "DescriptorTable(UAV(u3,numDescriptors = 1,space = 0)," \
+                                                     "visibility = SHADER_VISIBILITY_ALL),"\
+
 
 
 struct Particle
@@ -13,8 +23,8 @@ struct Particle
 
 struct IndirectCommand
 {
-    uint2 cameraAddress;
-    uint2 textureAddress;
+    uint cameraAddress;
+    uint textureAddress;
     uint4 drawArguments;
 };
 
@@ -30,6 +40,8 @@ cbuffer SceneRootConstant : register(b0)
 {
     uint SpawnCount; //最大生成数
     uint CommandCount; //最大コマンド生成数
+    uint padding01;
+    uint padding02;
 };
 
 //読み込み専用固定長配列
@@ -42,30 +54,35 @@ RWStructuredBuffer<Particle> ParticleData : register(u0);
 AppendStructuredBuffer<IndirectCommand> outputCommands : register(u1);
 
 //空きインデックスバッファ(+Append/Consume)
-ConsumeStructuredBuffer<uint> reserveSlotsConsume : register(t1);
-AppendStructuredBuffer<uint> reserveSlotsAppend : register(u1);
+ConsumeStructuredBuffer<uint> reserveSlotsConsume : register(u2);
+AppendStructuredBuffer<uint> reserveSlotsAppend : register(u3);
 
 [RootSignature(ParticleCalcRootSignature)]
-[numthreads(THREAD_X, 1, 1)]
+[numthreads(THREAD_1024, 1, 1)]
 void ResetReserveBuffer(uint3 groupID : SV_GroupID, uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : SV_GroupThreadID)
 {
-    reserveSlotsAppend.Append(dispatchThreadID.x);
+    uint index = (groupID.x * THREAD_X) + groupThreadID.x;
+    if (index < CommandCount)
+    {
+        reserveSlotsAppend.Append(index);
+    }
 }
 
 
 //パーティクル生成
 [RootSignature(ParticleCalcRootSignature)]
-[numthreads(THREAD_X, THREAD_Y, 1)]
+[numthreads(THREAD_1024, 1, 1)]
 void SpawnParticle(uint3 groupID : SV_GroupID, uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : SV_GroupThreadID)
 {
+    uint index = (groupID.x * THREAD_X) + groupThreadID.x;
     [branch]
-    if (dispatchThreadID.x < SpawnCount)
+    if (index < SpawnCount)
     {
         uint newIndex = reserveSlotsConsume.Consume();
-        ParticleData[newIndex].pos = ParticleCreationData[dispatchThreadID.x].pos;
-        ParticleData[newIndex].velocity = ParticleCreationData[dispatchThreadID.x].velocity;
-        ParticleData[newIndex].angle = ParticleCreationData[dispatchThreadID.x].angle;
-        ParticleData[newIndex].lifeTime = ParticleCreationData[dispatchThreadID.x].lifeTime;
+        ParticleData[newIndex].pos = ParticleCreationData[index].pos;
+        ParticleData[newIndex].velocity = ParticleCreationData[index].velocity;
+        ParticleData[newIndex].angle = ParticleCreationData[index].angle;
+        ParticleData[newIndex].lifeTime = ParticleCreationData[index].lifeTime;
     }
 }
 
@@ -80,7 +97,7 @@ void UpdateParticle(inout Particle particle, float lifetime)
 
 //パーティクル更新
 [RootSignature(ParticleCalcRootSignature)]
-[numthreads(THREAD_X, THREAD_Y, 1)]
+[numthreads(THREAD_1024, 1, 1)]
 void UpdateParticles(uint3 groupID : SV_GroupID, uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : SV_GroupThreadID)
 {
     uint index = (groupID.x * THREAD_X) + groupThreadID.x;

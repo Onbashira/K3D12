@@ -1,6 +1,6 @@
 #define ParticleRootSignature  "RootFlags(ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT),"\
                                     "CBV(b0),"\
-                                    "DescriptorTable(CBV(b1,numDescriptors = 1,space = 0)," \
+                                    "DescriptorTable(CBV(t0,numDescriptors = 1,space = 0)," \
                                                         "visibility = SHADER_VISIBILITY_ALL),"\
                                     "StaticSampler(s0 ,"\
                                              "filter = FILTER_MIN_MAG_MIP_LINEAR,"\

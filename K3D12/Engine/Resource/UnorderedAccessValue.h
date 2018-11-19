@@ -2,6 +2,7 @@
 #include "../Util/D3D12Common.h"
 #include "../DescriptorHeap/DescriptorHeap.h"
 #include "Resource.h"
+#include "ByteAddressBuffer.h"
 
 namespace K3D12 {
 
@@ -27,7 +28,7 @@ namespace K3D12 {
 			HEAP_OFFSET_MAX,
 		};
 		//CounterReosurce
-		Microsoft::WRL::ComPtr<ID3D12Resource>	_counterResource;
+		ByteAddressBuffer						_counterResource;
 		//ステージング用のメモリ
 		Resource								_stagingResource;
 		//GPUMemにアップロードするためのメモリ　（リードバック用のメモリは継承元のリソース
@@ -60,7 +61,7 @@ namespace K3D12 {
 		void									WriteToBuffer(unsigned int numElements, unsigned int elementSize, void* pBufferData);
 		//コマンドリストを指定してやること。非同期即時復帰でリソースのGPU配置操作を実行
 		void									AsyncWriteToBuffer(std::weak_ptr<K3D12::GraphicsCommandList> list,unsigned int numElements, unsigned int elementSize, void* pBufferData , K3D12::CommandQueue* queue = nullptr);
-		//GPU上の情報をリードバックする
+		//GPU上の情報をリードバックする(待機する)
 		void									ReadBack();
 		//コマンドリストを指定してやること。非同期即時復帰でGPU上の情報をリードバック操作を実行
 		void									AsyncReadBack(std::weak_ptr<K3D12::GraphicsCommandList> list, K3D12::CommandQueue* queue = nullptr);
@@ -72,9 +73,10 @@ namespace K3D12 {
 		D3D12_GPU_DESCRIPTOR_HANDLE				GetSRVGPUHandle();
 		//
 		D3D12_GPU_DESCRIPTOR_HANDLE				GetUAVGPUHandle();
+
 		void									Discard();
 		
-		Microsoft::WRL::ComPtr<ID3D12Resource>	GetCounterResource()const;
+		ByteAddressBuffer						GetCounterResource()const;
 		
 		DescriptorHeap*							GetHeap();
 

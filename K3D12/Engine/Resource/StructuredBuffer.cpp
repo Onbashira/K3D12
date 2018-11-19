@@ -105,6 +105,8 @@ HRESULT K3D12::StructuredBuffer::Create(unsigned int elementSize, unsigned int n
 	this->Update(pBufferData, numElements*elementSize, 0);
 	this->Unmap(0, &this->_readRange);
 
+	CHECK_RESULT(_counterResource.Create());
+
 	CHECK_RESULT(CreateHeap(HEAP_OFFSET::HEAP_OFFSET_MAX));
 	CHECK_RESULT(CreateDescriptors(elementSize, numElements));
 
@@ -168,7 +170,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE K3D12::StructuredBuffer::GetUAVGPUHandle()
 
 HRESULT K3D12::StructuredBuffer::CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC* uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle)
 {
-	GET_DEVICE->CreateUnorderedAccessView(_resource.Get(), _counterResource.Get(), uavDesc, cpuDescriptorHandle);
+	GET_DEVICE->CreateUnorderedAccessView(_resource.Get(), _counterResource.GetResource(), uavDesc, cpuDescriptorHandle);
 	return S_OK;
 }
 
@@ -198,16 +200,24 @@ void K3D12::StructuredBuffer::ReadBack()
 	}
 }
 
+void K3D12::StructuredBuffer::ReadBackCounterResource(unsigned int * pDst)
+{
+	D3D12_RANGE range = { 0,1 };
+	_counterResource.Map(0, &range);
+	_counterResource.Read(reinterpret_cast<void*>(pDst), sizeof(float), 0);
+	_counterResource.Unmap(0, nullptr);
+
+}
+
 void K3D12::StructuredBuffer::Discard()
 {
 	_heap.Discard();
 	_readBackResource.Discard();
-	if (_counterResource.Get() != nullptr) {
-		_counterResource.Reset();
-	}
+	_counterResource.Discard();
+
 }
 
-Microsoft::WRL::ComPtr<ID3D12Resource> K3D12::StructuredBuffer::GetCounterResource() const
+K3D12::ByteAddressBuffer K3D12::StructuredBuffer::GetCounterResource() const
 {
 	return _counterResource;
 }

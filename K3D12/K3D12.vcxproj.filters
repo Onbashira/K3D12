@@ -486,9 +486,6 @@
     <ClCompile Include="Engine\Resource\AppendConsumeBuffer.cpp">
       <Filter>Engine\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\CommandBuffer.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Resource\ByteAddressBuffer.cpp">
       <Filter>Engine\Resource</Filter>
     </ClCompile>
@@ -816,9 +813,6 @@
       <Filter>Engine\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Resource\ByteAddressBuffer.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\CommandBuffer.h">
       <Filter>Engine\Resource</Filter>
     </ClInclude>
   </ItemGroup>
