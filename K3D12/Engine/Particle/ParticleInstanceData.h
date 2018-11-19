@@ -1,12 +1,15 @@
 #pragma once
 #include <vector>
+#include <memory>
+
 #include "../DescriptorHeap/DescriptorHeap.h"
 #include "../Resource/UnorderedAccessValue.h"
 #include "../Util/Math.h"
 #include "../DescriptorHeap/DescriptorHeap.h"
 #include "../Signature/CommandSignature.h"
-namespace K3D12 {
 
+namespace K3D12 {
+	class RootSignature;
 	//‚Ü‚¸‚QD‚©‚ç
 	struct ParticleData {
 		//ƒ|ƒWƒVƒ‡ƒ“ xyz = Pos w = killedFlag
@@ -82,6 +85,8 @@ namespace K3D12 {
 		~ParticleInstanceData();
 
 		void Create(unsigned int spawnCountParFrame = 1024, unsigned int commandCountParFrame = 1024);
+
+		void CreateCommandSignature(std::weak_ptr<K3D12::RootSignature> rs);
 
 		void AddDrawDesc(D3D12_INDIRECT_ARGUMENT_DESC indirectPropaties);
 
