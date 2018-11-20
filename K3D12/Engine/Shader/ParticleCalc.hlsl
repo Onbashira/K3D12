@@ -13,6 +13,9 @@
 
 
 
+//GPUアドレスでいいのはRoot系バインドだけ、デスクリプターテーブルでバインドするパラメータはDESCRIPTORHEAPのGPUアドレスっぽい・・・？
+
+
 struct Particle
 {
     float4 pos;
@@ -23,9 +26,10 @@ struct Particle
 
 struct IndirectCommand
 {
-    uint cameraAddress;
-    uint textureAddress;
-    uint4 drawArguments;
+    uint2 VertexViewAddress;
+    uint2 CameraGPUAddress;
+    uint2 ShaderResourceAddress;
+    uint4 DrawArguments;
 };
 
 #define THREAD_X 128
@@ -62,6 +66,8 @@ AppendStructuredBuffer<uint> reserveSlotsAppend : register(u3);
 void ResetReserveBuffer(uint3 groupID : SV_GroupID, uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : SV_GroupThreadID)
 {
     uint index = (groupID.x * THREAD_X) + groupThreadID.x;
+    
+    //空きを全部インデックスで埋める
     if (index < CommandCount)
     {
         reserveSlotsAppend.Append(index);
@@ -106,14 +112,14 @@ void UpdateParticles(uint3 groupID : SV_GroupID, uint3 dispatchThreadID : SV_Dis
     {
     
         [branch] //もし残存生存時間が0.0より大きければ
-        if (ParticleData[index].lifeTime > 0.0f )
+        if (ParticleData[index].lifeTime > 0.0f)
         {
             UpdateParticle(ParticleData[index], 0.016f);
         }
         else
         {
             ParticleData[index].pos.w = -1.0f; //kill Particle
-            reserveSlotsAppend.Append(index);　//空きインデックスバッファにインデックス値をアペンド
+            reserveSlotsAppend.Append(index); //空きインデックスバッファにインデックス値をアペンド
         }
     }
 

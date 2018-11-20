@@ -12,7 +12,7 @@ namespace K3D12 {
 	//UAVはDXGI_FORMATはUNKNWON固定
 	class UnorderedAccessValue : public K3D12::Resource
 	{
-	public :
+	public:
 		enum BUFFER_MODE {
 			UAV_BUFFER_MODE_APPEND,
 			UAV_BUFFER_MODE_CONSUME
@@ -39,17 +39,16 @@ namespace K3D12 {
 		DescriptorHeap							_heap;
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC		_unorderedAccessViewDesc;
+
+		D3D12_SHADER_RESOURCE_VIEW_DESC			_shaderResourceViewDesc;
+
 	public:
-		
+
 	private:
 
 		HRESULT									CreateHeap(unsigned numElements, unsigned int nodeMask = 0);
-		
-		HRESULT									CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC* uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
-		
-		HRESULT									CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC* srvDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
-	
-	public:	
+
+	public:
 
 		UnorderedAccessValue();
 
@@ -58,10 +57,14 @@ namespace K3D12 {
 		HRESULT									Create(unsigned int elementSize, unsigned int numElements, void* pBufferData);
 		//デスクリプタの作成
 		HRESULT									CreateDescriptors(unsigned int elementSize, unsigned int numElements);
+
+		HRESULT									CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC* uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
+
+		HRESULT									CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC* srvDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
 		//リソースをアップロードバッファに配置
 		void									WriteToBuffer(unsigned int numElements, unsigned int elementSize, void* pBufferData);
 		//コマンドリストを指定してやること。非同期即時復帰でリソースのGPU配置操作を実行
-		void									AsyncWriteToBuffer(std::weak_ptr<K3D12::GraphicsCommandList> list,unsigned int numElements, unsigned int elementSize, void* pBufferData , K3D12::CommandQueue* queue = nullptr);
+		void									AsyncWriteToBuffer(std::weak_ptr<K3D12::GraphicsCommandList> list, unsigned int numElements, unsigned int elementSize, void* pBufferData, K3D12::CommandQueue* queue = nullptr);
 		//GPU上の情報をリードバックする(待機する)
 		void									ReadBack();
 		//コマンドリストを指定してやること。非同期即時復帰でGPU上の情報をリードバック操作を実行
@@ -76,10 +79,14 @@ namespace K3D12 {
 		D3D12_GPU_DESCRIPTOR_HANDLE				GetUAVGPUHandle();
 
 		void									Discard();
-		
+
 		ByteAddressBuffer						GetCounterResource()const;
-		
+
 		DescriptorHeap*							GetHeap();
+
+		D3D12_UNORDERED_ACCESS_VIEW_DESC		GetUAVDesc();
+
+		D3D12_SHADER_RESOURCE_VIEW_DESC			GetSRVDesc();
 
 	};
 }

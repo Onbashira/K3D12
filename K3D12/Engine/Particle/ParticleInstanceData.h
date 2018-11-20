@@ -24,11 +24,13 @@ namespace K3D12 {
 		float liveTime;
 	};
 
-	struct IndirectCommand {
-		D3D12_GPU_VIRTUAL_ADDRESS cameraAddress;
-		D3D12_GPU_VIRTUAL_ADDRESS vertexAddres;
-		D3D12_GPU_VIRTUAL_ADDRESS shaderResourceAddress;
-		D3D12_DRAW_ARGUMENTS drawArguments;
+	struct ParticleIndirectCommand {
+		D3D12_GPU_VIRTUAL_ADDRESS	vertexBufferGPUAddress; //GPUアドレス
+		unsigned int				vertexBufferSize;//１頂点サイズ　
+		unsigned int				vertexBufferStride;//１頂点ストライド
+		D3D12_GPU_VIRTUAL_ADDRESS	cameraConstantData;//カメラのコンスタントデータへのストライド
+		D3D12_GPU_DESCRIPTOR_HANDLE	shaderResourceGPUAddress;
+		D3D12_DRAW_ARGUMENTS		drawArguments;
 	};
 
 	struct ParticleRootConstant {
@@ -43,14 +45,38 @@ namespace K3D12 {
 	};
 
 	enum PARTICLE_COMPUTE_SLOT {
-		CONSTANT,
-		PARTICLE_CREATE_DATA,
-		PARTICLE_DATA,
-		DRAW_ARGUMENT_DATA,
-		RESERVE_SLOT_CONSUME_DATA,
-		RESERVE_SLOT_APPEND_DATA,
-		PARTICLE_COMPUTE_SLOT_MAX
+		COMPUTE_SLOT_CONSTANT,
+		COMPUTE_SLOT_PARTICLE_CREATE_DATA,
+		COMPUTE_SLOT_PARTICLE_DATA,
+		COMPUTE_SLOT_DRAW_ARGUMENT_DATA,
+		COMPUTE_SLOT_RESERVE_SLOT_CONSUME_DATA,
+		COMPUTE_SLOT_RESERVE_SLOT_APPEND_DATA,
+		COMPUTE_SLOT_PARTICLE_COMPUTE_SLOT_MAX
 	};
+
+	enum PARTICLE_GRAPHICS_SLOT {
+		GRAPHICS_SLOT_CONSTANT,
+		GRAPHICS_SLOT_PARTICLE_CREATE_DATA,
+		GRAPHICS_SLOT_PARTICLE_DATA,
+		GRAPHICS_SLOT_DRAW_ARGUMENT_DATA,
+		GRAPHICS_SLOT_RESERVE_SLOT_CONSUME_DATA,
+		GRAPHICS_SLOT_RESERVE_SLOT_APPEND_DATA,
+		GRAPHICS_SLOT_PARTICLE_COMPUTE_SLOT_MAX
+	};
+
+	enum PARTICLE_HEAP_DESCRIPTOR_OFFSET {
+		OFFSET_PARTICLE_CREATE_DATA,
+		OFFSET_PARTICLE_DATA,
+		OFFSET_DRAW_ARGUMENT_DATA,
+		OFFSET_RESERVE_SLOT_CONSUME_DATA,
+		OFFSET_RESERVE_SLOT_APPEND_DATA,
+		OFFSET_SPRITE,
+		OFFSET_PARTICLE_OFFSET_MAX
+	};
+
+	//のちに高速水球歪み描画に用いる
+
+	//
 
 	class ParticleInstanceData
 	{
@@ -67,16 +93,29 @@ namespace K3D12 {
 		UnorderedAccessValue	_particleData;
 		//空きデータ(解放されたデータ）の管理 (+Append/Consume)
 		UnorderedAccessValue	_reservedIndexData;
-		//コマンドリストに投げるように作る描画データ(indirectCommand)
+		//コマンドリストに投げるように作る描画データ(ParticleIndirectCommand)
 		UnorderedAccessValue	_drawArgumentData;
 		//コマンド解釈
 		CommandSignature		_commandSignature;
 		//コマンド解釈データ
-		std::vector<D3D12_INDIRECT_ARGUMENT_DESC> _drawDescs;
+		std::vector<D3D12_INDIRECT_ARGUMENT_DESC>	_drawDescs;
+		//インダイレクトDrawを使わない	(テスト用) (後で外部から設定できるようにする)
+		D3D12_VERTEX_BUFFER_VIEW					_vertexBufferView;
+		//パーティクル描画コマンド初期化コンテナ	(テスト用) (後で外部から設定できるようにする)
+		std::vector<ParticleIndirectCommand>		_indirectDrawBuffer;
+		//パーティクル初期化コンテナ	(テスト用) (後で外部から設定できるようにする)
+		std::vector<ParticleData>					_particleInitBuffer;
+
 
 	public:
 
 	private:
+
+		void InitHeap();
+
+		void InitView();
+
+		void LoadParticleTexture(std::string path);
 
 	public:
 
@@ -90,7 +129,15 @@ namespace K3D12 {
 
 		void AddDrawDesc(D3D12_INDIRECT_ARGUMENT_DESC indirectPropaties);
 
-		void SetDescriptorHeap(GraphicsCommandList computeCommandList);
+		void SetDescriptorHeap(std::weak_ptr<GraphicsCommandList> computeCommandList);
+
+		void SetVertexBuffer(std::weak_ptr<GraphicsCommandList> graphicsCommandList);
+
+		void InitParticleIndirectCommandBuffer(unsigned int size, unsigned int stride, void* pBuffer);
+
+		void InitParticleInitializeBuffer(unsigned int size, unsigned int stride, void* pBuffer);
+
+
 
 		void Discard();
 

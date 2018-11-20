@@ -104,6 +104,29 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 	this->WriteToBuffer(numElements, elementSize, pBufferData);
 	_counterResource.Create();
 	CHECK_RESULT(CreateHeap(HEAP_OFFSET::HEAP_OFFSET_MAX));
+	//Setting View
+	{
+		D3D12_BUFFER_UAV uavBuffer;
+		uavBuffer.FirstElement = 0;
+		uavBuffer.NumElements = numElements;
+		uavBuffer.Flags = D3D12_BUFFER_UAV_FLAGS::D3D12_BUFFER_UAV_FLAG_NONE;
+		uavBuffer.CounterOffsetInBytes = 0;
+		uavBuffer.StructureByteStride = elementSize;
+
+
+		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc;
+		this->_unorderedAccessViewDesc.ViewDimension = D3D12_UAV_DIMENSION::D3D12_UAV_DIMENSION_BUFFER;
+		_unorderedAccessViewDesc.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+		_unorderedAccessViewDesc.Buffer = uavBuffer;
+
+		_shaderResourceViewDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+		_shaderResourceViewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+		_shaderResourceViewDesc.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+		_shaderResourceViewDesc.Buffer.FirstElement = 0;
+		_shaderResourceViewDesc.Buffer.NumElements = numElements;
+		_shaderResourceViewDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAGS::D3D12_BUFFER_SRV_FLAG_NONE;
+		_shaderResourceViewDesc.Buffer.StructureByteStride = elementSize;
+	}
 	CHECK_RESULT(CreateDescriptors(elementSize, numElements));
 
 	return S_OK;
@@ -113,32 +136,11 @@ HRESULT K3D12::UnorderedAccessValue::CreateDescriptors(unsigned int elementSize,
 {
 	//UAVStructuredView
 	{
-		D3D12_BUFFER_UAV uavBuffer;
-		uavBuffer.FirstElement = 0;
-		uavBuffer.NumElements = numElements;
-		uavBuffer.Flags = D3D12_BUFFER_UAV_FLAGS::D3D12_BUFFER_UAV_FLAG_NONE;
-		uavBuffer.CounterOffsetInBytes = 0;
-		uavBuffer.StructureByteStride = elementSize;
-		
-
-		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc;
-		uavDesc.ViewDimension = D3D12_UAV_DIMENSION::D3D12_UAV_DIMENSION_BUFFER;
-		uavDesc.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
-		uavDesc.Buffer = uavBuffer;
-
-		this->CreateView(&uavDesc, _heap.GetCPUHandle(HEAP_OFFSET::UAV_DESCRIPTOR_OFFSET));
+		this->CreateView(&_unorderedAccessViewDesc, _heap.GetCPUHandle(HEAP_OFFSET::UAV_DESCRIPTOR_OFFSET));
 	}
 	//SRVRawView
 	{
-		D3D12_SHADER_RESOURCE_VIEW_DESC srv;
-		srv.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-		srv.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		srv.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
-		srv.Buffer.FirstElement = 0;
-		srv.Buffer.NumElements = numElements;
-		srv.Buffer.Flags = D3D12_BUFFER_SRV_FLAGS::D3D12_BUFFER_SRV_FLAG_NONE;
-		srv.Buffer.StructureByteStride = elementSize;
-		this->CreateView(&srv, _heap.GetCPUHandle(HEAP_OFFSET::SRV_DESCRIPTOR_OFFSET));
+		this->CreateView(&_shaderResourceViewDesc, _heap.GetCPUHandle(HEAP_OFFSET::SRV_DESCRIPTOR_OFFSET));
 	}
 	return S_OK;
 
@@ -303,4 +305,14 @@ K3D12::ByteAddressBuffer K3D12::UnorderedAccessValue::GetCounterResource() const
 K3D12::DescriptorHeap * K3D12::UnorderedAccessValue::GetHeap()
 {
 	return &_heap;
+}
+
+D3D12_UNORDERED_ACCESS_VIEW_DESC K3D12::UnorderedAccessValue::GetUAVDesc()
+{
+	return _unorderedAccessViewDesc;
+}
+
+D3D12_SHADER_RESOURCE_VIEW_DESC K3D12::UnorderedAccessValue::GetSRVDesc()
+{
+	return _shaderResourceViewDesc;
 }

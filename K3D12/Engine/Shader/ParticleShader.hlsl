@@ -33,9 +33,11 @@ Texture2D<float4> ParticleTex : register(t0);
 
 SamplerState Sampler : register(s0);
 
+
+//36byte
 struct VSInput
 {
-    float2 pos : POSITION; //位置
+    float4 pos : POSITION; //位置
     float2 velocity : VELOCITY;
     float size : SIZE; //パーティクルサイズ
     float angle : ANGLE; //角度
@@ -63,8 +65,12 @@ struct PSOutput
 
 GSInput VSMain(VSInput input)
 {
+    if (input.pos.w <= 0.0f)
+    {
+        discard;
+    }
     GSInput output = (GSInput) 0;
-    output.pos = input.pos;
+    output.pos = input.pos.xy;
     output.velocity = input.velocity;
     output.size = input.size;
     output.angle = input.angle;
