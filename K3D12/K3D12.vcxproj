@@ -225,10 +225,12 @@
     <ClCompile Include="Engine\Util\WICTextureLoader12.cpp" />
     <ClCompile Include="Engine\Window\Window.cpp" />
     <ClCompile Include="Engine\Window\WindowManager.cpp" />
+    <ClCompile Include="Engine\Particle\GPUParticle.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine\Particle\ParticleQuad.cpp" />
     <ClCompile Include="Engine\Particle\ParticleInstanceData.cpp" />
     <ClCompile Include="Engine\Particle\ParticleCluster.cpp" />
+    <ClCompile Include="Engine\Particle\ParticleCSStruct.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Resource\ByteAddressBuffer.h" />
@@ -339,6 +341,9 @@
     <ClInclude Include="Engine\Particle\ParticleQuad.h" />
     <ClInclude Include="Engine\Particle\ParticleInstanceData.h" />
     <ClInclude Include="Engine\Particle\ParticleCluster.h" />
+    <ClInclude Include="Engine\Particle\GPUParticle.h" />
+    <ClInclude Include="Engine\Particle\ParticleCSStruct.h" />
+    <ClInclude Include="Engine\Resource\UploadBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">

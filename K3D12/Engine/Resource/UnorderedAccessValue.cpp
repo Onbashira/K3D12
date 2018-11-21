@@ -310,6 +310,7 @@ K3D12::DescriptorHeap * K3D12::UnorderedAccessValue::GetHeap()
 D3D12_UNORDERED_ACCESS_VIEW_DESC K3D12::UnorderedAccessValue::GetUAVDesc()
 {
 	return _unorderedAccessViewDesc;
+
 }
 
 D3D12_SHADER_RESOURCE_VIEW_DESC K3D12::UnorderedAccessValue::GetSRVDesc()

@@ -52,7 +52,7 @@ HRESULT K3D12::ConstantBuffer::Create( ULONG64 size)
 		return E_FAIL;
 	}
 
-	//システム終了までUnmapしない（しなくていいらしい）
+	//システム終了までUnmapしない
 
 	hr = Map(0, nullptr);
 	if (FAILED(hr)) {

@@ -126,23 +126,23 @@ HRESULT K3D12::StructuredBuffer::CreateDescriptors(unsigned int elementSize, uns
 		
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc;
-		uavDesc.ViewDimension = D3D12_UAV_DIMENSION::D3D12_UAV_DIMENSION_BUFFER;
-		uavDesc.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
-		uavDesc.Buffer = uavBuffer;
+		_unorderedAccessViewDesc.ViewDimension = D3D12_UAV_DIMENSION::D3D12_UAV_DIMENSION_BUFFER;
+		_unorderedAccessViewDesc.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+		_unorderedAccessViewDesc.Buffer = uavBuffer;
 
-		this->CreateView(&uavDesc, _heap.GetCPUHandle(HEAP_OFFSET::UAV_DESCRIPTOR_OFFSET));
+		this->CreateView(&_unorderedAccessViewDesc, _heap.GetCPUHandle(HEAP_OFFSET::UAV_DESCRIPTOR_OFFSET));
 	}
 	//SRVRawView
 	{
 		D3D12_SHADER_RESOURCE_VIEW_DESC srv;
-		srv.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-		srv.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		srv.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
-		srv.Buffer.FirstElement = 0;
-		srv.Buffer.NumElements = numElements;
-		srv.Buffer.Flags = D3D12_BUFFER_SRV_FLAGS::D3D12_BUFFER_SRV_FLAG_NONE;
-		srv.Buffer.StructureByteStride = elementSize;
-		this->CreateView(&srv, _heap.GetCPUHandle(HEAP_OFFSET::SRV_DESCRIPTOR_OFFSET));
+		_shaderResourceViewDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+		_shaderResourceViewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+		_shaderResourceViewDesc.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+		_shaderResourceViewDesc.Buffer.FirstElement = 0;
+		_shaderResourceViewDesc.Buffer.NumElements = numElements;
+		_shaderResourceViewDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAGS::D3D12_BUFFER_SRV_FLAG_NONE;
+		_shaderResourceViewDesc.Buffer.StructureByteStride = elementSize;
+		this->CreateView(&_shaderResourceViewDesc, _heap.GetCPUHandle(HEAP_OFFSET::SRV_DESCRIPTOR_OFFSET));
 	}
 	return S_OK;
 
@@ -178,6 +178,15 @@ HRESULT K3D12::StructuredBuffer::CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC * sr
 {
 	GET_DEVICE->CreateShaderResourceView(_resource.Get(), srvDesc, cpuDescriptorHandle);
 	return S_OK;
+}
+
+void K3D12::StructuredBuffer::WriteToBuffer(unsigned int numElements, unsigned int elementSize, void * pBufferData)
+{
+	D3D12_RANGE range = { 0,1 };
+
+	Map(0, &range);
+	Update(pBufferData, numElements * elementSize,0);
+	Unmap(0, nullptr);
 }
 
 void K3D12::StructuredBuffer::ReadBack()
@@ -225,4 +234,14 @@ K3D12::ByteAddressBuffer K3D12::StructuredBuffer::GetCounterResource() const
 K3D12::DescriptorHeap * K3D12::StructuredBuffer::GetHeap()
 {
 	return &_heap;
+}
+
+D3D12_UNORDERED_ACCESS_VIEW_DESC K3D12::StructuredBuffer::GetUAVDesc()
+{
+	return _unorderedAccessViewDesc;
+}
+
+D3D12_SHADER_RESOURCE_VIEW_DESC K3D12::StructuredBuffer::GetSRVDesc()
+{
+	return _shaderResourceViewDesc;
 }

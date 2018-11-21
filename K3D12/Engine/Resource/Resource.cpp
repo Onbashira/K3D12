@@ -136,7 +136,6 @@ void K3D12::Resource::Alignment256ByteUpdate(const void * pSrc, unsigned int ele
 	for (unsigned int i = 0; i < elementCount; i++) {
 		Update(static_cast<void*>((char*)(pSrc)+i * elementSize), Util::Alignment256Bytes(elementSize), offset);
 		offset += static_cast<unsigned int>(Util::Alignment256Bytes(elementSize));
-
 	}
 }
 

@@ -37,15 +37,15 @@ namespace K3D12 {
 		DescriptorHeap							_heap;
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC		_unorderedAccessViewDesc;
+
+		D3D12_SHADER_RESOURCE_VIEW_DESC			_shaderResourceViewDesc;
 	public:
 		
 	private:
 
 		HRESULT									CreateHeap(unsigned numElements, unsigned int nodeMask = 0);
 		
-		HRESULT									CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC* uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
-		
-		HRESULT									CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC* srvDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
+
 	public:	
 
 		StructuredBuffer();
@@ -55,6 +55,13 @@ namespace K3D12 {
 		HRESULT									Create(unsigned int elementSize, unsigned int numElements, void* pBufferData);
 		//デスクリプタの作成
 		HRESULT									CreateDescriptors(unsigned int elementSize, unsigned int numElements);
+
+		HRESULT									CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC* uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
+
+		HRESULT									CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC* srvDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
+
+		void									WriteToBuffer(unsigned int numElements, unsigned int elementSize, void* pBufferData);
+
 		//GPU上の情報をリードバックする
 		void									ReadBack();
 		//カウンタリソースの情報をリードバックスする
@@ -73,6 +80,10 @@ namespace K3D12 {
 		K3D12::ByteAddressBuffer				GetCounterResource()const;
 		
 		DescriptorHeap*							GetHeap();
+
+		D3D12_UNORDERED_ACCESS_VIEW_DESC		GetUAVDesc();
+
+		D3D12_SHADER_RESOURCE_VIEW_DESC			GetSRVDesc();
 
 	};
 }

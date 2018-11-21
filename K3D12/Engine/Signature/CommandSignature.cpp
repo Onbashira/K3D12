@@ -18,9 +18,9 @@ K3D12::CommandSignature::~CommandSignature()
 }
 
 
-HRESULT K3D12::CommandSignature::Create(const D3D12_COMMAND_SIGNATURE_DESC & desc, RootSignature& rs)
+HRESULT K3D12::CommandSignature::Create(const D3D12_COMMAND_SIGNATURE_DESC & desc, std::weak_ptr<K3D12::RootSignature> rs)
 {
-	auto res = GET_DEVICE->CreateCommandSignature(&desc, rs.GetSignature().Get(), IID_PPV_ARGS(&_commandSignature));
+	auto res = GET_DEVICE->CreateCommandSignature(&desc, rs.lock()->GetSignature().Get(), IID_PPV_ARGS(&_commandSignature));
 	return E_NOTIMPL;
 }
 
