@@ -16,7 +16,7 @@
 //GPUアドレスでいいのはRoot系バインドだけ、デスクリプターテーブルでバインドするパラメータはDESCRIPTORHEAPのGPUアドレスっぽい・・・？
 
 
-struct Particle
+struct ParticleParam
 {
     float4 pos;
     float2 velocity;
@@ -49,10 +49,10 @@ cbuffer SceneRootConstant : register(b0)
 };
 
 //読み込み専用固定長配列
-StructuredBuffer<Particle> ParticleCreationData : register(t0);
+StructuredBuffer<ParticleParam> ParticleCreationData : register(t0);
 
 //パーティクル書き込みバッファ固定長配列
-RWStructuredBuffer<Particle> ParticleData : register(u0);
+RWStructuredBuffer<ParticleParam> ParticleData : register(u0);
 
 //コマンドバッファ
 AppendStructuredBuffer<IndirectCommand> outputCommands : register(u1);
@@ -93,7 +93,7 @@ void SpawnParticle(uint3 groupID : SV_GroupID, uint3 dispatchThreadID : SV_Dispa
 }
 
 //パーティクル単体更新
-void UpdateParticle(inout Particle particle, float lifetime)
+void UpdateParticle(inout ParticleParam particle, float lifetime)
 {
     particle.lifeTime -= lifetime;
     particle.velocity *= 0.8f;

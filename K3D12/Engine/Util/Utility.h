@@ -15,25 +15,17 @@ namespace K3D12::Util{
 		return ret;
 	};
 
-	//128バイトアライメント
-	inline size_t Alignment128Bytes(size_t size) {
+	template <typename X>
+	X inline Align(X num, size_t ali) {
+		return ((num + ali - 1) / ali) * ali;
+	}
 
-	};
-
-	//16バイトアライメント
-	inline size_t Alignment16Bytes(size_t size) {
-
-	};
-
-	//4バイトアライメント
-	inline size_t Alignment4Bytes(size_t size) {
-
-	};
-
-	//2バイトアライメント
-	inline size_t Alignmentt2Bytes(size_t size) {
-
-	};
+	inline unsigned int ConstantBufferAlign(unsigned int byteSize) {
+		if (byteSize == 256) {
+			return 256;
+		}
+		return ((byteSize + 255) & ~255);
+	}
 
 	inline unsigned int  AlignForUavCounter(UINT bufferSize)
 	{

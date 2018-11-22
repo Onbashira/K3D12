@@ -231,6 +231,7 @@
     <ClCompile Include="Engine\Particle\ParticleInstanceData.cpp" />
     <ClCompile Include="Engine\Particle\ParticleCluster.cpp" />
     <ClCompile Include="Engine\Particle\ParticleCSStruct.cpp" />
+    <ClCompile Include="Engine\Particle\Particle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Resource\ByteAddressBuffer.h" />
@@ -344,6 +345,7 @@
     <ClInclude Include="Engine\Particle\GPUParticle.h" />
     <ClInclude Include="Engine\Particle\ParticleCSStruct.h" />
     <ClInclude Include="Engine\Resource\UploadBuffer.h" />
+    <ClInclude Include="Engine\Particle\Particle.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shader\Bloom.hlsl">
