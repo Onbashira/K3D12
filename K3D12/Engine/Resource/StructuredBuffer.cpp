@@ -84,7 +84,7 @@ HRESULT K3D12::StructuredBuffer::Create(unsigned int elementSize, unsigned int n
 
 		//リソース作成
 		{
-			_readBackResource.Create(readBackHeapProp, D3D12_HEAP_FLAG_NONE,readBackResourceDesc,D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COPY_DEST);
+			_readBackResource.Create(readBackHeapProp, D3D12_HEAP_FLAG_NONE, readBackResourceDesc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COPY_DEST);
 			Resource::Create(defaultHeapProp, D3D12_HEAP_FLAG_NONE, defaultResourceDesc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 #ifdef _DEBUG
 			SetName("UAVResource");
@@ -101,11 +101,11 @@ HRESULT K3D12::StructuredBuffer::Create(unsigned int elementSize, unsigned int n
 	}
 	//this->WriteToBuffer(numElements, elementSize, pBufferData);
 
-	this->Map(0, &this->_readRange);
-	this->Update(pBufferData, numElements*elementSize, 0);
-	this->Unmap(0, &this->_readRange);
-
-	CHECK_RESULT(_counterResource.Create());
+	if (pBufferData != nullptr) {
+		this->Map(0, &this->_readRange);
+		this->Update(pBufferData, numElements*elementSize, 0);
+		this->Unmap(0, &this->_readRange);
+	}
 
 	CHECK_RESULT(CreateHeap(HEAP_OFFSET::HEAP_OFFSET_MAX));
 	CHECK_RESULT(CreateDescriptors(elementSize, numElements));
@@ -123,7 +123,7 @@ HRESULT K3D12::StructuredBuffer::CreateDescriptors(unsigned int elementSize, uns
 		uavBuffer.Flags = D3D12_BUFFER_UAV_FLAGS::D3D12_BUFFER_UAV_FLAG_NONE;
 		uavBuffer.CounterOffsetInBytes = 0;
 		uavBuffer.StructureByteStride = elementSize;
-		
+
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc;
 		_unorderedAccessViewDesc.ViewDimension = D3D12_UAV_DIMENSION::D3D12_UAV_DIMENSION_BUFFER;
@@ -168,9 +168,9 @@ D3D12_GPU_DESCRIPTOR_HANDLE K3D12::StructuredBuffer::GetUAVGPUHandle()
 	return _heap.GetGPUHandle(HEAP_OFFSET::UAV_DESCRIPTOR_OFFSET);
 }
 
-HRESULT K3D12::StructuredBuffer::CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC* uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle)
+HRESULT K3D12::StructuredBuffer::CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC * uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle, Resource * counterResource)
 {
-	GET_DEVICE->CreateUnorderedAccessView(_resource.Get(), _counterResource.GetResource(), uavDesc, cpuDescriptorHandle);
+	GET_DEVICE->CreateUnorderedAccessView(_resource.Get(), counterResource->GetResource(), uavDesc, cpuDescriptorHandle);
 	return S_OK;
 }
 
@@ -185,36 +185,14 @@ void K3D12::StructuredBuffer::WriteToBuffer(unsigned int numElements, unsigned i
 	D3D12_RANGE range = { 0,1 };
 
 	Map(0, &range);
-	Update(pBufferData, numElements * elementSize,0);
+	Update(pBufferData, numElements * elementSize, 0);
 	Unmap(0, nullptr);
 }
 
-void K3D12::StructuredBuffer::ReadBack()
+void K3D12::StructuredBuffer::WaitForProcess(K3D12::CommandQueue* queue)
 {
-	ResourceTransition(D3D12System::GetCommandList("CommandList")->GetCommandList().Get(), D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COPY_SOURCE);
-	D3D12System::GetCommandList("CommandList")->GetCommandList()->CopyResource(_readBackResource.GetResource(),this->_resource.Get());
-	ResourceTransition(D3D12System::GetCommandList("CommandList")->GetCommandList().Get(), D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-	//GPUとの同期処理、こいつは後でキューとリストを選択して待機できるようにしなければならない
-	{
-		D3D12System::GetCommandList("CommandList")->CloseCommandList();
-
-		ID3D12CommandList* lists[] = { D3D12System::GetCommandList("CommandList")->GetCommandList().Get() };
-
-		D3D12System::GetInstance().GetMasterCommandQueue().GetQueue()->ExecuteCommandLists(1, lists);
-		GET_SYSTEM_FENCE->Wait(&D3D12System::GetInstance().GetMasterCommandQueue());
-
-		D3D12System::GetCommandList("CommandList")->ResetAllocator();
-		D3D12System::GetCommandList("CommandList")->ResetCommandList();
-	}
-}
-
-void K3D12::StructuredBuffer::ReadBackCounterResource(unsigned int * pDst)
-{
-	D3D12_RANGE range = { 0,1 };
-	_counterResource.Map(0, &range);
-	_counterResource.Read(reinterpret_cast<void*>(pDst), sizeof(float), 0);
-	_counterResource.Unmap(0, nullptr);
+	GET_SYSTEM_FENCE->Wait(queue);
 
 }
 
@@ -222,13 +200,7 @@ void K3D12::StructuredBuffer::Discard()
 {
 	_heap.Discard();
 	_readBackResource.Discard();
-	_counterResource.Discard();
 
-}
-
-K3D12::ByteAddressBuffer K3D12::StructuredBuffer::GetCounterResource() const
-{
-	return _counterResource;
 }
 
 K3D12::DescriptorHeap * K3D12::StructuredBuffer::GetHeap()

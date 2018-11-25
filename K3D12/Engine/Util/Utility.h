@@ -3,15 +3,16 @@
 #include <string>
 #include <iostream>
 #include <vector>
-
-namespace K3D12::Util{
+#include <d3d12.h>
+#include "../../Engine/ShaderComponent/HLSLIncluder.h"
+namespace K3D12::Util {
 
 	//256バイトアライメント
 	inline size_t Alignment256Bytes(size_t size) {
 		if (size == 256) {
 			return 256;
 		}
-		size_t ret = (size&(~0xff))+0x0100;
+		size_t ret = (size&(~0xff)) + 0x0100;
 		return ret;
 	};
 
@@ -48,7 +49,7 @@ namespace K3D12::Util{
 	inline std::string ExtensionExtruction(std::string str)
 	{
 		size_t dotPos = str.rfind('.');
-		size_t cutNum =  str.length() - dotPos;
+		size_t cutNum = str.length() - dotPos;
 		std::string ext = str.substr(dotPos + 1, cutNum);
 		return ext;
 	}
@@ -74,7 +75,7 @@ namespace K3D12::Util{
 
 		// 変換結果を返す
 		return(oRet);
-	
+
 	};
 
 	//std::string -> std::wstring
@@ -96,7 +97,6 @@ namespace K3D12::Util{
 
 		return textureTempPath;
 	}
-
 	//レガシーなFopen・Fclose・Fread
 	namespace FileStream {
 
@@ -150,8 +150,10 @@ namespace K3D12::Util{
 			}
 			return returnValue;
 		}
+
+
 	}
 
-}	
+}
 
 

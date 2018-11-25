@@ -50,21 +50,23 @@ namespace K3D12 {
 
 		StructuredBuffer _reservedSlotsBuffer;
 
-		StructuredBuffer _InstancePropatiesBuffer;
+		StructuredBuffer _instancePropatiesBuffer;
 
-		StructuredBuffer _InstanceDrawBuffer;
+		StructuredBuffer _instanceDrawBuffer;
 
-		StructuredBuffer _InstanceCountBuffer;
+		StructuredBuffer _instanceCountBuffer;
 
-		StructuredBuffer _DrawArgBuffer;
+		StructuredBuffer _drawArgBuffer;
 
-		StructuredBuffer _DrawArgCopyBuffer;
+		StructuredBuffer _drawArgCopyBuffer;
 
-		StructuredBuffer _DrawArgBuffer;
+		StructuredBuffer _drawArgBuffer;
 
-		DescriptorHeap   _DescriptorHeap;
+		DescriptorHeap   _initDescriptorHeap;
 
-		DescriptorHeap   _DrawDescriptorHeap;
+		DescriptorHeap   _descriptorHeap;
+
+		DescriptorHeap   _drawDescriptorHeap;
 
 		CommandSignature _commandSignature;
 
@@ -104,7 +106,7 @@ namespace K3D12 {
 
 		void Create(int particleMax, int emitNum);
 
-		void Run();
+		void Run(float deltaTime);
 
 		void Draw();
 

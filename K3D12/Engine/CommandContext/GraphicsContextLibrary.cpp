@@ -109,6 +109,11 @@ HRESULT K3D12::GraphicsContextLibrary::CreateRootSignature(std::string rsName, I
 	return _shaderObjectLibrary.CreateRootSignature(rsName, signature);
 }
 
+HRESULT K3D12::GraphicsContextLibrary::CreateRootSignature(std::string rsName, D3D12_ROOT_SIGNATURE_DESC * signature)
+{
+	return _shaderObjectLibrary.CreateRootSignature(rsName, signature);
+}
+
 void K3D12::GraphicsContextLibrary::SetCommandList(std::string commandListName, std::shared_ptr<GraphicsCommandList> commandList)
 {
 	_commandListLibrary.Set(commandListName, commandList);

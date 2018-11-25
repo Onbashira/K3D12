@@ -5,93 +5,94 @@
 #include <d3d12.h>
 #include <algorithm>
 #include "ShaderCluster.h"
+#include "../Util/Utility.h"
 
-
-ShaderCluster::ShaderCluster()
+K3D12::ShaderCluster::ShaderCluster()
 {
-}
-
-
-ShaderCluster::~ShaderCluster()
-{
-	_vs.Reset();
-	_ps.Reset();
-	_gs.Reset();
-	_ds.Reset();
-	_hs.Reset();
-}
-
-void ShaderCluster::SetVS(Microsoft::WRL::ComPtr<ID3DBlob> vs)
-{
-	_vs = vs;
-}
-
-void ShaderCluster::SetPS(Microsoft::WRL::ComPtr<ID3DBlob> ps)
-{
-	_ps = ps;
-}
-
-void ShaderCluster::SetGS(Microsoft::WRL::ComPtr<ID3DBlob> gs)
-{
-	_gs = gs;
-}
-
-void ShaderCluster::SetDS(Microsoft::WRL::ComPtr<ID3DBlob> ds)
-{
-	_ds = ds;
 
 }
 
-void ShaderCluster::SetHS(Microsoft::WRL::ComPtr<ID3DBlob> hs)
+K3D12::ShaderCluster::~ShaderCluster()
 {
-	_hs = hs;
+
 }
 
-Microsoft::WRL::ComPtr<ID3DBlob> ShaderCluster::GetVS()
+D3D12_SHADER_BYTECODE K3D12::ShaderCluster::GetShader(ShaderCluster::SHADER_TYPE type)
 {
-	return _vs;
+	if (_shaderMap.find(type) != _shaderMap.end()) {
+
+		return _shaderMap[type];
+	}
+	return D3D12_SHADER_BYTECODE();
 }
 
-Microsoft::WRL::ComPtr<ID3DBlob> ShaderCluster::GetPS()
+void K3D12::ShaderCluster::AddShaderMacro(std::string name, std::string definition)
 {
-	return _ps;
-}
 
-Microsoft::WRL::ComPtr<ID3DBlob> ShaderCluster::GetGS()
-{
-	return _gs;
-}
-
-Microsoft::WRL::ComPtr<ID3DBlob> ShaderCluster::GetDS()
-{
-	return _ds;
-}
-
-Microsoft::WRL::ComPtr<ID3DBlob> ShaderCluster::GetHS()
-{
-	return _hs;
-}
-
-void ShaderCluster::AddShaderMacro(std::string name, std::string definition)
-{
-	D3D_SHADER_MACRO macro = { name.c_str(),definition.c_str() };
+	D3D_SHADER_MACRO macro;
+	macro.Name = name.c_str();
+	macro.Definition = definition.c_str();
 	_shaderMacro.push_back(macro);
 }
 
-void ShaderCluster::EraseShaderMacro(std::string name)
+void K3D12::ShaderCluster::EraseShaderMacro(std::string name)
 {
-	auto itr = std::find_if(_shaderMacro.begin(), _shaderMacro.end(), 
+	auto itr = std::find_if(_shaderMacro.begin(), _shaderMacro.end(),
 		[name](const D3D_SHADER_MACRO& value)->bool {
-			if (std::string(value.Name) == name) {
-				return true; 
-			}
-			return false; 
+		if (std::string(value.Name) == name) {
+			return true;
 		}
+		return false;
+	}
 	);
 	this->_shaderMacro.erase(itr);
 }
 
-const std::vector<D3D_SHADER_MACRO>& ShaderCluster::GetShaderMacro() const
+const std::vector<D3D_SHADER_MACRO>& K3D12::ShaderCluster::GetShaderMacro() const
 {
 	return _shaderMacro;
+}
+
+HRESULT K3D12::ShaderCluster::CompileShader(SHADER_TYPE type, std::string shaderPath, std::string functionName, std::string shaderMode, std::string includePath)
+{
+#if defined(_DEBUG)
+	//グラフィックデバッグツールによるシェーダーのデバッグの有効化処理
+	UINT compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+
+#else
+	UINT compileFlag = 0;
+#endif
+
+	ID3DBlob* shader;
+	ID3DBlob* error;
+
+	HRESULT hret = {};
+	D3D_SHADER_MACRO* ptr = _shaderMacro.size() >0 ? &this->_shaderMacro[0] : nullptr ;
+	ID3DInclude* includePtr = (includePath == "") ? nullptr : &K3D12::HLSLIncluder(includePath);
+
+	hret = D3DCompileFromFile(Util::StringToWString(shaderPath).c_str(), ptr, includePtr, functionName.c_str(), shaderMode.c_str(), compileFlag, 0, &shader, &error);
+
+
+	if (FAILED(hret)) {
+		OutputDebugStringA((char*)error->GetBufferPointer());
+		return E_FAIL;
+	}
+	if (error != nullptr) {
+		OutputDebugStringA((char*)error->GetBufferPointer());
+		return E_FAIL;
+
+	}
+
+	shader->Release();
+
+	error->Release();
+
+	D3D12_SHADER_BYTECODE byteCode;
+	byteCode.BytecodeLength = shader->GetBufferSize();
+	byteCode.pShaderBytecode = shader->GetBufferPointer();
+
+	this->_shaderMap[type] = byteCode;
+
+	return S_OK;
+
 }

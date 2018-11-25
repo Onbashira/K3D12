@@ -3,64 +3,49 @@
 #include <vector>
 #include <d3dcommon.h>
 #include <string>
+#include <unordered_map>
 #include <d3d12.h>
+#include "HLSLIncluder.h"
 
 
 
 //シェーダーにパスに対応した
-class ShaderCluster
-{
-private:	
+namespace K3D12 {
+	class ShaderCluster
+	{
+	public:
+		enum class SHADER_TYPE {
+			SHADER_TYPE_VERTEX,
+			SHADER_TYPE_PIXEL,
+			SHADER_TYPE_GEOMETRY,
+			SHADER_TYPE_DOMAIN,
+			SHADER_TYPE_HULL,
+			SHADER_TYPE_COMPUTE
+		};
+	private:
 
-	std::string	_clusterName;
+		std::unordered_map<SHADER_TYPE, D3D12_SHADER_BYTECODE> _shaderMap;
 
-	std::vector<D3D_SHADER_MACRO> _shaderMacro;
+		std::vector<D3D_SHADER_MACRO> _shaderMacro;
 
-	Microsoft::WRL::ComPtr<ID3DBlob> _vs;
+	private:
 
-	Microsoft::WRL::ComPtr<ID3DBlob> _ps;
+	public:
 
-	Microsoft::WRL::ComPtr<ID3DBlob> _gs;
+		ShaderCluster();
 
-	Microsoft::WRL::ComPtr<ID3DBlob> _ds;
+		~ShaderCluster();
+		
+		D3D12_SHADER_BYTECODE GetShader(ShaderCluster::SHADER_TYPE type);
 
-	Microsoft::WRL::ComPtr<ID3DBlob> _hs;
-public :
+		void AddShaderMacro(std::string name, std::string definition);
 
-private:
+		void EraseShaderMacro(std::string name);
 
-public:
+		const std::vector<D3D_SHADER_MACRO>& GetShaderMacro()const;
 
-	ShaderCluster();
+		HRESULT CompileShader(SHADER_TYPE type, std::string shaderPath, std::string functionName, std::string  shaderMode, std::string includePath = "");
 
-	~ShaderCluster();
-
-	void SetVS(Microsoft::WRL::ComPtr<ID3DBlob> vs);
-
-	void SetPS(Microsoft::WRL::ComPtr<ID3DBlob> ps);
-
-	void SetGS(Microsoft::WRL::ComPtr<ID3DBlob> gs);
-
-	void SetDS(Microsoft::WRL::ComPtr<ID3DBlob> ds);
-
-	void SetHS(Microsoft::WRL::ComPtr<ID3DBlob> hs);
-
-	Microsoft::WRL::ComPtr<ID3DBlob> GetVS();
-
-	Microsoft::WRL::ComPtr<ID3DBlob> GetPS();
-
-	Microsoft::WRL::ComPtr<ID3DBlob> GetGS();
-
-	Microsoft::WRL::ComPtr<ID3DBlob> GetDS();
-
-	Microsoft::WRL::ComPtr<ID3DBlob> GetHS();
-
-	void AddShaderMacro(std::string name, std::string definition);
-
-	void EraseShaderMacro(std::string name);
-
-	const std::vector<D3D_SHADER_MACRO>& GetShaderMacro()const;
-
-
-};
+	};
+}
 

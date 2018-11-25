@@ -27,8 +27,6 @@ namespace K3D12 {
 			SRV_DESCRIPTOR_OFFSET = 1,
 			HEAP_OFFSET_MAX,
 		};
-		//CounterReosurce
-		ByteAddressBuffer						_counterResource;		
 		//GPUMemにアップロードするためのメモリ　（リードバック用のメモリは継承元のリソース
 		Resource								_readBackResource;
 
@@ -56,29 +54,24 @@ namespace K3D12 {
 		//デスクリプタの作成
 		HRESULT									CreateDescriptors(unsigned int elementSize, unsigned int numElements);
 
-		HRESULT									CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC* uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
+		HRESULT									CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC* uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle,Resource* counterResource = nullptr);
 
 		HRESULT									CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC* srvDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle);
 
 		void									WriteToBuffer(unsigned int numElements, unsigned int elementSize, void* pBufferData);
 
-		//GPU上の情報をリードバックする
-		void									ReadBack();
-		//カウンタリソースの情報をリードバックスする
-		void									ReadBackCounterResource(unsigned int* pDst);
-		//
+		void									WaitForProcess(K3D12::CommandQueue* queue);
+		
 		D3D12_CPU_DESCRIPTOR_HANDLE				GetSRVCPUHandle();
-		//
+		
 		D3D12_CPU_DESCRIPTOR_HANDLE				GetUAVCPUHandle();
-		//
+		
 		D3D12_GPU_DESCRIPTOR_HANDLE				GetSRVGPUHandle();
-		//
+		
 		D3D12_GPU_DESCRIPTOR_HANDLE				GetUAVGPUHandle();
 
 		void									Discard();
-		
-		K3D12::ByteAddressBuffer				GetCounterResource()const;
-		
+				
 		DescriptorHeap*							GetHeap();
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC		GetUAVDesc();

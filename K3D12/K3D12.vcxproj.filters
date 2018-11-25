@@ -234,27 +234,6 @@
     <ClCompile Include="Engine\PipelineState\PipelineStateObject.cpp">
       <Filter>Engine\PipelineState</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\ConstantBuffer.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\DepthStencilBuffer.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\IndexBuffer.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\Resource.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\ResourceCreater.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\ShaderResource.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\VertexBuffer.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Signature\CommandSignature.cpp">
       <Filter>Engine\Signature</Filter>
     </ClCompile>
@@ -468,12 +447,6 @@
     <ClCompile Include="Engine\Util\Curve.cpp">
       <Filter>Engine\Util</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\StructuredBuffer.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\UnorderedAccessValue.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Particle\ParticleCluster.cpp">
       <Filter>Engine\Particle</Filter>
     </ClCompile>
@@ -483,12 +456,6 @@
     <ClCompile Include="Engine\Particle\ParticleQuad.cpp">
       <Filter>Engine\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\AppendConsumeBuffer.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\ByteAddressBuffer.cpp">
-      <Filter>Engine\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Particle\GPUParticle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -497,6 +464,36 @@
     </ClCompile>
     <ClCompile Include="Engine\Particle\Particle.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\AppendConsumeBuffer.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\ByteAddressBuffer.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\ConstantBuffer.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\DepthStencilBuffer.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\IndexBuffer.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\Resource.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\ShaderResource.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\StructuredBuffer.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\UnorderedAccessValue.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\VertexBuffer.cpp">
+      <Filter>Engine\Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -559,27 +556,6 @@
     </ClInclude>
     <ClInclude Include="Engine\PipelineState\PipelineStateObject.h">
       <Filter>Engine\PipelineState</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\ConstantBuffer.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\DepthStencilBuffer.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\IndexBuffer.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\Resource.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\ResourceCreater.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\ShaderResource.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\VertexBuffer.h">
-      <Filter>Engine\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Signature\CommandSignature.h">
       <Filter>Engine\Signature</Filter>
@@ -803,12 +779,6 @@
     <ClInclude Include="Engine\Util\Curve.h">
       <Filter>Engine\Util</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Resource\StructuredBuffer.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\UnorderedAccessValue.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Particle\ParticleCluster.h">
       <Filter>Engine\Particle</Filter>
     </ClInclude>
@@ -818,23 +788,47 @@
     <ClInclude Include="Engine\Particle\ParticleQuad.h">
       <Filter>Engine\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Resource\AppendConsumeBuffer.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\ByteAddressBuffer.h">
-      <Filter>Engine\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Particle\GPUParticle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Particle\ParticleCSStruct.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Particle\Particle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\AppendConsumeBuffer.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\ByteAddressBuffer.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\ConstantBuffer.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\DepthStencilBuffer.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\IndexBuffer.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\Resource.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\ShaderResource.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\StructuredBuffer.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\UnorderedAccessValue.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Resource\UploadBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Particle\Particle.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\Resource\VertexBuffer.h">
+      <Filter>Engine\Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -874,11 +868,16 @@
     <FxCompile Include="Engine\Shader\ShaderMath.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shader\ParticleShader.hlsl">
-      <Filter>Engine\Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\Shader\ParticleCalc.hlsl">
-      <Filter>Engine\Shader</Filter>
-    </FxCompile>
+    <FxCompile Include="Engine\Shader\GPUParticleVS.hlsl" />
+    <FxCompile Include="Engine\Shader\ParticleInitCS.hlsl" />
+    <FxCompile Include="Engine\Shader\ParticleSpawnCS.hlsl" />
+    <FxCompile Include="Engine\Shader\ParticleUpdateCS.hlsl" />
+    <FxCompile Include="Engine\Shader\ColorParticlePS.hlsl" />
+    <FxCompile Include="Engine\Shader\ColorParticleVS.hlsl" />
+    <FxCompile Include="Engine\Shader\ColorParticleGS.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\Shader\ParticleCSStruct.hlsli" />
+    <None Include="Engine\Shader\ColorParticleHeader.hlsli" />
   </ItemGroup>
 </Project>

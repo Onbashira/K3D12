@@ -24,6 +24,12 @@ HRESULT K3D12::CommandSignature::Create(const D3D12_COMMAND_SIGNATURE_DESC & des
 	return E_NOTIMPL;
 }
 
+HRESULT K3D12::CommandSignature::Create(const D3D12_COMMAND_SIGNATURE_DESC & desc)
+{
+	auto res = GET_DEVICE->CreateCommandSignature(&desc, nullptr, IID_PPV_ARGS(&_commandSignature));
+	return E_NOTIMPL;
+}
+
 Microsoft::WRL::ComPtr<ID3D12RootSignature> K3D12::CommandSignature::GetSignature()
 {
 	return Microsoft::WRL::ComPtr<ID3D12RootSignature>();

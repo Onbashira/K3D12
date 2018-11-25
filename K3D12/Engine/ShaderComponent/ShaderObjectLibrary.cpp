@@ -80,6 +80,23 @@ HRESULT K3D12::ShaderObjectLibrary::CreateRootSignature(std::string rsName, ID3D
 	return E_FAIL;
 }
 
+HRESULT K3D12::ShaderObjectLibrary::CreateRootSignature(std::string rsName, D3D12_ROOT_SIGNATURE_DESC * desc)
+{
+	if (_rootSignaturelibrary.find(rsName) == _rootSignaturelibrary.end()) {
+		this->_rootSignaturelibrary[rsName] = std::make_shared<K3D12::RootSignature>();
+		auto hr = this->_rootSignaturelibrary[rsName]->CreateFromDesc(desc);
+		this->_rootSignaturelibrary[rsName]->SetName(rsName);
+
+		if (SUCCEEDED(hr)) {
+			DEBUG_LOG(std::string("RootSignature‚ª³í‚Éì¬E“o˜^‚³‚ê‚Ü‚µ‚½ : " + rsName));
+
+			return hr;
+		}
+		return hr;
+	}
+	return E_FAIL;
+}
+
 void K3D12::ShaderObjectLibrary::SetPSO(std::string psoName, std::shared_ptr<K3D12::PipelineStateObject> pso)
 {
 	if (_psolibrary.find(psoName) == _psolibrary.end()) {

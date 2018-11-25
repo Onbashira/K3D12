@@ -52,6 +52,9 @@ namespace K3D12 {
 
 		HRESULT CreateRootSignature(std::string rsName, ID3DBlob* signature);
 
+		HRESULT CreateRootSignature(std::string rsName,D3D12_ROOT_SIGNATURE_DESC* signature);
+
+
 		void SetCommandList(std::string commandListName, std::shared_ptr<GraphicsCommandList> commandList);
 
 		void SetPSO(std::string psoName, std::shared_ptr<PipelineStateObject> pso);

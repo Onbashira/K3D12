@@ -31,6 +31,9 @@ namespace K3D12 {
 		//ルートシグネチャの作成
 		HRESULT CreateRootSignature(std::string rsName, ID3DBlob* signature);
 
+		//ルートシグネチャの作成
+		HRESULT CreateRootSignature(std::string rsName,D3D12_ROOT_SIGNATURE_DESC * desc);
+
 		//パイプラインステートの登録
 		void SetPSO(std::string psoName, std::shared_ptr<K3D12::PipelineStateObject> pso);
 		
