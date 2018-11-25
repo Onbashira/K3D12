@@ -103,5 +103,9 @@ namespace K3D12 {
 		{
 			return _elementByteSize / sizeof(T);
 		}
+
+		T* Data() {
+			return static_cast<T*>(GetMappedPointer());
+		}
 	};
 }

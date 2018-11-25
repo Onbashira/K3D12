@@ -79,8 +79,8 @@ void K3D12::GPUParticle::Create(int particleMax, int emitNum)
 
 	{
 		ID3D12DescriptorHeap* ppHeaps[] = { _initDescriptorHeap.GetHeap().Get() };
-		GraphicsContextLibrary::GetInstance().CreateCommandList("InitParticle", 0,D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT);
-		auto cmd = GraphicsContextLibrary::GetInstance().GetGraphicsCommandList("InitParticle");
+		GraphicsContextLibrary::GetInstance().CreateCommandList("InitParticle", 0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT);
+		auto cmd = K3D12::D3D12System::GetComputeCommandList();
 		cmd->ResetAllocator();
 		cmd->ResetCommandList();
 		cmd->GetCommandList()->SetPipelineState(GraphicsContextLibrary::GetInstance().GetPSO("ParticleInitPSO")->GetPSO().Get());
@@ -94,8 +94,13 @@ void K3D12::GPUParticle::Create(int particleMax, int emitNum)
 
 		//ここで初期化を回す
 		{
-
+			ID3D12CommandList* lists[] = { cmd->GetCommandList().Get() };
+			K3D12::D3D12System::GetMasterComputeQueu().GetQueue()->ExecuteCommandLists(1, lists);
+			K3D12::D3D12System::GetMasterComputeQueu().Wait();
+			cmd->ResetAllocator();
+			cmd->ResetCommandList();
 		}
+
 	}
 
 
@@ -109,10 +114,26 @@ void K3D12::GPUParticle::Run(float deltaTime)
 
 void K3D12::GPUParticle::Draw()
 {
+
 }
 
 void K3D12::GPUParticle::Spawn(int num, Vector3 pos, float speedMag, float lengthMag, float reductionRate)
 {
+	num = min(num, INSTANCE_MAX * _deltaTime - 1000);
+
+	for (int i = 0; i < num && _spawanDataCount < SPAWN_MAX; i++) {
+		auto& spawn = _spawnData.Data()[i];
+		spawn.position = Vector4(pos, 1.0f);
+		spawn.colorSamplingV = Util::frand()*0.5f + 0.5f;
+		auto th = Util::frand() * F_2PI;
+		spawn.forward = Vector3(sin(th), cos(th), 0.0f);
+		spawn.initialSpeedFactor = Util::frand()*1.25f + 0.25f;
+		spawn.speedMag = speedMag;
+		spawn.lengthMag = lengthMag;
+		spawn.reductionRate = reductionRate;
+
+		_spawanDataCount++;
+	}
 }
 
 void K3D12::GPUParticle::CreateBuffers()
@@ -306,6 +327,8 @@ void K3D12::GPUParticle::CreatePipelineState()
 		compPSO.Flags = D3D12_PIPELINE_STATE_FLAGS::D3D12_PIPELINE_STATE_FLAG_TOOL_DEBUG;
 		compPSO.CS = computeShader.GetShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_COMPUTE);
 		compPSO.pRootSignature = GraphicsContextLibrary::GetInstance().GetRootSignature("GPUParticleCSRootSignature")->GetSignature().Get();
+		GraphicsContextLibrary::GetInstance().CreatePSO("ParticleSpawnPSO", compPSO);
+
 	}
 	//アップデート
 	{
@@ -315,6 +338,8 @@ void K3D12::GPUParticle::CreatePipelineState()
 		compPSO.Flags = D3D12_PIPELINE_STATE_FLAGS::D3D12_PIPELINE_STATE_FLAG_TOOL_DEBUG;
 		compPSO.CS = computeShader.GetShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_COMPUTE);
 		compPSO.pRootSignature = GraphicsContextLibrary::GetInstance().GetRootSignature("GPUParticleCSRootSignature")->GetSignature().Get();
+		GraphicsContextLibrary::GetInstance().CreatePSO("ParticleUpdatePSO", compPSO);
+
 	}
 	//描画用
 	{

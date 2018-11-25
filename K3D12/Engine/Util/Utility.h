@@ -154,6 +154,15 @@ namespace K3D12::Util {
 
 	}
 
+	float frand() {
+#if 0
+		unsigned res = (rand() >> 9) | 0x3f800000;
+		return(*(float*)&res) - 1.0f;
+#else
+		return (float)rand() / RAND_MAX;
+#endif
+	}
+
 }
 
 
