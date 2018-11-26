@@ -1,6 +1,15 @@
 #include "GPUParticle.h"
+#include "../System/D3D12System.h"
 #include "../Util/Utility.h"
 #include "../../Engine/ShaderComponent/ShaderCluster.h"
+#include "../CommandContext/GraphicsContextLibrary.h"
+
+
+#define THREAD_NUM_X 16
+
+
+unsigned int K3D12::GPUParticle::INSTANCE_MAX = 1024 * 2048;
+unsigned int K3D12::GPUParticle::SPAWN_MAX = 256 * THREAD_NUM_X;
 
 K3D12::GPUParticle::GPUParticle()
 {
@@ -10,6 +19,7 @@ K3D12::GPUParticle::GPUParticle()
 
 K3D12::GPUParticle::~GPUParticle()
 {
+
 }
 
 
@@ -41,9 +51,10 @@ void K3D12::GPUParticle::Create(int particleMax, int emitNum)
 
 	D3D12_ROOT_SIGNATURE_DESC sigDesc;
 	sigDesc.NumParameters = _countof(param);
-	sigDesc.NumStaticSamplers = 1;
+	sigDesc.NumStaticSamplers = 0;
 	sigDesc.pParameters = param;
 	sigDesc.pStaticSamplers = nullptr;
+	sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAGS::D3D12_ROOT_SIGNATURE_FLAG_NONE;
 
 	GraphicsContextLibrary::GetInstance().CreateRootSignature("ParticleInitCSRootSignature", &sigDesc);
 
@@ -53,6 +64,9 @@ void K3D12::GPUParticle::Create(int particleMax, int emitNum)
 		ShaderCluster cs = {};
 		cs.CompileShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_COMPUTE, "./Engine/Shader/ParticleInitCS.hlsl", "InitReservedSlots", "cs_5_0");
 		psoDesc.CS = cs.GetShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_COMPUTE);
+		psoDesc.pRootSignature = GraphicsContextLibrary::GetInstance().GetRootSignature("ParticleInitCSRootSignature")->GetSignature().Get();
+		psoDesc.Flags = D3D12_PIPELINE_STATE_FLAGS::D3D12_PIPELINE_STATE_FLAG_NONE;;
+		psoDesc.NodeMask = 0;
 	}
 	GraphicsContextLibrary::GetInstance().CreatePSO("ParticleInitPSO", psoDesc);
 
@@ -72,21 +86,19 @@ void K3D12::GPUParticle::Create(int particleMax, int emitNum)
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
 	uavDesc.Buffer.FirstElement = 0;
 	uavDesc.Buffer.NumElements = INSTANCE_MAX;
-	uavDesc.Buffer.StructureByteStride = sizeof(uint32_t);
+	uavDesc.Buffer.StructureByteStride = sizeof(unsigned int);
 	uavDesc.Buffer.CounterOffsetInBytes = 0;
 	uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
-	_instanceCountBuffer.CreateView(&uavDesc, _initDescriptorHeap.GetCPUHandle(0));
+	_reservedSlotsBuffer.CreateView(&uavDesc, _initDescriptorHeap.GetCPUHandle(0), &_instanceCountBuffer);
 
 	{
 		ID3D12DescriptorHeap* ppHeaps[] = { _initDescriptorHeap.GetHeap().Get() };
-		GraphicsContextLibrary::GetInstance().CreateCommandList("InitParticle", 0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT);
 		auto cmd = K3D12::D3D12System::GetComputeCommandList();
-		cmd->ResetAllocator();
-		cmd->ResetCommandList();
+
 		cmd->GetCommandList()->SetPipelineState(GraphicsContextLibrary::GetInstance().GetPSO("ParticleInitPSO")->GetPSO().Get());
 		cmd->GetCommandList()->SetComputeRootSignature(GraphicsContextLibrary::GetInstance().GetRootSignature("ParticleInitCSRootSignature")->GetSignature().Get());
 		cmd->GetCommandList()->SetDescriptorHeaps(1, ppHeaps);
-		cmd->GetCommandList()->SetComputeRootDescriptorTable(1, _initDescriptorHeap.GetGPUHandle(0));
+		cmd->GetCommandList()->SetComputeRootDescriptorTable(0, _initDescriptorHeap.GetGPUHandle(0));
 
 		unsigned int threadNum = (INSTANCE_MAX >> 10);
 		cmd->GetCommandList()->Dispatch(threadNum, 1, 1);
@@ -95,15 +107,12 @@ void K3D12::GPUParticle::Create(int particleMax, int emitNum)
 		//ここで初期化を回す
 		{
 			ID3D12CommandList* lists[] = { cmd->GetCommandList().Get() };
-			K3D12::D3D12System::GetMasterComputeQueu().GetQueue()->ExecuteCommandLists(1, lists);
-			K3D12::D3D12System::GetMasterComputeQueu().Wait();
+			K3D12::D3D12System::GetMasterComputeQueue().GetQueue()->ExecuteCommandLists(1, lists);
+			K3D12::D3D12System::GetMasterComputeQueue().Wait();
 			cmd->ResetAllocator();
 			cmd->ResetCommandList();
 		}
-
 	}
-
-
 }
 
 void K3D12::GPUParticle::Run(float deltaTime)
@@ -114,19 +123,112 @@ void K3D12::GPUParticle::Run(float deltaTime)
 
 void K3D12::GPUParticle::Draw()
 {
+	_sceneConstantBuffer.Data()->deltaTime = _deltaTime;
+	_sceneConstantBuffer.Data()->gameTime = _gameTime;
+	_sceneConstantBuffer.Data()->spawnerCount = _spawanDataCount;
 
+	{
+		Matrix view = K3D12::GetCamera().GetView();
+		Matrix proj = K3D12::GetCamera().GetProjection();
+		Matrix vp = (view * proj);
+		_wvpMatBuffer.CopyData(0, vp);
+	}
+	// 描画数を０から始める
+	{
+		D3D12_SUBRESOURCE_DATA subresource = {};
+		DrawArgs args = {};
+		args.VertexCountPerInstance = 2;
+		subresource.pData = &args;
+		subresource.RowPitch = sizeof(args);
+		subresource.SlicePitch = subresource.RowPitch;
+
+		{
+			K3D12::D3D12System::CreateCommandList("ResourceUpdaterList",0,D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT);
+			auto ucmd = K3D12::D3D12System::GetCommandList("ResourceUpdaterList");
+
+			_drawArgBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_COPY_DEST);
+			_drawArgCopyBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_COPY_SOURCE);
+
+			//リソースアップデート
+			UpdateSubresources<1>(ucmd->GetCommandList().Get(), _drawArgBuffer.GetResource(), _drawArgCopyBuffer.GetResource(), 0, 0, 1, &subresource);
+
+			_drawArgBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_GENERIC_READ);
+			_drawArgCopyBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_GENERIC_READ);
+			//ここでアップデートを回す
+			{
+				ucmd->CloseCommandList();
+				ID3D12CommandList* lists[] = { ucmd->GetCommandList().Get() };
+				K3D12::D3D12System::GetMasterCommandQueue().GetQueue()->ExecuteCommandLists(1, lists);
+				K3D12::D3D12System::GetMasterCommandQueue().Wait();
+				ucmd->ResetAllocator();
+				ucmd->ResetCommandList();
+			}
+
+		}
+		{
+			auto cmd = K3D12::D3D12System::GetComputeCommandList();
+
+			cmd->GetCommandList()->SetComputeRootSignature(GraphicsContextLibrary::GetInstance().GetRootSignature("GPUParticleCSRootSignature")->GetSignature().Get());
+
+			//でスクリプタヒープセット
+			ID3D12DescriptorHeap* ppHeap[] = { _descriptorHeap.GetHeap().Get() };
+			cmd->GetCommandList()->SetDescriptorHeaps(1, ppHeap);
+
+			cmd->GetCommandList()->SetComputeRootDescriptorTable(0, _descriptorHeap.GetGPUHandle(0));
+
+			if (_spawanDataCount > 0) {
+
+				cmd->GetCommandList()->SetPipelineState(GraphicsContextLibrary::GetInstance().GetPSO("ParticleSpawnPSO")->GetPSO().Get());
+				cmd->GetCommandList()->Dispatch(THREAD_NUM_X, 1, 1);
+
+			}
+
+			cmd->GetCommandList()->SetPipelineState(GraphicsContextLibrary::GetInstance().GetPSO("ParticleUpdatePSO")->GetPSO().Get());
+			cmd->GetCommandList()->Dispatch(INSTANCE_MAX >> 10, 1, 1);
+			//ここで実行を回す
+			{
+				cmd->CloseCommandList();
+				ID3D12CommandList* lists[] = { cmd->GetCommandList().Get() };
+				K3D12::D3D12System::GetMasterComputeQueue().GetQueue()->ExecuteCommandLists(1, lists);
+				K3D12::D3D12System::GetMasterComputeQueue().Wait();
+				cmd->ResetAllocator();
+				cmd->ResetCommandList();
+			}
+		}
+		//描画ステップ
+		{
+			auto cmd = K3D12::D3D12System::GetMasterCommandList();
+			//メインレンダーターゲットのセット
+			cmd->GetCommandList()->ClearDepthStencilView(K3D12::GetCamera().GetDepthStencil().GetDSVHeapPtr()->GetCPUHandle(0),
+				D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 1, &K3D12::D3D12System::GetInstance().GetWindow().GetScissorRect());
+			K3D12::SetMainRenderTarget(cmd, &K3D12::GetCamera().GetDepthStencil().GetDSVHeapPtr()->GetCPUHandle(0));
+			cmd->GetCommandList()->SetPipelineState(GraphicsContextLibrary::GetInstance().GetPSO("DrawPSO")->GetPSO().Get());
+			cmd->GetCommandList()->SetGraphicsRootSignature(GraphicsContextLibrary::GetInstance().GetRootSignature("GPUParticleDrawRootSignature")->GetSignature().Get());
+			ID3D12DescriptorHeap* ppHeap[] = { _drawDescriptorHeap.GetHeap().Get() };
+
+			ppHeap[0] = _drawDescriptorHeap.GetHeap().Get();
+			cmd->GetCommandList()->SetDescriptorHeaps(1, ppHeap);
+			cmd->GetCommandList()->SetGraphicsRootDescriptorTable(0, _drawDescriptorHeap.GetGPUHandle(0));
+			cmd->GetCommandList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+			cmd->GetCommandList()->ExecuteIndirect(_commandSignature.GetSignature().Get(), 1, _drawArgBuffer.GetResource(), sizeof(DrawArgs::pad), nullptr, 0);
+		}
+
+		_spawanDataCount = 0;
+
+	}
 }
 
 void K3D12::GPUParticle::Spawn(int num, Vector3 pos, float speedMag, float lengthMag, float reductionRate)
 {
-	num = min(num, INSTANCE_MAX * _deltaTime - 1000);
+	//遅延によるスポーンミスのカバー
+	num = min(num, static_cast<int> (INSTANCE_MAX * _deltaTime - 1000));
 
-	for (int i = 0; i < num && _spawanDataCount < SPAWN_MAX; i++) {
+	for (unsigned int i = 0; i < (unsigned int)num && (unsigned int)_spawanDataCount < SPAWN_MAX; i++) {
 		auto& spawn = _spawnData.Data()[i];
 		spawn.position = Vector4(pos, 1.0f);
 		spawn.colorSamplingV = Util::frand()*0.5f + 0.5f;
 		auto th = Util::frand() * F_2PI;
-		spawn.forward = Vector3(sin(th), cos(th), 0.0f);
+		spawn.forward = Vector3(sinf(th), cosf(th), 0.0f);
 		spawn.initialSpeedFactor = Util::frand()*1.25f + 0.25f;
 		spawn.speedMag = speedMag;
 		spawn.lengthMag = lengthMag;
@@ -182,16 +284,16 @@ void K3D12::GPUParticle::CreateRootSignature()
 	range[1].BaseShaderRegister = 0;
 	range[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 
-	range[3].NumDescriptors = 1;
-	range[3].RegisterSpace = 0;
-	range[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	range[3].BaseShaderRegister = 0;
-	range[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	range[2].NumDescriptors = 1;
+	range[2].RegisterSpace = 0;
+	range[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	range[2].BaseShaderRegister = 0;
+	range[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 
-	param[1].ShaderVisibility = D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL;
-	param[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	param[1].DescriptorTable.NumDescriptorRanges = 3;
-	param[1].DescriptorTable.pDescriptorRanges = range;
+	param[0].ShaderVisibility = D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL;
+	param[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	param[0].DescriptorTable.NumDescriptorRanges = 3;
+	param[0].DescriptorTable.pDescriptorRanges = range;
 
 	D3D12_STATIC_SAMPLER_DESC sampler = {};
 	sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE::D3D12_TEXTURE_ADDRESS_MODE_WRAP;
@@ -212,10 +314,16 @@ void K3D12::GPUParticle::CreateRootSignature()
 	sigDesc.NumStaticSamplers = 1;
 	sigDesc.pParameters = param;
 	sigDesc.pStaticSamplers = &sampler;
+	sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAGS::D3D12_ROOT_SIGNATURE_FLAG_NONE;
 
 	GraphicsContextLibrary::GetInstance().CreateRootSignature("GPUParticleCSRootSignature", &sigDesc);
 
 	sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+	param[0].ShaderVisibility = D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL;
+	param[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	param[0].DescriptorTable.NumDescriptorRanges = 2;
+	param[0].DescriptorTable.pDescriptorRanges = range;
 
 	range[0].NumDescriptors = 1;
 	range[0].RegisterSpace = 0;
@@ -236,7 +344,7 @@ void K3D12::GPUParticle::CreateRootSignature()
 		// コマンドシグネチャもここで作る
 		D3D12_COMMAND_SIGNATURE_DESC commandDesc = {};
 		D3D12_INDIRECT_ARGUMENT_DESC argumentDescs[1] = {};
-		argumentDescs[0].Type = D3D12_INDIRECT_ARGUMENT_TYPE_DRAW;
+		argumentDescs[0].Type = D3D12_INDIRECT_ARGUMENT_TYPE::D3D12_INDIRECT_ARGUMENT_TYPE_DRAW;
 		commandDesc.ByteStride = sizeof(IndirectCommand);
 		commandDesc.NumArgumentDescs = _countof(argumentDescs);
 		commandDesc.pArgumentDescs = argumentDescs;
@@ -265,7 +373,7 @@ void K3D12::GPUParticle::CreateDescriptorHeap()
 	uavDesc.Buffer.StructureByteStride = sizeof(unsigned int);
 	uavDesc.Buffer.NumElements = INSTANCE_MAX;
 
-	_reservedSlotsBuffer.CreateView(&uavDesc, _descriptorHeap.GetCPUHandle(0));
+	_reservedSlotsBuffer.CreateView(&uavDesc, _descriptorHeap.GetCPUHandle(0),&_instanceCountBuffer);
 
 	uavDesc.Buffer.StructureByteStride = sizeof(InstanceDrawData);
 	uavDesc.Buffer.CounterOffsetInBytes = D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT;
@@ -300,7 +408,6 @@ void K3D12::GPUParticle::CreateDescriptorHeap()
 
 	_drawDescriptorHeap.Create(&desc);
 
-	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 	cbvDesc.BufferLocation = _wvpMatBuffer.GetResource()->GetGPUVirtualAddress();
 	cbvDesc.SizeInBytes = _wvpMatBuffer.ElementByteSize();
 
@@ -322,9 +429,9 @@ void K3D12::GPUParticle::CreatePipelineState()
 	//スポーン
 	{
 		ShaderCluster computeShader;
-		computeShader.CompileShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_COMPUTE, "./Engine/Shader/ParticleSpawnCS.hlsl", "SpawnParticles", "cs_5_0", ".Engine/Shader/ParticleCSStruct.hlsli");
+		computeShader.CompileShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_COMPUTE, "./Engine/Shader/ParticleSpawnCS.hlsl", "SpawnParticles", "cs_5_0", "./Engine/Shader/");
 		compPSO.pRootSignature;
-		compPSO.Flags = D3D12_PIPELINE_STATE_FLAGS::D3D12_PIPELINE_STATE_FLAG_TOOL_DEBUG;
+		compPSO.Flags = D3D12_PIPELINE_STATE_FLAGS::D3D12_PIPELINE_STATE_FLAG_NONE;
 		compPSO.CS = computeShader.GetShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_COMPUTE);
 		compPSO.pRootSignature = GraphicsContextLibrary::GetInstance().GetRootSignature("GPUParticleCSRootSignature")->GetSignature().Get();
 		GraphicsContextLibrary::GetInstance().CreatePSO("ParticleSpawnPSO", compPSO);
@@ -333,9 +440,9 @@ void K3D12::GPUParticle::CreatePipelineState()
 	//アップデート
 	{
 		ShaderCluster computeShader;
-		computeShader.CompileShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_COMPUTE, "./Engine/Shader/ParticleUpdateCS.hlsl", "UpdateParticles", "cs_5_0", ".Engine/Shader/ParticleCSStruct.hlsli");
+		computeShader.CompileShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_COMPUTE, "./Engine/Shader/ParticleUpdateCS.hlsl", "UpdateParticles", "cs_5_0", "./Engine/Shader/");
 		compPSO.pRootSignature;
-		compPSO.Flags = D3D12_PIPELINE_STATE_FLAGS::D3D12_PIPELINE_STATE_FLAG_TOOL_DEBUG;
+		compPSO.Flags = D3D12_PIPELINE_STATE_FLAGS::D3D12_PIPELINE_STATE_FLAG_NONE;
 		compPSO.CS = computeShader.GetShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_COMPUTE);
 		compPSO.pRootSignature = GraphicsContextLibrary::GetInstance().GetRootSignature("GPUParticleCSRootSignature")->GetSignature().Get();
 		GraphicsContextLibrary::GetInstance().CreatePSO("ParticleUpdatePSO", compPSO);
@@ -356,12 +463,12 @@ void K3D12::GPUParticle::CreatePipelineState()
 		}
 		{
 			ShaderCluster shader;
-			shader.CompileShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_GEOMETRY, "./Engine/Shader/ColorParticleGS.hlsl", "GS", "gs_5_0", ".Engine/Shader/ColorPaticleHeader.hlsli");
+			shader.CompileShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_GEOMETRY, "./Engine/Shader/ColorParticleGS.hlsl", "GS", "gs_5_0", "./Engine/Shader/");
 			desc.GS = shader.GetShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_VERTEX);
 		}
 		{
 			ShaderCluster shader;
-			shader.CompileShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_PIXEL, "./Engine/Shader/ColorParticlePS.hlsl", "PS", "cs_5_0", ".Engine/Shader/ColorPaticleHeader.hlsli");
+			shader.CompileShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_PIXEL, "./Engine/Shader/ColorParticlePS.hlsl", "PS", "ps_5_0", "./Engine/Shader/");
 			desc.PS = shader.GetShader(ShaderCluster::SHADER_TYPE::SHADER_TYPE_PIXEL);
 
 		}

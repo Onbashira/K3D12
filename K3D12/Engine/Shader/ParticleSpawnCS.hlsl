@@ -1,5 +1,5 @@
 #define PARTICLE_SPAWN
-#include "ParticleCSStruct.hlsli"
+#include "ParticleCSStruct.hlsl"
 
 
 [numthreads(256, 1, 1)]

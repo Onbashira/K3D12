@@ -26,13 +26,14 @@ K3D12::GraphicsCommandList::~GraphicsCommandList()
 
 HRESULT K3D12::GraphicsCommandList::Create(unsigned int nodeMask, D3D12_COMMAND_LIST_TYPE listType)
 {
+	_listType = listType;
 	HRESULT result;
-	result = K3D12::GetDevice()->CreateCommandAllocator(listType,IID_PPV_ARGS(&_commandAllocator));
+	result = K3D12::GetDevice()->CreateCommandAllocator(_listType, IID_PPV_ARGS(&_commandAllocator));
 	if (result != S_OK) {
 		return E_FAIL;
 	}
 
-	result = GET_DEVICE->CreateCommandList(nodeMask, listType, _commandAllocator.Get(), nullptr, IID_PPV_ARGS(&_commandList));
+	result = GET_DEVICE->CreateCommandList(nodeMask, _listType, _commandAllocator.Get(), nullptr, IID_PPV_ARGS(&_commandList));
 	if (result != S_OK) {
 		return E_FAIL;
 	}
@@ -122,7 +123,7 @@ void K3D12::GraphicsCommandList::AddRenderTargets(D3D12_CPU_DESCRIPTOR_HANDLE ha
 {
 	//unsigned int size = _countof(&handles);
 	unsigned int size = sizeof(handles) / sizeof(D3D12_CPU_DESCRIPTOR_HANDLE);
-	for (unsigned int index = 0; index < size;index++) {
+	for (unsigned int index = 0; index < size; index++) {
 		this->_bindedRenderTargets[index] = handles[index];
 	}
 }
@@ -152,7 +153,7 @@ void K3D12::GraphicsCommandList::OMSetBindingRenderTargets()
 	for (auto& ref : _bindedRenderTargets) {
 		handles.push_back(ref.second);
 	}
-	if (handles.size()== 0 || _bindedDepthStencil == nullptr) {
+	if (handles.size() == 0 || _bindedDepthStencil == nullptr) {
 		return;
 	}
 	_commandList->OMSetRenderTargets(static_cast<unsigned int>(_bindedRenderTargets.size()), &handles[0], (handles.size() > 1 ? TRUE : FALSE), &_bindedDepthStencil->GetDSVHeapPtr()->GetCPUHandle(0));

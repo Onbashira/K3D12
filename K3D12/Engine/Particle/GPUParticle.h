@@ -3,19 +3,22 @@
 #include <vector>
 #include "../../Engine/Util/Math.h"
 #include "../../Engine/Util/D3D12Common.h"
-#include "../Resource/Resource.h"
-#include "../Resource/StructuredBuffer.h"
 #include "../DescriptorHeap/DescriptorHeap.h"
-#include "../../Engine//Signature/CommandSignature.h"
+#include "../Signature/CommandSignature.h"
 #include "../Resource/UploadBuffer.h"
+#include "../Resource/StructuredBuffer.h"
 #include "ParticleCSStruct.h"
-namespace K3D12 {
-#define THREAD_NUM_X 16
-	class GPUParticle
-	{
+
+namespace K3D12{
+
+	class GPUParticle {
+
+	public:
+
 	private:
-		inline static unsigned int INSTANCE_MAX = 1024 * 2048;
-		inline static unsigned int SPAWN_MAX = 256 * THREAD_NUM_X;
+
+		static unsigned int INSTANCE_MAX;
+		static unsigned int SPAWN_MAX;
 
 		//シーン用のコンスタント
 		struct SceneConstantBuffer {
@@ -24,9 +27,10 @@ namespace K3D12 {
 			unsigned int spawnerCount;
 			float rad;
 		};
+
 		struct DrawArgs {
 			//4096バイト目にInstanceCountが来るように調整
-			unsigned char pad[D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT - sizeof(UINT)];
+			unsigned char pad[D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT - 4];
 			unsigned int VertexCountPerInstance;
 			unsigned int InstanceCount;
 			unsigned int StartVertexLocation;
@@ -60,8 +64,6 @@ namespace K3D12 {
 
 		StructuredBuffer _drawArgCopyBuffer;
 
-		StructuredBuffer _drawArgBuffer;
-
 		DescriptorHeap   _initDescriptorHeap;
 
 		DescriptorHeap   _descriptorHeap;
@@ -74,7 +76,7 @@ namespace K3D12 {
 
 		UploadBuffer<SceneConstantBuffer> _sceneConstantBuffer;
 
-		UploadBuffer<Matrix>			_wvpMatBuffer;
+		UploadBuffer<Matrix> _wvpMatBuffer;
 
 		int PARTICLE_MAX;
 
@@ -85,8 +87,7 @@ namespace K3D12 {
 		float _deltaTime;
 
 		float _gameTime;
-		
-	public:
+
 
 	private:
 
@@ -110,7 +111,7 @@ namespace K3D12 {
 
 		void Draw();
 
-		void Spawn(int num,Vector3 pos ,float speedMag = 10.0f,float lengthMag = 4.0f ,float reductionRate = 0.9375f );
+		void Spawn(int num, Vector3 pos, float speedMag = 10.0f, float lengthMag = 4.0f, float reductionRate = 0.9375f);
 
 	};
 }

@@ -8,6 +8,7 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
+#include <wrl.h>
 
 #include "../Util/D3D12Common.h"
 #include "../Window/Window.h"
@@ -24,6 +25,7 @@
 #include "../Input/GamePadManager.h"
 #include "../Rendering/GBufferSprite.h"
 #include "../GameConponent/Primitive/PrimitiveCreater.h"
+
 
 namespace K3D12 {
 
@@ -65,9 +67,9 @@ namespace K3D12 {
 		PrimitiveCreater				_primitiveCreater;
 		
 		GBufferSprite					_geometryBufferSprite;
-	
-	public:
 
+	public:
+	
 	private:
 
 		D3D12System();
@@ -115,6 +117,9 @@ namespace K3D12 {
 		HRESULT BindingGBufferRenderTarget();
 
 		HRESULT InitiazlieGBufferSprite();
+
+		HRESULT InitializeGPUParticle();
+
 
 		void TermWindow();
 
@@ -166,7 +171,7 @@ namespace K3D12 {
 
 		static HRESULT CreatePSO(std::string name, D3D12_COMPUTE_PIPELINE_STATE_DESC& desc, ID3DBlob* rootSignature = nullptr);
 
-		static HRESULT CreateCommandList(std::string name, unsigned int nodeMask, D3D12_COMMAND_LIST_TYPE& type);
+		static HRESULT CreateCommandList(std::string name, unsigned int nodeMask, const D3D12_COMMAND_LIST_TYPE& type);
 
 		static std::shared_ptr<PipelineStateObject> GetPSO(std::string name);
 
@@ -180,9 +185,9 @@ namespace K3D12 {
 
 		static  CommandQueue& GetMasterCommandQueue();
 
-		static  CommandQueue& GetMasterComputeQueu();
+		static  CommandQueue& GetMasterComputeQueue();
 
-		static  CommandQueue& GetMasterCopyQueu();
+		static  CommandQueue& GetMasterCopyQueue();
 
 		friend  Camera& GetCamera();
 
@@ -194,7 +199,7 @@ namespace K3D12 {
 
 		friend  InputManager&  Input();
 
-		friend void SetMainRenderTarget();
+		friend void SetMainRenderTarget(std::weak_ptr<GraphicsCommandList> list,D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 	};
 
@@ -226,7 +231,7 @@ namespace K3D12 {
 
 	 void SetWindowName(std::wstring name);
 
-	 void SetMainRenderTarget();
+	 void SetMainRenderTarget(std::weak_ptr<GraphicsCommandList> list,D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 	 int MessageLoop();
 

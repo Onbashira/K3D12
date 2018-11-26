@@ -29,6 +29,8 @@ namespace K3D12 {
 		std::string											_commandListName;
 		//コマンドアロケータの名前
 		std::string											_commandAllocatorName;
+		//
+		D3D12_COMMAND_LIST_TYPE								_listType;
 	public:
 
 	private:

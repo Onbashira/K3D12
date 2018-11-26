@@ -20,7 +20,7 @@ cbuffer cb : register(b0)
     float4x4 wvpMat;
 }
 
-PS_INPUT main(uint vindex : SV_VertexID, uint index : SV_InstanceID)
+PS_INPUT VS(uint vindex : SV_VertexID, uint index : SV_InstanceID)
 {
     PS_INPUT vd;
     float a = 1.0f - instanceDrawingData[index].colorSampleCoord.x;
@@ -30,7 +30,7 @@ PS_INPUT main(uint vindex : SV_VertexID, uint index : SV_InstanceID)
     vd.color = float4(
 		1.0f - instanceDrawingData[index].colorSampleCoord.y,
 		1.0f,
-		instanceDrawingData[index].colorSampleCoord.y,
+		1.0 - instanceDrawingData[index].colorSampleCoord.y,
 		a);
 
     return vd;

@@ -67,8 +67,9 @@ HRESULT K3D12::ShaderCluster::CompileShader(SHADER_TYPE type, std::string shader
 	ID3DBlob* error;
 
 	HRESULT hret = {};
+	auto includer = K3D12::HLSLIncluder(includePath);
 	D3D_SHADER_MACRO* ptr = _shaderMacro.size() >0 ? &this->_shaderMacro[0] : nullptr ;
-	ID3DInclude* includePtr = (includePath == "") ? nullptr : &K3D12::HLSLIncluder(includePath);
+	ID3DInclude* includePtr = (includePath == "") ? nullptr : &includer;
 
 	hret = D3DCompileFromFile(Util::StringToWString(shaderPath).c_str(), ptr, includePtr, functionName.c_str(), shaderMode.c_str(), compileFlag, 0, &shader, &error);
 
@@ -80,18 +81,17 @@ HRESULT K3D12::ShaderCluster::CompileShader(SHADER_TYPE type, std::string shader
 	if (error != nullptr) {
 		OutputDebugStringA((char*)error->GetBufferPointer());
 		return E_FAIL;
+		error->Release();
 
 	}
 
-	shader->Release();
-
-	error->Release();
 
 	D3D12_SHADER_BYTECODE byteCode;
 	byteCode.BytecodeLength = shader->GetBufferSize();
 	byteCode.pShaderBytecode = shader->GetBufferPointer();
 
 	this->_shaderMap[type] = byteCode;
+
 
 	return S_OK;
 

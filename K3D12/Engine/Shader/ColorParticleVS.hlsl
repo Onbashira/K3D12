@@ -1,5 +1,5 @@
 
-#include "ColorParticleHeader.hlsli"
+#include "ColorParticleHeader.hlsl"
 
 GS_INPUT VS(VS_INPUT input)
 {

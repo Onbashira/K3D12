@@ -447,24 +447,6 @@
     <ClCompile Include="Engine\Util\Curve.cpp">
       <Filter>Engine\Util</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Particle\ParticleCluster.cpp">
-      <Filter>Engine\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Particle\ParticleInstanceData.cpp">
-      <Filter>Engine\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Particle\ParticleQuad.cpp">
-      <Filter>Engine\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Particle\GPUParticle.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Particle\ParticleCSStruct.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Particle\Particle.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Resource\AppendConsumeBuffer.cpp">
       <Filter>Engine\Resource</Filter>
     </ClCompile>
@@ -494,6 +476,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Resource\VertexBuffer.cpp">
       <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Timer\Timer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Particle\GPUParticle.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -779,22 +767,7 @@
     <ClInclude Include="Engine\Util\Curve.h">
       <Filter>Engine\Util</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Particle\ParticleCluster.h">
-      <Filter>Engine\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Particle\ParticleInstanceData.h">
-      <Filter>Engine\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Particle\ParticleQuad.h">
-      <Filter>Engine\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Particle\GPUParticle.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Particle\ParticleCSStruct.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Particle\Particle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Resource\AppendConsumeBuffer.h">
@@ -829,6 +802,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Resource\VertexBuffer.h">
       <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Timer\Timer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Particle\GPUParticle.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -875,9 +854,7 @@
     <FxCompile Include="Engine\Shader\ColorParticlePS.hlsl" />
     <FxCompile Include="Engine\Shader\ColorParticleVS.hlsl" />
     <FxCompile Include="Engine\Shader\ColorParticleGS.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Engine\Shader\ParticleCSStruct.hlsli" />
-    <None Include="Engine\Shader\ColorParticleHeader.hlsli" />
+    <FxCompile Include="Engine\Shader\ColorParticleHeader.hlsl" />
+    <FxCompile Include="Engine\Shader\ParticleCSStruct.hlsl" />
   </ItemGroup>
 </Project>

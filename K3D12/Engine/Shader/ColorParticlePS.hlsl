@@ -1,6 +1,6 @@
 
 #if 0
-#include "ColorParticleHeader.hlsli"
+#include "ColorParticleHeader.hlsl"
 #endif
 struct PS_INPUT
 {

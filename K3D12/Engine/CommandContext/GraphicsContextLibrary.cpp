@@ -141,7 +141,7 @@ std::shared_ptr<K3D12::PipelineStateObject> K3D12::GraphicsContextLibrary::GetPS
 
 std::shared_ptr<K3D12::RootSignature> K3D12::GraphicsContextLibrary::GetRootSignature(std::string rsName)
 {
-	return _shaderObjectLibrary.GetRootSignature(rsName + "RootSignature").lock();
+	return _shaderObjectLibrary.GetRootSignature(rsName).lock();
 }
 
 void K3D12::GraphicsContextLibrary::EraseCommandList(std::string commandListName)

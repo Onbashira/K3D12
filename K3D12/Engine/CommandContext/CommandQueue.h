@@ -12,6 +12,8 @@ namespace K3D12 {
 
 		K3D12::Fence								_fence;
 
+		D3D12_COMMAND_QUEUE_DESC _desc;
+
 	public:
 
 	private:

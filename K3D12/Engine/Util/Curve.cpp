@@ -19,7 +19,7 @@ Vector2 Curve2D::Evaluate(float t)
 	}
 	Vector2 result = Vector2::zero;
 	unsigned int size = _points.size();
-	for (int i = 0; i < size; i++) {
+	for (unsigned int i = 0; i < size; i++) {
 		result += _points[i] * Bernstein(size - 1, i, t);
 	}
 	return result;

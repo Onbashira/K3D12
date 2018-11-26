@@ -1,5 +1,5 @@
 
-#include "ColorParticleHeader.hlsli"
+#include "ColorParticleHeader.hlsl"
 
 cbuffer cbImmutable
 {
@@ -32,7 +32,7 @@ void GS(
     {
         float3 pos = s_positions[i] * input[0].rad;
         pos = mul((float3x3) mInvView, pos);
-        pos += input[0].pos;
+        pos += input[0].pos.xyz;
         output.pos = mul(mWorldViewProj, float4(pos, 1.0f));
         output.color = input[0].color;
         output.tex = s_texcoords[i];

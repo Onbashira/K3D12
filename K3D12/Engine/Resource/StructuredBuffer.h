@@ -6,11 +6,10 @@
 
 namespace K3D12 {
 
-	class GraphicsCommandList;
 	class CommandQueue;
 
 	//UAV‚ÍDXGI_FORMAT‚ÍUNKNWONŒÅ’è
-	class StructuredBuffer : public K3D12::Resource
+	class StructuredBuffer : public Resource
 	{
 	public :
 		enum BUFFER_MODE {

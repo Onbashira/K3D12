@@ -10,8 +10,8 @@ namespace K3D12 {
 	{
 	private:
 
-		unsigned int _elementByteSize = 0;
-		bool isConstantBuffer = false;
+		unsigned int _elementByteSize;
+		bool isConstantBuffer;
 
 	public:
 
@@ -19,28 +19,26 @@ namespace K3D12 {
 
 	public:
 
-		UploadBuffer() : 
-			isConstantBuffer(false)
+		UploadBuffer() :
+			_elementByteSize(0), isConstantBuffer(false)
 		{
-
-
 
 		};
 
 		~UploadBuffer()
 		{
-			Unmap(0,nullptr);
+			Unmap(0, nullptr);
 		};
 
-		void Create(unsigned int elementCount = 1, bool isCB = false, D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE)
+		void Create(unsigned int elementCount = 1, bool isCB = false, D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_NONE)
 		{
 			isConstantBuffer = isCB;
-			{
-				this->_elementByteSize = sizeof(T);
-				if (isConstantBuffer) {
-					this->_elementByteSize = Util::Alignment256Bytes(_elementByteSize);
-				}
+
+			this->_elementByteSize = sizeof(T);
+			if (isConstantBuffer) {
+				this->_elementByteSize = (unsigned int)Util::Alignment256Bytes(_elementByteSize);
 			}
+
 
 			D3D12_HEAP_PROPERTIES prop = {};
 			D3D12_RESOURCE_DESC   desc = {};
@@ -65,47 +63,46 @@ namespace K3D12 {
 			Resource::Create(prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ);
 			Map(0, nullptr);
 
-		}
+		};
 
 		void CopyData(unsigned int elementIndex, const T& data)
 		{
-			Read(data, sizeof(T), sizeof(T) * elementIndex);
+			Resource::Update(&data, sizeof(T), sizeof(T) * elementIndex);
 		};
 
 		void CopyArray(int arraySiz, const T* data)
 		{
-			Read(data, sizeof(T)*arraySiz, 0);
-
+			Resource::Update(&data, sizeof(T)*arraySiz, 0);
 		};
 
 		void CreateView(D3D12_CONSTANT_BUFFER_VIEW_DESC& cbvDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle)
 		{
 
 			GET_DEVICE->CreateConstantBufferView(&cbvDesc, cpuDescriptorHandle);
-		}
+		};
 
 		void CreateView(D3D12_SHADER_RESOURCE_VIEW_DESC & srv, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle)
 		{
 			GET_DEVICE->CreateShaderResourceView(this->GetResource(), &srv, cpuDescriptorHandle);
-		}
+		};
 
 		void CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC & uav, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle, ID3D12Resource* counterResource)
 		{
 			GET_DEVICE->CreateUnorderedAccessView(this->GetResource(), counterResource, &uav, cpuDescriptorHandle);
-		}
+		};
 
 		unsigned int ElementByteSize()
 		{
 			return _elementByteSize;
-		}
+		};
 
 		unsigned int ElementNum()
 		{
 			return _elementByteSize / sizeof(T);
-		}
+		};
 
 		T* Data() {
-			return static_cast<T*>(GetMappedPointer());
-		}
+			return reinterpret_cast<T*>(GetMappedPointer());
+		};
 	};
-}
+};

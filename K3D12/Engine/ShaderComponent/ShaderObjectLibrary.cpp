@@ -23,8 +23,8 @@ HRESULT K3D12::ShaderObjectLibrary::CreatePSO(std::string psoName, D3D12_GRAPHIC
 		HRESULT hr = {};
 		this->_psolibrary[psoName] = std::make_shared<K3D12::PipelineStateObject>();
 		if (signature != nullptr) {
-			hr = CreateRootSignature(psoName + "RootSignature", signature);
-			hr = this->_psolibrary[psoName]->Create(psoName, gps, GetRootSignature(psoName + "RootSignature"));
+			hr = CreateRootSignature(psoName, signature);
+			hr = this->_psolibrary[psoName]->Create(psoName, gps, GetRootSignature(psoName ));
 
 		}
 		else {

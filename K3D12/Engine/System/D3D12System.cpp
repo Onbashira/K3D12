@@ -22,6 +22,7 @@
 #include "../GameConponent/Primitive/PrimitiveCreater.h"
 #include "../Signature/RootSignature.h"
 #include "../Audio/AudioManager.h"
+#include "../Particle/GPUParticle.h"
 
 #include <random>
 
@@ -114,7 +115,7 @@ HRESULT D3D12System::CreatePSO(std::string name, D3D12_COMPUTE_PIPELINE_STATE_DE
 	return GraphicsContextLibrary::GetInstance().CreatePSO(name, desc, rootSignature);;
 }
 
-HRESULT D3D12System::CreateCommandList(std::string name, unsigned int nodeMask, D3D12_COMMAND_LIST_TYPE & type)
+HRESULT D3D12System::CreateCommandList(std::string name, unsigned int nodeMask,const D3D12_COMMAND_LIST_TYPE & type)
 {
 	return GraphicsContextLibrary::GetInstance().CreateCommandList(name, nodeMask, type);
 }
@@ -149,12 +150,12 @@ K3D12::CommandQueue& K3D12::D3D12System::GetMasterCommandQueue()
 	return GetInstance()._commandQueue;
 }
 
-CommandQueue & K3D12::D3D12System::GetMasterComputeQueu()
+CommandQueue & K3D12::D3D12System::GetMasterComputeQueue()
 {
 	return GetInstance()._computeQueue;
 }
 
-CommandQueue & K3D12::D3D12System::GetMasterCopyQueu()
+CommandQueue & K3D12::D3D12System::GetMasterCopyQueue()
 {
 	return GetInstance()._copyQueue;
 }
@@ -214,7 +215,7 @@ HRESULT K3D12::D3D12System::InitializeCopyQueue()
 	desc.Priority = D3D12_COMMAND_QUEUE_PRIORITY::D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
 	desc.Type = D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COPY;
 
-	auto hr = this->_computeQueue.Create(desc);
+	auto hr = this->_copyQueue.Create(desc);
 	CHECK_RESULT(hr);
 	return hr;
 }
@@ -225,20 +226,18 @@ HRESULT D3D12System::InitializeCommandList()
 	{
 		auto hr = GraphicsContextLibrary::GetInstance().CreateCommandList("CommandList", 0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT);
 		CHECK_RESULT(hr);
-		return hr;
 	}
 	//マスターのコンピュートリスト
 	{
 		auto hr = GraphicsContextLibrary::GetInstance().CreateCommandList("ComputeList", 0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COMPUTE);
 		CHECK_RESULT(hr);
-		return hr;
 	}
 	//マスターのコピーリスト
 	{
 		auto hr = GraphicsContextLibrary::GetInstance().CreateCommandList("CopyList", 0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COPY);
 		CHECK_RESULT(hr);
-		return hr;
 	}
+	return S_OK;
 }
 
 HRESULT D3D12System::InitializeFence()
@@ -822,6 +821,11 @@ HRESULT D3D12System::InitiazlieGBufferSprite()
 	return result;
 }
 
+HRESULT K3D12::D3D12System::InitializeGPUParticle()
+{
+	return S_OK;
+}
+
 HRESULT D3D12System::InitializeWindow()
 {
 	auto hr = _window.Create(_appClassName, _windowWidth, _windowHeight);
@@ -971,6 +975,7 @@ void K3D12::ScreenFlip()
 			ID3D12CommandList *lists[] = { D3D12System::GetInstance().GetCommandList("CommandList")->GetCommandList().Get() };
 			D3D12System::GetInstance()._commandQueue.GetQueue()->ExecuteCommandLists(_countof(lists), lists);
 			D3D12System::GetInstance()._fence.Wait(&D3D12System::GetInstance()._commandQueue);
+
 		}
 		//プレセント
 		D3D12System::GetInstance()._renderTarget.Present(1, 0);
@@ -1032,9 +1037,9 @@ void K3D12::SetWindowName(std::wstring name)
 	D3D12System::GetInstance()._appClassName = name;
 }
 
-void K3D12::SetMainRenderTarget()
+void K3D12::SetMainRenderTarget(std::weak_ptr<GraphicsCommandList> list,D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle)
 {
-	D3D12System::GetInstance()._renderTarget.SetRenderTarget(D3D12System::GetMasterCommandList());
+	D3D12System::GetInstance()._renderTarget.SetRenderTarget(list.lock(), depthHandle);
 }
 
 int K3D12::MessageLoop()

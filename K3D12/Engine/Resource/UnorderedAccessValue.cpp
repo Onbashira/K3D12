@@ -114,7 +114,6 @@ HRESULT K3D12::UnorderedAccessValue::Create(unsigned int elementSize, unsigned i
 		uavBuffer.StructureByteStride = elementSize;
 
 
-		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc;
 		this->_unorderedAccessViewDesc.ViewDimension = D3D12_UAV_DIMENSION::D3D12_UAV_DIMENSION_BUFFER;
 		_unorderedAccessViewDesc.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
 		_unorderedAccessViewDesc.Buffer = uavBuffer;

@@ -1,5 +1,5 @@
 
-#include "ParticleCSStruct.hlsli"
+#include "ParticleCSStruct.hlsl"
 
 
 void UpdateParticle(inout InstanceData instanceRef, float lifetime)

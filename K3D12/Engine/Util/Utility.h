@@ -17,7 +17,7 @@ namespace K3D12::Util {
 	};
 
 	template <typename X>
-	X inline Align(X num, size_t ali) {
+	X inline Align(X num, unsigned int ali) {
 		return ((num + ali - 1) / ali) * ali;
 	}
 
@@ -154,7 +154,7 @@ namespace K3D12::Util {
 
 	}
 
-	float frand() {
+	inline float frand() {
 #if 0
 		unsigned res = (rand() >> 9) | 0x3f800000;
 		return(*(float*)&res) - 1.0f;

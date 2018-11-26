@@ -42,7 +42,6 @@ HRESULT K3D12::StructuredBuffer::Create(unsigned int elementSize, unsigned int n
 			defaultHeapProp.VisibleNodeMask = 1;
 			defaultHeapProp.CreationNodeMask = 1;
 			defaultHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_L0;
-
 		}
 
 		{
@@ -84,11 +83,9 @@ HRESULT K3D12::StructuredBuffer::Create(unsigned int elementSize, unsigned int n
 
 		//ƒŠƒ\[ƒXì¬
 		{
-			_readBackResource.Create(readBackHeapProp, D3D12_HEAP_FLAG_NONE, readBackResourceDesc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COPY_DEST);
 			Resource::Create(defaultHeapProp, D3D12_HEAP_FLAG_NONE, defaultResourceDesc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 #ifdef _DEBUG
 			SetName("UAVResource");
-			_readBackResource.SetName("ReadBackBuffer");
 #endif // _DEBUG
 
 		}
@@ -125,7 +122,6 @@ HRESULT K3D12::StructuredBuffer::CreateDescriptors(unsigned int elementSize, uns
 		uavBuffer.StructureByteStride = elementSize;
 
 
-		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc;
 		_unorderedAccessViewDesc.ViewDimension = D3D12_UAV_DIMENSION::D3D12_UAV_DIMENSION_BUFFER;
 		_unorderedAccessViewDesc.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
 		_unorderedAccessViewDesc.Buffer = uavBuffer;
@@ -134,7 +130,6 @@ HRESULT K3D12::StructuredBuffer::CreateDescriptors(unsigned int elementSize, uns
 	}
 	//SRVRawView
 	{
-		D3D12_SHADER_RESOURCE_VIEW_DESC srv;
 		_shaderResourceViewDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 		_shaderResourceViewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		_shaderResourceViewDesc.Format = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
@@ -170,7 +165,8 @@ D3D12_GPU_DESCRIPTOR_HANDLE K3D12::StructuredBuffer::GetUAVGPUHandle()
 
 HRESULT K3D12::StructuredBuffer::CreateView(D3D12_UNORDERED_ACCESS_VIEW_DESC * uavDesc, D3D12_CPU_DESCRIPTOR_HANDLE cpuDescriptorHandle, Resource * counterResource)
 {
-	GET_DEVICE->CreateUnorderedAccessView(_resource.Get(), counterResource->GetResource(), uavDesc, cpuDescriptorHandle);
+	
+	GET_DEVICE->CreateUnorderedAccessView(_resource.Get(), counterResource == nullptr ?  nullptr: counterResource->GetResource(), uavDesc, cpuDescriptorHandle);
 	return S_OK;
 }
 
