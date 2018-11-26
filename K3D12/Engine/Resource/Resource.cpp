@@ -80,17 +80,23 @@ HRESULT K3D12::Resource::Create(D3D12_HEAP_PROPERTIES heapProps, D3D12_HEAP_FLAG
 
 HRESULT K3D12::Resource::Map(UINT subResource, D3D12_RANGE * readRange)
 {
-	auto hr = _resource->Map(subResource, readRange, reinterpret_cast<void**>(&_pDst));
-	if (FAILED(hr)) {
-		return E_FAIL;
+	if (_resource.Get() != nullptr) {
+
+		auto hr = _resource->Map(subResource, readRange, reinterpret_cast<void**>(&_pDst));
+		if (FAILED(hr)) {
+			return E_FAIL;
+		}
 	}
 	return S_OK;
+
 }
 
 void K3D12::Resource::Unmap(UINT subResource, D3D12_RANGE * writtenRange)
 {
-	_resource->Unmap(subResource, writtenRange);
-	_pDst = nullptr;
+	if (_resource.Get() != nullptr) {
+		_resource->Unmap(subResource, writtenRange);
+		_pDst = nullptr;
+	}
 }
 
 UCHAR* K3D12::Resource::GetMappedPointer()

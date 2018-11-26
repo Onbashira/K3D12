@@ -974,11 +974,10 @@ void K3D12::ScreenFlip()
 		{
 			ID3D12CommandList *lists[] = { D3D12System::GetInstance().GetCommandList("CommandList")->GetCommandList().Get() };
 			D3D12System::GetInstance()._commandQueue.GetQueue()->ExecuteCommandLists(_countof(lists), lists);
-			D3D12System::GetInstance()._fence.Wait(&D3D12System::GetInstance()._commandQueue);
 
 		}
 		//プレセント
-		D3D12System::GetInstance()._renderTarget.Present(1, 0);
+		D3D12System::GetInstance()._renderTarget.Present(1,0);
 	}
 	//GPU待機
 	D3D12System::GetInstance()._fence.Wait(&D3D12System::GetInstance()._commandQueue);

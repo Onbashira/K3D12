@@ -6,6 +6,7 @@
 
 
 #define THREAD_NUM_X 16
+#define TEST 1
 
 
 unsigned int K3D12::GPUParticle::INSTANCE_MAX = 1024 * 2048;
@@ -19,7 +20,31 @@ K3D12::GPUParticle::GPUParticle()
 
 K3D12::GPUParticle::~GPUParticle()
 {
+	_reservedSlotsBuffer.Discard();
 
+	_instancePropatiesBuffer.Discard();
+
+	_instanceDrawBuffer.Discard();
+
+	_instanceCountBuffer.Discard();
+
+	_drawArgBuffer.Discard();
+
+	_drawArgCopyBuffer.Discard();
+
+	_initDescriptorHeap.Discard();
+
+	_descriptorHeap.Discard();
+
+	_drawDescriptorHeap.Discard();
+
+	_commandSignature.Discard();
+
+	_spawnData.Discard();
+
+	_sceneConstantBuffer.Discard();
+
+	_wvpMatBuffer.Discard();
 }
 
 
@@ -142,18 +167,20 @@ void K3D12::GPUParticle::Draw()
 		subresource.RowPitch = sizeof(args);
 		subresource.SlicePitch = subresource.RowPitch;
 
+#ifndef TEST 
 		{
-			K3D12::D3D12System::CreateCommandList("ResourceUpdaterList",0,D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT);
+			K3D12::D3D12System::CreateCommandList("ResourceUpdaterList", 0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT);
 			auto ucmd = K3D12::D3D12System::GetCommandList("ResourceUpdaterList");
+			{
+				//クリア
+				_drawArgBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_COPY_DEST);
+				_drawArgCopyBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_COPY_SOURCE);
 
-			_drawArgBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_COPY_DEST);
-			_drawArgCopyBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_COPY_SOURCE);
-
-			//リソースアップデート
-			UpdateSubresources<1>(ucmd->GetCommandList().Get(), _drawArgBuffer.GetResource(), _drawArgCopyBuffer.GetResource(), 0, 0, 1, &subresource);
-
-			_drawArgBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_GENERIC_READ);
-			_drawArgCopyBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_GENERIC_READ);
+				//リソースアップデート
+				UpdateSubresources<1>(ucmd->GetCommandList().Get(), _drawArgBuffer.GetResource(), _drawArgCopyBuffer.GetResource(), 0, 0, 1, &subresource);
+				_drawArgBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_GENERIC_READ);
+				_drawArgCopyBuffer.ResourceTransition(ucmd, D3D12_RESOURCE_STATE_GENERIC_READ);
+			}
 			//ここでアップデートを回す
 			{
 				ucmd->CloseCommandList();
@@ -212,8 +239,64 @@ void K3D12::GPUParticle::Draw()
 			cmd->GetCommandList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
 			cmd->GetCommandList()->ExecuteIndirect(_commandSignature.GetSignature().Get(), 1, _drawArgBuffer.GetResource(), sizeof(DrawArgs::pad), nullptr, 0);
 		}
+	}
+#else
+	{
+		auto cmd = K3D12::D3D12System::GetMasterCommandList();
 
-		_spawanDataCount = 0;
+		{
+
+			//クリア
+			_drawArgBuffer.ResourceTransition(cmd, D3D12_RESOURCE_STATE_COPY_DEST);
+			_drawArgCopyBuffer.ResourceTransition(cmd, D3D12_RESOURCE_STATE_COPY_SOURCE);
+
+			//リソースアップデート
+			UpdateSubresources<1>(cmd->GetCommandList().Get(), _drawArgBuffer.GetResource(), _drawArgCopyBuffer.GetResource(), 0, 0, 1, &subresource);
+			_drawArgBuffer.ResourceTransition(cmd, D3D12_RESOURCE_STATE_GENERIC_READ);
+			_drawArgCopyBuffer.ResourceTransition(cmd, D3D12_RESOURCE_STATE_GENERIC_READ);
+
+
+		}
+		{
+
+			cmd->GetCommandList()->SetComputeRootSignature(GraphicsContextLibrary::GetInstance().GetRootSignature("GPUParticleCSRootSignature")->GetSignature().Get());
+
+			//でスクリプタヒープセット
+			ID3D12DescriptorHeap* ppHeap[] = { _descriptorHeap.GetHeap().Get() };
+			cmd->GetCommandList()->SetDescriptorHeaps(1, ppHeap);
+
+			cmd->GetCommandList()->SetComputeRootDescriptorTable(0, _descriptorHeap.GetGPUHandle(0));
+
+			if (_spawanDataCount > 0) {
+
+				cmd->GetCommandList()->SetPipelineState(GraphicsContextLibrary::GetInstance().GetPSO("ParticleSpawnPSO")->GetPSO().Get());
+				cmd->GetCommandList()->Dispatch(THREAD_NUM_X, 1, 1);
+
+			}
+
+			cmd->GetCommandList()->SetPipelineState(GraphicsContextLibrary::GetInstance().GetPSO("ParticleUpdatePSO")->GetPSO().Get());
+			cmd->GetCommandList()->Dispatch(INSTANCE_MAX >> 10, 1, 1);
+		}
+		//描画ステップ
+		{
+			//メインレンダーターゲットのセット
+			cmd->GetCommandList()->ClearDepthStencilView(K3D12::GetCamera().GetDepthStencil().GetDSVHeapPtr()->GetCPUHandle(0),
+				D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 1, &K3D12::D3D12System::GetInstance().GetWindow().GetScissorRect());
+			K3D12::SetMainRenderTarget(cmd, &K3D12::GetCamera().GetDepthStencil().GetDSVHeapPtr()->GetCPUHandle(0));
+			cmd->GetCommandList()->SetPipelineState(GraphicsContextLibrary::GetInstance().GetPSO("DrawPSO")->GetPSO().Get());
+			cmd->GetCommandList()->SetGraphicsRootSignature(GraphicsContextLibrary::GetInstance().GetRootSignature("GPUParticleDrawRootSignature")->GetSignature().Get());
+			ID3D12DescriptorHeap* ppHeap[] = { _drawDescriptorHeap.GetHeap().Get() };
+
+			ppHeap[0] = _drawDescriptorHeap.GetHeap().Get();
+			cmd->GetCommandList()->SetDescriptorHeaps(1, ppHeap);
+			cmd->GetCommandList()->SetGraphicsRootDescriptorTable(0, _drawDescriptorHeap.GetGPUHandle(0));
+			cmd->GetCommandList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+			cmd->GetCommandList()->ExecuteIndirect(_commandSignature.GetSignature().Get(), 1, _drawArgBuffer.GetResource(), sizeof(DrawArgs::pad), nullptr, 0);
+		}
+	}
+
+#endif
+	_spawanDataCount = 0;
 
 	}
 }
@@ -223,12 +306,12 @@ void K3D12::GPUParticle::Spawn(int num, Vector3 pos, float speedMag, float lengt
 	//遅延によるスポーンミスのカバー
 	num = min(num, static_cast<int> (INSTANCE_MAX * _deltaTime - 1000));
 
-	for (unsigned int i = 0; i < (unsigned int)num && (unsigned int)_spawanDataCount < SPAWN_MAX; i++) {
+	for (int i = 0; i < num && (unsigned int)_spawanDataCount < SPAWN_MAX; i++) {
 		auto& spawn = _spawnData.Data()[i];
 		spawn.position = Vector4(pos, 1.0f);
 		spawn.colorSamplingV = Util::frand()*0.5f + 0.5f;
 		auto th = Util::frand() * F_2PI;
-		spawn.forward = Vector3(sinf(th), cosf(th), 0.0f);
+		spawn.forward = Vector3(sinf(th), cosf(th), 0.0).Normalize();
 		spawn.initialSpeedFactor = Util::frand()*1.25f + 0.25f;
 		spawn.speedMag = speedMag;
 		spawn.lengthMag = lengthMag;
@@ -373,7 +456,7 @@ void K3D12::GPUParticle::CreateDescriptorHeap()
 	uavDesc.Buffer.StructureByteStride = sizeof(unsigned int);
 	uavDesc.Buffer.NumElements = INSTANCE_MAX;
 
-	_reservedSlotsBuffer.CreateView(&uavDesc, _descriptorHeap.GetCPUHandle(0),&_instanceCountBuffer);
+	_reservedSlotsBuffer.CreateView(&uavDesc, _descriptorHeap.GetCPUHandle(0), &_instanceCountBuffer);
 
 	uavDesc.Buffer.StructureByteStride = sizeof(InstanceDrawData);
 	uavDesc.Buffer.CounterOffsetInBytes = D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT;

@@ -1943,7 +1943,8 @@ inline UINT64 UpdateSubresources(
     }
     
     BYTE* pData;
-    HRESULT hr = pIntermediate->Map(0, NULL, reinterpret_cast<void**>(&pData));
+	D3D12_RANGE range = { 0,1 };
+	HRESULT hr = pIntermediate->Map(0, &range, reinterpret_cast<void**>(&pData));
     if (FAILED(hr))
     {
         return 0;
@@ -1959,7 +1960,7 @@ inline UINT64 UpdateSubresources(
 		};
         MemcpySubresource(&DestData, &pSrcData[i], (SIZE_T)pRowSizesInBytes[i], pNumRows[i], pLayouts[i].Footprint.Depth);
     }
-    pIntermediate->Unmap(0, NULL);
+    pIntermediate->Unmap(0, &range);
     
     if (DestinationDesc.Dimension == D3D12_RESOURCE_DIMENSION_BUFFER)
     {

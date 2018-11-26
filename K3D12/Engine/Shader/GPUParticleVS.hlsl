@@ -29,8 +29,8 @@ PS_INPUT VS(uint vindex : SV_VertexID, uint index : SV_InstanceID)
     vd.tex = float2(0.5f * (1.0f - vindex), 0.5f * (1.0f - vindex));
     vd.color = float4(
 		1.0f - instanceDrawingData[index].colorSampleCoord.y,
-		1.0f,
-		1.0 - instanceDrawingData[index].colorSampleCoord.y,
+		0.5f,
+		instanceDrawingData[index].colorSampleCoord.y,
 		a);
 
     return vd;
